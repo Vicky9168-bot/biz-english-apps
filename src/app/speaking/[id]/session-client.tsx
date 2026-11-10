@@ -68,8 +68,13 @@ export function SpeakingSession({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
       if (prepTimerRef.current) clearInterval(prepTimerRef.current)
+      // 離開頁面：放棄這段錄音（不送去分析），只釋放麥克風
       const mr = mediaRecorderRef.current
-      if (mr && mr.state !== 'inactive') mr.stop()
+      if (mr) {
+        mr.onstop = null
+        if (mr.state !== 'inactive') mr.stop()
+        mr.stream.getTracks().forEach((t) => t.stop())
+      }
     }
   }, [])
 

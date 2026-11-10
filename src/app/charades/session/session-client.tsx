@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import type { Vocabulary } from '@/lib/supabase/types'
 
 const MAX_ATTEMPTS = 3
@@ -35,6 +36,7 @@ interface SessionClientProps {
 }
 
 export function SessionClient({ words, mode, profile }: SessionClientProps) {
+  const router = useRouter()
   const [wordIdx, setWordIdx] = useState(0)
   const [results, setResults] = useState<WordResult[]>([])
   const [currentAttempts, setCurrentAttempts] = useState<Attempt[]>([])
@@ -76,6 +78,19 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
 
   const currentWord = words[wordIdx]
   const isLast = wordIdx === words.length - 1
+
+  // 練習結果只在整輪結束時才存檔，中途離開前先確認
+  function handleExit() {
+    const hasProgress = results.length > 0 || currentAttempts.length > 0
+    if (
+      hasProgress &&
+      !window.confirm('確定要離開嗎？這一輪還沒完成，目前的練習結果不會被儲存。')
+    ) {
+      return
+    }
+    cleanupStream()
+    router.push('/charades')
+  }
 
   const cleanupStream = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop())
@@ -482,9 +497,18 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
     <main className="flex-1 bg-slate-100 min-h-screen">
       <nav className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-3xl px-6 h-16 flex items-center justify-between">
-          <span className="text-sm text-slate-600">
-            第 {wordIdx + 1} / {words.length} 題
-          </span>
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={handleExit}
+              className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+            >
+              ← 離開練習
+            </button>
+            <span className="text-sm text-slate-600">
+              第 {wordIdx + 1} / {words.length} 題
+            </span>
+          </div>
           <div className="flex gap-1">
             {[...Array(MAX_ATTEMPTS)].map((_, i) => (
               <div

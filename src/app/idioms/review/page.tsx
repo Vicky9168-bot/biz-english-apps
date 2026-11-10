@@ -115,7 +115,7 @@ export default async function IdiomsReviewPage() {
 
   return (
     <main className="flex-1 bg-slate-100 min-h-screen">
-      <AppNav backHref="/" backLabel="← 回題庫首頁" />
+      <AppNav backHref="/idioms" backLabel="← 回題庫首頁" />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <header className="mb-6">

@@ -28,7 +28,7 @@ export default async function SpeakingScenarioPage({
 
   return (
     <main className="flex-1 bg-slate-100 min-h-screen">
-      <AppNav backHref="/" backLabel="← 回題庫" />
+      <AppNav backHref="/speaking" backLabel="← 回題庫" />
 
       <div className="mx-auto max-w-3xl px-6 py-10">
         <SpeakingSession

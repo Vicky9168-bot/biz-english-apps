@@ -47,7 +47,7 @@ export default async function CategoryPage({
 
   return (
     <main className="flex-1 bg-slate-100 min-h-screen">
-      <AppNav backHref="/" backLabel="← 回題型列表" />
+      <AppNav backHref="/interview" backLabel="← 回題型列表" />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <header className="mb-8">

@@ -73,7 +73,7 @@ export default async function CharadesReviewPage() {
 
   return (
     <main className="flex-1 bg-slate-100 min-h-screen">
-      <AppNav backHref="/" backLabel="← 回比手畫腳" />
+      <AppNav backHref="/charades" backLabel="← 回比手畫腳" />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <header className="mb-8">
