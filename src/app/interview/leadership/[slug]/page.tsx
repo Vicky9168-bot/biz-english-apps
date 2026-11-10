@@ -34,7 +34,7 @@ export default async function LeadershipPage({
 
   return (
     <main className="flex-1 bg-slate-100 min-h-screen">
-      <AppNav backHref="/interview" backLabel="← 回面試首頁" />
+      <AppNav backHref="/interview" />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <header className="mb-8">

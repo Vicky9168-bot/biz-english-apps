@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { ExitButton } from '../../back-button'
 import type { Vocabulary } from '@/lib/supabase/types'
 
 const MAX_ATTEMPTS = 3
@@ -498,13 +499,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
       <nav className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-3xl px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={handleExit}
-              className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
-            >
-              ← 離開練習
-            </button>
+            <ExitButton onClick={handleExit} />
             <span className="text-sm text-slate-600">
               第 {wordIdx + 1} / {words.length} 題
             </span>

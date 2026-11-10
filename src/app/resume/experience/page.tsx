@@ -159,7 +159,7 @@ export default async function ResumeExperiencePage() {
 
   return (
     <main className="flex-1 bg-slate-100 min-h-screen">
-      <AppNav backHref="/resume" backLabel="← 回履歷首頁" />
+      <AppNav backHref="/resume" />
 
       <div className="mx-auto max-w-3xl px-6 py-10 space-y-6">
         <header className="rounded-xl border border-slate-200 bg-white p-6">

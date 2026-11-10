@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { BackButton } from './back-button'
 
 export type NavUser = {
   email: string | null
@@ -71,28 +72,17 @@ export function SiteNav({ user }: { user: NavUser | null }) {
 }
 
 // 功能頁共用導覽列：品牌 + 返回連結
-export function AppNav({
-  backHref = '/',
-  backLabel = '← 回首頁',
-}: {
-  backHref?: string
-  backLabel?: string
-}) {
+export function AppNav({ backHref = '/' }: { backHref?: string }) {
   return (
     <nav className="border-b border-stone-200 bg-white">
-      <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
+      <div className="mx-auto max-w-6xl px-6 h-16 flex items-center gap-4">
+        <BackButton href={backHref} />
         <Link
           href="/"
           className="text-xl font-bold text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900/20 rounded-sm"
           translate="no"
         >
           BizEnglish
-        </Link>
-        <Link
-          href={backHref}
-          className="text-sm text-stone-600 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded-sm px-1"
-        >
-          {backLabel}
         </Link>
       </div>
     </nav>

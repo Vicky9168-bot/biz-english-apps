@@ -52,7 +52,7 @@ export default async function QuestionPracticePage({
 
   return (
     <main className="flex-1 bg-slate-100 min-h-screen">
-      <AppNav backHref={`/interview/${cat}`} backLabel="← 回題型列表" />
+      <AppNav backHref={`/interview/${cat}`} />
 
       <div className="mx-auto max-w-3xl px-6 py-10">
         <header className="mb-8">

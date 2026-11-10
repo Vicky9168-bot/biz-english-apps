@@ -13,7 +13,7 @@ export default async function SpeakingCustomPage() {
 
   return (
     <main className="flex-1 bg-slate-100 min-h-screen">
-      <AppNav backHref="/speaking" backLabel="← 回題庫" />
+      <AppNav backHref="/speaking" />
 
       <div className="mx-auto max-w-3xl px-6 py-10">
         <header className="mb-6">
