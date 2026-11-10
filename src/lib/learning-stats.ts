@@ -6,7 +6,6 @@ type SupabaseClient = Awaited<ReturnType<typeof createClient>>
 const MIN_PER_CHARADES = 2
 const MIN_PER_LISTENING = 5
 const MIN_PER_IDIOM = 0.5
-const MIN_PER_SPEAKING = 3
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
@@ -34,7 +33,7 @@ export async function getLearningStats(
   const cutoffDate = cutoff.toISOString().slice(0, 10)
   const cutoffISO = cutoff.toISOString()
 
-  const [charadesRes, listeningRes, idiomRes, speakingRes] = await Promise.all([
+  const [charadesRes, listeningRes, idiomRes] = await Promise.all([
     supabase
       .from('charades_sessions')
       .select('session_date')
@@ -50,31 +49,23 @@ export async function getLearningStats(
       .select('attempted_at')
       .eq('user_id', userId)
       .gte('attempted_at', cutoffISO),
-    supabase
-      .from('scenario_responses')
-      .select('created_at')
-      .eq('user_id', userId)
-      .gte('created_at', cutoffISO),
   ])
 
   const charadesDates = toDates(charadesRes.data, 'session_date')
   const listeningDates = toDates(listeningRes.data, 'session_date')
   const idiomDates = toDates(idiomRes.data, 'attempted_at', 10)
-  const speakingDates = toDates(speakingRes.data, 'created_at', 10)
 
   const inMonth = (d: string) => d >= startOfMonth
   const monthMinutes = Math.round(
     charadesDates.filter(inMonth).length * MIN_PER_CHARADES +
       listeningDates.filter(inMonth).length * MIN_PER_LISTENING +
-      idiomDates.filter(inMonth).length * MIN_PER_IDIOM +
-      speakingDates.filter(inMonth).length * MIN_PER_SPEAKING
+      idiomDates.filter(inMonth).length * MIN_PER_IDIOM
   )
 
   const streak = calculateStreak([
     ...charadesDates,
     ...listeningDates,
     ...idiomDates,
-    ...speakingDates,
   ])
 
   return { streak, monthMinutes }

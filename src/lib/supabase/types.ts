@@ -41,17 +41,3 @@ export interface CharadesSession {
   stars: number
   created_at: string
 }
-
-export interface ScenarioVideo {
-  id: string
-  youtube_url: string
-  youtube_video_id: string
-  title: string
-  scenario_type: string
-  duration_seconds: number | null
-  recommended_frameworks: string[]
-  difficulty: 'beginner' | 'intermediate' | 'advanced'
-  transcript: string | null
-  thumbnail_url: string | null
-  published: boolean
-}
