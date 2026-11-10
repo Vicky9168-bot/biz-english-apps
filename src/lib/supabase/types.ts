@@ -7,6 +7,7 @@ export interface UserProfile {
   job_title: string | null
   industry: string | null
   seniority_level: string | null
+  nickname: string | null
   english_challenges: string[]
   target_scenarios: string[]
   proficiency_level: number | null

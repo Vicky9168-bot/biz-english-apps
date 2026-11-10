@@ -19,15 +19,18 @@ export function OnboardingForm({ userId }: { userId: string }) {
   const [industry, setIndustry] = useState('')
   const [challenges, setChallenges] = useState<string[]>([])
   const [level, setLevel] = useState<number | null>(null)
+  const [nickname, setNickname] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const totalSteps = 4
+  const totalSteps = 5
+  const trimmedNickname = nickname.trim()
   const canNext =
     (step === 1 && jobTitle) ||
     (step === 2 && industry) ||
     (step === 3 && challenges.length > 0) ||
-    (step === 4 && level !== null)
+    (step === 4 && level !== null) ||
+    (step === 5 && trimmedNickname.length >= 1 && trimmedNickname.length <= 20)
 
   function toggleChallenge(v: string) {
     setChallenges((prev) =>
@@ -46,12 +49,18 @@ export function OnboardingForm({ userId }: { userId: string }) {
         industry,
         english_challenges: challenges,
         proficiency_level: level,
+        nickname: trimmedNickname,
         onboarding_completed: true,
       })
       .eq('user_id', userId)
 
     if (updateError) {
-      setError(updateError.message)
+      // 23505 = unique_violation（暱稱重複）
+      setError(
+        updateError.code === '23505'
+          ? '這個暱稱已被使用，請換一個'
+          : updateError.message
+      )
       setSaving(false)
       return
     }
@@ -194,6 +203,29 @@ export function OnboardingForm({ userId }: { userId: string }) {
                 <div className="text-xs text-slate-500 mt-0.5">{l.description}</div>
               </button>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Q5: 暱稱 */}
+      {step === 5 && (
+        <div>
+          <h2 className="text-xl font-semibold text-slate-900 mb-2">
+            5. 幫自己取個暱稱
+          </h2>
+          <p className="text-sm text-slate-500 mb-6">
+            排行榜只會顯示暱稱，不會顯示你的帳號或 Email（1 到 20 字）
+          </p>
+          <input
+            type="text"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            maxLength={20}
+            placeholder="例如：Vicky"
+            className="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 focus:border-stone-800 focus:outline-none"
+          />
+          <div className="mt-2 text-right text-xs text-slate-400">
+            {trimmedNickname.length} / 20
           </div>
         </div>
       )}
