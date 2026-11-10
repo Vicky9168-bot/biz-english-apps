@@ -1,6 +1,12 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AppNav } from '../site-nav'
+import {
+  allDates,
+  computeStreaks,
+  getActivityDates,
+  shiftDate,
+} from '@/lib/learning-stats'
 
 export default async function ProgressPage() {
   const supabase = await createClient()
@@ -45,13 +51,13 @@ export default async function ProgressPage() {
   const stillReviewing = Array.from(latest.values()).filter((v) => !v.correct)
     .length
 
-  // 打卡日 → 當前 streak + 最佳 streak
-  const uniqueDates = [...new Set(rows.map((r) => r.session_date))].sort()
+  // 打卡日：四種活動（比手畫腳、聽力、口說、俚語）合併，與首頁同一套算法
+  const activityDates = allDates(await getActivityDates(supabase, user.id))
   const { current: currentStreak, best: bestStreak } =
-    computeStreaks(uniqueDates)
+    computeStreaks(activityDates)
 
   // 過去 30 天熱力圖
-  const heatmap = buildHeatmap(rows.map((r) => r.session_date))
+  const heatmap = buildHeatmap(activityDates)
 
   return (
     <main className="flex-1 bg-slate-100 min-h-screen">
@@ -115,8 +121,8 @@ export default async function ProgressPage() {
               <div
                 key={cell.date}
                 className={`w-6 h-6 rounded-sm ${cellColor(cell.count)}`}
-                title={`${cell.date} · ${cell.count} 題`}
-                aria-label={`${cell.date} 練習 ${cell.count} 題`}
+                title={`${cell.date} · ${cell.count} 次`}
+                aria-label={`${cell.date} 練習 ${cell.count} 次`}
               />
             ))}
           </div>
@@ -169,55 +175,14 @@ function MiniStat({ label, value }: { label: string; value: string }) {
   )
 }
 
-function computeStreaks(sortedDates: string[]): {
-  current: number
-  best: number
-} {
-  if (sortedDates.length === 0) return { current: 0, best: 0 }
-
-  const set = new Set(sortedDates)
-  let best = 0
-
-  // best streak: 從每個日期起算連續多長
-  for (const d of set) {
-    if (set.has(shiftDate(d, -1))) continue // 不是連續段起點
-    let run = 1
-    let cursor = d
-    while (set.has(shiftDate(cursor, 1))) {
-      run++
-      cursor = shiftDate(cursor, 1)
-    }
-    if (run > best) best = run
-  }
-
-  // current streak: 從今天(或昨天,允許今天還沒練)往回算
-  const today = new Date().toISOString().slice(0, 10)
-  let cursor = set.has(today) ? today : shiftDate(today, -1)
-  let current = 0
-  while (set.has(cursor)) {
-    current++
-    cursor = shiftDate(cursor, -1)
-  }
-
-  return { current, best }
-}
-
-function shiftDate(date: string, days: number): string {
-  const d = new Date(date)
-  d.setDate(d.getDate() + days)
-  return d.toISOString().slice(0, 10)
-}
-
 function buildHeatmap(dates: string[]): Array<{ date: string; count: number }> {
   const counts = new Map<string, number>()
   dates.forEach((d) => counts.set(d, (counts.get(d) ?? 0) + 1))
 
   const cells: Array<{ date: string; count: number }> = []
-  const today = new Date()
+  const today = new Date().toISOString().slice(0, 10)
   for (let i = 29; i >= 0; i--) {
-    const d = new Date(today)
-    d.setDate(d.getDate() - i)
-    const iso = d.toISOString().slice(0, 10)
+    const iso = shiftDate(today, -i)
     cells.push({ date: iso, count: counts.get(iso) ?? 0 })
   }
   return cells

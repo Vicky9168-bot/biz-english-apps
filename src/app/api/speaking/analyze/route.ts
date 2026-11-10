@@ -150,6 +150,31 @@ Guidelines:
     const feedback = JSON.parse(completion.choices[0].message.content ?? '{}')
     console.log('[speaking] gpt', { ms: Date.now() - t1 })
 
+    // 存紀錄（失敗不影響回饋顯示）
+    const scores = [
+      feedback.framework_score,
+      feedback.vocab_score,
+      feedback.grammar_score,
+      feedback.fluency_score,
+    ].map((v) => (Number.isFinite(v) ? Math.round(v) : null))
+    const validScores = scores.filter((v): v is number => v !== null)
+    const { error: saveError } = await supabase.from('speaking_sessions').insert({
+      user_id: user.id,
+      scenario_id: typeof scenarioId === 'string' && scenarioId ? scenarioId : null,
+      title_zh: s.title_zh,
+      framework: s.framework,
+      transcript: userText,
+      framework_score: scores[0],
+      vocab_score: scores[1],
+      grammar_score: scores[2],
+      fluency_score: scores[3],
+      avg_score: validScores.length
+        ? Math.round(validScores.reduce((a, b) => a + b, 0) / validScores.length)
+        : null,
+      feedback,
+    })
+    if (saveError) console.error('[speaking] save error:', saveError)
+
     return NextResponse.json({
       userText,
       ...feedback,
