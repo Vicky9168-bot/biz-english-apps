@@ -27,7 +27,7 @@ export default async function SpeakingScenarioPage({
   if (error || !scenario) notFound()
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/speaking" />
 
       <div className="mx-auto max-w-3xl px-6 py-10">

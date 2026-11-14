@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Check, Sparkles } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { FEATURE_ICONS } from '@/lib/feature-icons'
 import {
@@ -25,7 +25,7 @@ export default async function PricingPage() {
   const startHref = user ? '/' : '/signup'
 
   return (
-    <main className="flex-1 bg-stone-100">
+    <main className="flex-1 bg-paper text-ink">
       <SiteNav
         user={
           user
@@ -36,32 +36,24 @@ export default async function PricingPage() {
 
       <div className="mx-auto max-w-6xl px-6 py-12 md:py-16">
         {/* 標題 */}
-        <header className="mx-auto max-w-2xl text-center">
-          <p
-            className="font-mono text-xs uppercase tracking-[0.25em] text-stone-500"
-            translate="no"
-          >
-            [Pricing]
-          </p>
-          <h1 className="mt-3 text-3xl font-black tracking-tight text-stone-900 md:text-5xl">
+        <header className="max-w-2xl">
+          <h1 className="text-balance text-3xl font-bold leading-[1.15] md:text-5xl">
             先免費練，再決定要不要升級
           </h1>
-          <p className="mt-4 text-sm leading-relaxed text-stone-600 md:text-base">
+          <p className="mt-4 text-base leading-relaxed text-ink/70">
             免費版讓你完整體驗學習方法與每日打卡；Pro 解鎖無限 AI
             評分與完整求職題庫，把商務英語練到能直接上場。
           </p>
         </header>
 
-        {/* 方案卡 */}
+        {/* 方案：Free 是一張白紙，Pro 加上墨水外框 */}
         <section className="mt-12 grid gap-6 md:grid-cols-2">
           {/* Free */}
-          <div className="flex flex-col rounded-2xl border border-stone-200 bg-white p-8">
+          <div className="flex flex-col rounded-lg border border-ink/15 bg-white p-8">
             <div className="flex items-baseline justify-between">
-              <h2 className="text-lg font-semibold text-stone-900">
-                {PLANS.free.label}
-              </h2>
+              <h2 className="text-lg font-semibold">{PLANS.free.label}</h2>
               <span
-                className="font-mono text-xs uppercase tracking-wider text-stone-400"
+                className="font-display text-sm font-semibold text-ink/65"
                 translate="no"
               >
                 {PLANS.free.name}
@@ -69,28 +61,26 @@ export default async function PricingPage() {
             </div>
             <div className="mt-6 flex items-baseline gap-2">
               <span
-                className="text-4xl font-black tabular-nums text-stone-900"
+                className="font-display text-4xl font-bold tabular-nums"
                 translate="no"
               >
                 {PLANS.free.price}
               </span>
-              <span className="text-sm text-stone-500">{PLANS.free.period}</span>
+              <span className="text-sm text-ink/65">{PLANS.free.period}</span>
             </div>
-            <p className="mt-2 text-sm text-stone-600">{PLANS.free.tagline}</p>
+            <p className="mt-2 text-sm text-ink/70">{PLANS.free.tagline}</p>
 
-            <ul className="mt-6 space-y-3 text-sm text-stone-700">
+            <ul className="mt-6 space-y-3 text-sm text-ink/80">
               {PLAN_FREE_PERKS.map((perk) => (
-                <PerkItem key={perk} tone="light">
+                <PerkItem key={perk} plan="free">
                   {perk}
                 </PerkItem>
               ))}
               {PLAN_ACCESS.map((a) => {
                 const f = FEATURES.find((x) => x.key === a.key)
                 return (
-                  <PerkItem key={a.key} tone="light">
-                    <span className="font-medium text-stone-900">
-                      {f?.title}
-                    </span>
+                  <PerkItem key={a.key} plan="free">
+                    <span className="font-medium text-ink">{f?.title}</span>
                     ：{a.free}
                   </PerkItem>
                 )
@@ -99,90 +89,84 @@ export default async function PricingPage() {
 
             <Link
               href={startHref}
-              className="mt-8 rounded-md border border-stone-300 bg-white px-6 py-3 text-center text-sm font-semibold text-stone-900 transition hover:border-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900/30"
+              className="mt-8 rounded-md border border-ink/30 px-6 py-3 text-center text-sm font-semibold transition hover:border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2"
             >
               {user ? '前往學習' : PLANS.free.cta}
             </Link>
           </div>
 
           {/* Pro */}
-          <div className="relative flex flex-col overflow-hidden rounded-2xl bg-[#3a3632] p-8 text-white">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(245,211,104,0.22),transparent_60%)]"
-            />
-            <div className="relative flex flex-1 flex-col">
-              <div className="flex items-baseline justify-between">
-                <h2 className="text-lg font-semibold">{PLANS.pro.label}</h2>
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#F5D368] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-stone-900">
-                  <Sparkles className="h-3 w-3" aria-hidden="true" />
-                  <span translate="no">{PLANS.pro.name}</span>
-                </span>
-              </div>
-              <div className="mt-6 flex items-baseline gap-2">
-                <span
-                  className="text-4xl font-black tabular-nums text-[#F5D368]"
-                  translate="no"
-                >
-                  {PLANS.pro.price}
-                </span>
-                <span className="text-sm text-white/60">{PLANS.pro.period}</span>
-              </div>
-              <p className="mt-1 text-xs text-[#F5D368]/80">
-                {PLANS.pro.yearly}
-              </p>
-              <p className="mt-3 text-sm text-white/75">{PLANS.pro.tagline}</p>
-
-              <ul className="mt-6 space-y-3 text-sm text-white/85">
-                <PerkItem tone="dark">包含免費版全部內容</PerkItem>
-                {PLAN_ACCESS.map((a) => {
-                  const f = FEATURES.find((x) => x.key === a.key)
-                  return (
-                    <PerkItem key={a.key} tone="dark">
-                      <span className="font-medium text-white">{f?.title}</span>
-                      ：{a.pro}
-                    </PerkItem>
-                  )
-                })}
-              </ul>
-
-              <Link
-                href={startHref}
-                className="mt-8 rounded-md bg-[#F5D368] px-6 py-3 text-center text-sm font-semibold text-stone-900 transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+          <div className="flex flex-col rounded-lg border-2 border-ink bg-white p-8">
+            <div className="flex items-baseline justify-between">
+              <h2 className="text-lg font-semibold">{PLANS.pro.label}</h2>
+              <span
+                className="rounded-sm bg-mark px-2 py-0.5 font-display text-sm font-semibold"
+                translate="no"
               >
-                {PLANS.pro.cta}
-              </Link>
-              <p className="mt-3 text-center text-xs text-white/50">
-                付費功能即將開放，現在加入可優先收到通知
-              </p>
+                {PLANS.pro.name}
+              </span>
             </div>
+            <div className="mt-6 flex items-baseline gap-2">
+              <span
+                className="font-display text-4xl font-bold tabular-nums"
+                translate="no"
+              >
+                {PLANS.pro.price}
+              </span>
+              <span className="text-sm text-ink/65">{PLANS.pro.period}</span>
+            </div>
+            <p className="mt-1 text-sm text-ink/65">{PLANS.pro.yearly}</p>
+            <p className="mt-3 text-sm text-ink/70">{PLANS.pro.tagline}</p>
+
+            <ul className="mt-6 flex-1 space-y-3 text-sm text-ink/80">
+              <PerkItem plan="pro">包含免費版全部內容</PerkItem>
+              {PLAN_ACCESS.map((a) => {
+                const f = FEATURES.find((x) => x.key === a.key)
+                return (
+                  <PerkItem key={a.key} plan="pro">
+                    <span className="font-medium text-ink">{f?.title}</span>
+                    ：{a.pro}
+                  </PerkItem>
+                )
+              })}
+            </ul>
+
+            <Link
+              href={startHref}
+              className="mt-8 rounded-md bg-ink px-6 py-3 text-center text-sm font-semibold text-paper transition hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2"
+            >
+              {PLANS.pro.cta}
+            </Link>
+            <p className="mt-3 text-center text-sm text-ink/65">
+              付費功能即將開放，現在加入可優先收到通知
+            </p>
           </div>
         </section>
 
         {/* 功能對照 */}
         <section className="mt-16">
-          <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="text-lg font-semibold text-stone-900">功能對照</h2>
-            <span className="text-xs text-stone-500">
+          <div className="mb-5 flex items-baseline justify-between gap-4">
+            <h2 className="text-2xl font-bold">功能對照</h2>
+            <span className="text-sm text-ink/65">
               含 AI 即時回饋的功能以標籤標示
             </span>
           </div>
-          <div className="overflow-x-auto rounded-2xl border border-stone-200 bg-white">
+          <div className="overflow-x-auto rounded-lg border border-ink/15 bg-white">
             <table className="w-full min-w-[640px] text-left text-sm">
               <thead>
-                <tr className="border-b border-stone-200 text-xs uppercase tracking-wider text-stone-500">
+                <tr className="border-b border-ink/15 text-ink/65">
                   <th scope="col" className="px-6 py-4 font-medium">
                     功能
                   </th>
                   <th scope="col" className="px-6 py-4 font-medium">
                     免費
                   </th>
-                  <th scope="col" className="px-6 py-4 font-medium text-[#8A6508]">
+                  <th scope="col" className="px-6 py-4 font-semibold text-ink">
                     Pro
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-100">
+              <tbody className="divide-y divide-ink/10">
                 {PLAN_ACCESS.map((a) => {
                   const f = FEATURES.find((x) => x.key === a.key)
                   if (!f) return null
@@ -191,24 +175,20 @@ export default async function PricingPage() {
                     <tr key={a.key}>
                       <th scope="row" className="px-6 py-4 font-normal">
                         <div className="flex items-center gap-3">
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-stone-900 text-[#F5D368]">
-                            <Icon
-                              className="h-4 w-4"
-                              strokeWidth={1.5}
-                              aria-hidden="true"
-                            />
-                          </span>
+                          <Icon
+                            className="h-5 w-5 shrink-0 text-ink/50"
+                            strokeWidth={1.5}
+                            aria-hidden="true"
+                          />
                           <div>
-                            <div className="font-semibold text-stone-900">
-                              {f.title}
-                            </div>
+                            <div className="font-semibold">{f.title}</div>
                             <div
-                              className="font-mono text-[10px] uppercase tracking-wider text-stone-400"
+                              className="mt-0.5 flex items-center gap-2 font-display text-xs text-ink/65"
                               translate="no"
                             >
                               {f.tag}
                               {a.ai && (
-                                <span className="ml-2 rounded-full bg-[#FBF0C8] px-1.5 py-0.5 font-semibold text-[#8A6508]">
+                                <span className="rounded-sm bg-mark px-1.5 py-0.5 font-semibold text-ink">
                                   AI
                                 </span>
                               )}
@@ -216,10 +196,8 @@ export default async function PricingPage() {
                           </div>
                         </div>
                       </th>
-                      <td className="px-6 py-4 text-stone-600">{a.free}</td>
-                      <td className="px-6 py-4 font-medium text-stone-900">
-                        {a.pro}
-                      </td>
+                      <td className="px-6 py-4 text-ink/70">{a.free}</td>
+                      <td className="px-6 py-4 font-medium">{a.pro}</td>
                     </tr>
                   )
                 })}
@@ -229,13 +207,13 @@ export default async function PricingPage() {
         </section>
 
         {/* FAQ */}
-        <section className="mt-16 mx-auto max-w-3xl">
-          <h2 className="mb-4 text-lg font-semibold text-stone-900">常見問題</h2>
-          <dl className="divide-y divide-stone-200 rounded-2xl border border-stone-200 bg-white">
+        <section className="mt-16 max-w-3xl">
+          <h2 className="mb-5 text-2xl font-bold">常見問題</h2>
+          <dl className="divide-y divide-ink/15 border-y border-ink/15">
             {PRICING_FAQ.map((item) => (
-              <div key={item.q} className="px-6 py-5">
-                <dt className="font-semibold text-stone-900">{item.q}</dt>
-                <dd className="mt-1.5 text-sm leading-relaxed text-stone-600">
+              <div key={item.q} className="py-5">
+                <dt className="font-semibold">{item.q}</dt>
+                <dd className="mt-1.5 text-sm leading-relaxed text-ink/70">
                   {item.a}
                 </dd>
               </div>
@@ -248,17 +226,17 @@ export default async function PricingPage() {
 }
 
 function PerkItem({
-  tone,
+  plan,
   children,
 }: {
-  tone: 'light' | 'dark'
+  plan: 'free' | 'pro'
   children: React.ReactNode
 }) {
   return (
     <li className="flex gap-3">
       <Check
         className={`mt-0.5 h-4 w-4 shrink-0 ${
-          tone === 'dark' ? 'text-[#F5D368]' : 'text-[#8A6508]'
+          plan === 'pro' ? 'text-ink' : 'text-ink/50'
         }`}
         strokeWidth={2}
         aria-hidden="true"

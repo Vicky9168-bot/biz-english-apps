@@ -70,18 +70,18 @@ export function OnboardingForm({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+    <div className="rounded-lg border border-ink/15 bg-white p-8">
       {/* Progress */}
       <div className="mb-8">
-        <div className="flex justify-between text-xs text-slate-500 mb-2">
+        <div className="flex justify-between text-xs text-ink/65 mb-2">
           <span>
             第 {step} / {totalSteps} 步
           </span>
           <span>{Math.round((step / totalSteps) * 100)}%</span>
         </div>
-        <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+        <div className="h-2 bg-paper rounded-full overflow-hidden">
           <div
-            className="h-full bg-stone-800 transition-all duration-300"
+            className="h-full bg-ink transition-all duration-300"
             style={{ width: `${(step / totalSteps) * 100}%` }}
           />
         </div>
@@ -90,10 +90,10 @@ export function OnboardingForm({ userId }: { userId: string }) {
       {/* Q1: 職位 */}
       {step === 1 && (
         <div>
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-xl font-semibold text-ink mb-2">
             1. 你的職位是什麼？
           </h2>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-ink/65 mb-6">
             我們會用你的職位來推薦相關的商務場景
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -103,8 +103,8 @@ export function OnboardingForm({ userId }: { userId: string }) {
                 onClick={() => setJobTitle(title)}
                 className={`rounded-lg border px-4 py-3 text-sm font-medium transition ${
                   jobTitle === title
-                    ? 'border-stone-800 bg-[#FBF0C8] text-[#8A6508]'
-                    : 'border-slate-200 text-slate-700 hover:border-slate-300'
+                    ? 'border-ink bg-mark/30 text-ink'
+                    : 'border-ink/15 text-ink/80 hover:border-ink/25'
                 }`}
               >
                 {title}
@@ -117,10 +117,10 @@ export function OnboardingForm({ userId }: { userId: string }) {
       {/* Q2: 產業 */}
       {step === 2 && (
         <div>
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-xl font-semibold text-ink mb-2">
             2. 你所在的產業？
           </h2>
-          <p className="text-sm text-slate-500 mb-6">影響單字題庫的領域選擇</p>
+          <p className="text-sm text-ink/65 mb-6">影響單字題庫的領域選擇</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {INDUSTRIES.map((ind) => (
               <button
@@ -128,8 +128,8 @@ export function OnboardingForm({ userId }: { userId: string }) {
                 onClick={() => setIndustry(ind)}
                 className={`rounded-lg border px-4 py-3 text-sm font-medium transition ${
                   industry === ind
-                    ? 'border-stone-800 bg-[#FBF0C8] text-[#8A6508]'
-                    : 'border-slate-200 text-slate-700 hover:border-slate-300'
+                    ? 'border-ink bg-mark/30 text-ink'
+                    : 'border-ink/15 text-ink/80 hover:border-ink/25'
                 }`}
               >
                 {ind}
@@ -142,10 +142,10 @@ export function OnboardingForm({ userId }: { userId: string }) {
       {/* Q3: 英文挑戰 */}
       {step === 3 && (
         <div>
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-xl font-semibold text-ink mb-2">
             3. 過往用英文最常遇到的挑戰？
           </h2>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-ink/65 mb-6">
             可多選，決定推題方向（已選 {challenges.length} 項）
           </p>
           <div className="grid gap-2">
@@ -155,15 +155,15 @@ export function OnboardingForm({ userId }: { userId: string }) {
                 onClick={() => toggleChallenge(c.value)}
                 className={`flex items-center gap-3 rounded-lg border px-4 py-3 text-left text-sm font-medium transition ${
                   challenges.includes(c.value)
-                    ? 'border-stone-800 bg-[#FBF0C8] text-[#8A6508]'
-                    : 'border-slate-200 text-slate-700 hover:border-slate-300'
+                    ? 'border-ink bg-mark/30 text-ink'
+                    : 'border-ink/15 text-ink/80 hover:border-ink/25'
                 }`}
               >
                 <span
                   className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                     challenges.includes(c.value)
-                      ? 'border-stone-800 bg-stone-800 text-[#F5D368]'
-                      : 'border-slate-300'
+                      ? 'border-ink bg-ink text-paper'
+                      : 'border-ink/25'
                   }`}
                 >
                   {challenges.includes(c.value) && (
@@ -182,10 +182,10 @@ export function OnboardingForm({ userId }: { userId: string }) {
       {/* Q4: 英文程度 */}
       {step === 4 && (
         <div>
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-xl font-semibold text-ink mb-2">
             4. 你目前的英文程度？
           </h2>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-ink/65 mb-6">
             決定初始難度，之後系統會依表現自動調整
           </p>
           <div className="grid gap-2">
@@ -195,12 +195,12 @@ export function OnboardingForm({ userId }: { userId: string }) {
                 onClick={() => setLevel(l.value)}
                 className={`rounded-lg border px-4 py-3 text-left transition ${
                   level === l.value
-                    ? 'border-stone-800 bg-[#FBF0C8]'
-                    : 'border-slate-200 hover:border-slate-300'
+                    ? 'border-ink bg-mark/30'
+                    : 'border-ink/15 hover:border-ink/25'
                 }`}
               >
-                <div className="text-sm font-medium text-slate-900">{l.label}</div>
-                <div className="text-xs text-slate-500 mt-0.5">{l.description}</div>
+                <div className="text-sm font-medium text-ink">{l.label}</div>
+                <div className="text-xs text-ink/65 mt-0.5">{l.description}</div>
               </button>
             ))}
           </div>
@@ -210,10 +210,10 @@ export function OnboardingForm({ userId }: { userId: string }) {
       {/* Q5: 暱稱 */}
       {step === 5 && (
         <div>
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-xl font-semibold text-ink mb-2">
             5. 幫自己取個暱稱
           </h2>
-          <p className="text-sm text-slate-500 mb-6">
+          <p className="text-sm text-ink/65 mb-6">
             排行榜只會顯示暱稱，不會顯示你的帳號或 Email（1 到 20 字）
           </p>
           <input
@@ -222,16 +222,16 @@ export function OnboardingForm({ userId }: { userId: string }) {
             onChange={(e) => setNickname(e.target.value)}
             maxLength={20}
             placeholder="例如：Vicky"
-            className="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-900 focus:border-stone-800 focus:outline-none"
+            className="w-full rounded-lg border border-ink/15 px-4 py-3 text-sm text-ink focus:border-ink focus:outline-none"
           />
-          <div className="mt-2 text-right text-xs text-slate-400">
+          <div className="mt-2 text-right text-xs text-ink/60">
             {trimmedNickname.length} / 20
           </div>
         </div>
       )}
 
       {error && (
-        <div className="mt-6 rounded-md bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+        <div className="mt-6 rounded-md bg-pen/10 border border-pen/30 px-3 py-2 text-sm text-pen">
           {error}
         </div>
       )}
@@ -241,7 +241,7 @@ export function OnboardingForm({ userId }: { userId: string }) {
         <button
           onClick={() => setStep(step - 1)}
           disabled={step === 1}
-          className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-md border border-ink/25 bg-white px-4 py-2 text-sm font-medium text-ink/80 hover:bg-paper transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           上一步
         </button>
@@ -249,7 +249,7 @@ export function OnboardingForm({ userId }: { userId: string }) {
           <button
             onClick={() => setStep(step + 1)}
             disabled={!canNext}
-            className="rounded-md bg-stone-800 px-6 py-2 text-sm font-semibold text-[#F5D368] hover:bg-stone-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-md bg-ink px-6 py-2 text-sm font-semibold text-paper hover:bg-ink/85 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             下一步
           </button>
@@ -257,7 +257,7 @@ export function OnboardingForm({ userId }: { userId: string }) {
           <button
             onClick={handleSubmit}
             disabled={!canNext || saving}
-            className="rounded-md bg-stone-800 px-6 py-2 text-sm font-semibold text-[#F5D368] hover:bg-stone-700 transition disabled:opacity-50"
+            className="rounded-md bg-ink px-6 py-2 text-sm font-semibold text-paper hover:bg-ink/85 transition disabled:opacity-50"
           >
             {saving ? '儲存中...' : '完成，開始學習'}
           </button>

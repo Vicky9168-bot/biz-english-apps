@@ -9,11 +9,11 @@ export type NavUser = {
 
 export function SiteNav({ user }: { user: NavUser | null }) {
   return (
-    <nav className="border-b border-stone-200 bg-white">
+    <nav className="border-b border-ink/10 bg-paper text-ink">
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
         <Link
           href="/"
-          className="text-xl font-bold text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900/20 rounded-sm"
+          className="font-display text-xl font-bold text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded-sm"
           translate="no"
         >
           BizEnglish
@@ -21,7 +21,7 @@ export function SiteNav({ user }: { user: NavUser | null }) {
         <div className="flex items-center gap-4">
           <Link
             href="/pricing"
-            className="text-sm text-stone-600 hover:text-stone-900"
+            className="rounded-sm text-sm text-ink/70 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
           >
             方案
           </Link>
@@ -29,12 +29,12 @@ export function SiteNav({ user }: { user: NavUser | null }) {
             <>
               {user.profileTag && (
                 <span
-                  className="hidden sm:inline text-xs text-stone-500 border border-stone-200 rounded-full px-2.5 py-1"
+                  className="hidden sm:inline text-xs text-ink/65 border border-ink/15 rounded-full px-2.5 py-1"
                   title={user.email ?? undefined}
                 >
                   {user.profileTag}
                   {user.proficiencyLevel && (
-                    <span className="ml-1.5 text-stone-400">
+                    <span className="ml-1.5 text-ink/50">
                       · Lv.{user.proficiencyLevel}
                     </span>
                   )}
@@ -43,7 +43,7 @@ export function SiteNav({ user }: { user: NavUser | null }) {
               <form action="/auth/logout" method="POST">
                 <button
                   type="submit"
-                  className="text-sm text-stone-600 hover:text-stone-900"
+                  className="rounded-sm text-sm text-ink/70 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
                 >
                   登出
                 </button>
@@ -53,13 +53,13 @@ export function SiteNav({ user }: { user: NavUser | null }) {
             <>
               <Link
                 href="/login"
-                className="text-sm text-stone-600 hover:text-stone-900"
+                className="rounded-sm text-sm text-ink/70 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
               >
                 登入
               </Link>
               <Link
                 href="/signup"
-                className="rounded-md bg-stone-800 px-4 py-2 text-sm font-semibold text-[#F5D368] hover:bg-stone-700 transition"
+                className="rounded-md bg-ink px-4 py-2 text-sm font-semibold text-paper hover:bg-ink/85 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
               >
                 免費開始
               </Link>
@@ -74,12 +74,12 @@ export function SiteNav({ user }: { user: NavUser | null }) {
 // 功能頁共用導覽列：品牌 + 返回連結
 export function AppNav({ backHref = '/' }: { backHref?: string }) {
   return (
-    <nav className="border-b border-stone-200 bg-white">
+    <nav className="border-b border-ink/10 bg-paper text-ink">
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center gap-4">
         <BackButton href={backHref} />
         <Link
           href="/"
-          className="text-xl font-bold text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900/20 rounded-sm"
+          className="font-display text-xl font-bold text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded-sm"
           translate="no"
         >
           BizEnglish

@@ -60,62 +60,35 @@ export default async function ProgressPage() {
   const heatmap = buildHeatmap(activityDates)
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper text-ink min-h-screen">
       <AppNav />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <header className="mb-8">
-          <div className="font-mono text-xs tracking-[0.2em] uppercase text-stone-500 mb-2">
-            [My Progress]
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 text-pretty">
-            我的學習成就
-          </h1>
-          <p className="text-slate-600 mt-2">
+          <h1 className="text-3xl font-bold text-pretty">我的學習成就</h1>
+          <p className="text-ink/70 mt-2">
             自 {profile.created_at?.slice(0, 10) ?? '—'} 開始，你的累積成果
           </p>
         </header>
 
         {/* 主要指標 */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-          <BigStat
-            label="目前連續"
-            value={`${currentStreak}`}
-            unit="天"
-            emphasis="text-orange-600"
-          />
-          <BigStat
-            label="最長 streak"
-            value={`${bestStreak}`}
-            unit="天"
-            emphasis="text-slate-900"
-          />
-          <BigStat
-            label="已掌握"
-            value={`${masteredWords}`}
-            unit="個字"
-            emphasis="text-emerald-700"
-          />
-          <BigStat
-            label="正確率"
-            value={`${accuracy}`}
-            unit="%"
-            emphasis="text-[#8A6508]"
-          />
+        <div className="grid grid-cols-2 border-t border-ink/15 lg:grid-cols-4 mb-8">
+          <BigStat label="目前連續" value={`${currentStreak}`} unit="天" />
+          <BigStat label="最長 streak" value={`${bestStreak}`} unit="天" />
+          <BigStat label="已掌握" value={`${masteredWords}`} unit="個字" />
+          <BigStat label="正確率" value={`${accuracy}`} unit="%" />
         </div>
 
         {/* 次要指標 */}
-        <div className="grid gap-4 sm:grid-cols-3 mb-8">
+        <div className="grid gap-x-8 sm:grid-cols-3 mb-12">
           <MiniStat label="總練習次數" value={totalAttempts.toString()} />
           <MiniStat label="累積答對" value={totalCorrect.toString()} />
           <MiniStat label="待複習" value={stillReviewing.toString()} />
         </div>
 
-        {/* 熱力圖 */}
-        <section className="rounded-xl bg-white border border-slate-200 p-6">
-          <h2 className="text-sm font-semibold tracking-wide uppercase text-slate-500 mb-4">
-            過去 30 天
-          </h2>
+        {/* 熱力圖：次數越多，螢光筆越濃 */}
+        <section className="border-t border-ink/15 pt-6">
+          <h2 className="text-xl font-bold mb-4">過去 30 天</h2>
           <div className="flex gap-1 flex-wrap">
             {heatmap.map((cell) => (
               <div
@@ -126,12 +99,12 @@ export default async function ProgressPage() {
               />
             ))}
           </div>
-          <div className="flex items-center gap-2 mt-4 text-xs text-slate-500">
+          <div className="flex items-center gap-2 mt-4 text-sm text-ink/65">
             <span>少</span>
-            <div className="w-3 h-3 rounded-sm bg-slate-100" />
-            <div className="w-3 h-3 rounded-sm bg-emerald-200" />
-            <div className="w-3 h-3 rounded-sm bg-emerald-400" />
-            <div className="w-3 h-3 rounded-sm bg-emerald-600" />
+            <div className="w-3 h-3 rounded-sm bg-ink/10" />
+            <div className="w-3 h-3 rounded-sm bg-mark/60" />
+            <div className="w-3 h-3 rounded-sm bg-mark" />
+            <div className="w-3 h-3 rounded-sm bg-ink" />
             <span>多</span>
           </div>
         </section>
@@ -144,21 +117,19 @@ function BigStat({
   label,
   value,
   unit,
-  emphasis,
 }: {
   label: string
   value: string
   unit: string
-  emphasis: string
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
-      <div className="text-xs text-slate-500 mb-2">{label}</div>
-      <div className="flex items-baseline gap-1">
-        <span className={`text-3xl font-bold tabular-nums ${emphasis}`}>
+    <div className="border-b border-ink/15 py-5 pr-4 lg:border-l lg:pl-6 lg:first:border-l-0 lg:first:pl-0">
+      <div className="text-sm text-ink/65 mb-1">{label}</div>
+      <div className="flex items-baseline gap-1.5">
+        <span className="font-display text-4xl font-bold tabular-nums">
           {value}
         </span>
-        <span className="text-sm text-slate-500">{unit}</span>
+        <span className="text-sm text-ink/65">{unit}</span>
       </div>
     </div>
   )
@@ -166,9 +137,9 @@ function BigStat({
 
 function MiniStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-white border border-slate-200 px-4 py-3">
-      <div className="text-xs text-slate-500 mb-0.5">{label}</div>
-      <div className="text-lg font-semibold text-slate-900 tabular-nums">
+    <div className="flex items-baseline justify-between border-b border-ink/15 py-3">
+      <div className="text-sm text-ink/65">{label}</div>
+      <div className="font-display text-lg font-semibold tabular-nums">
         {value}
       </div>
     </div>
@@ -189,8 +160,8 @@ function buildHeatmap(dates: string[]): Array<{ date: string; count: number }> {
 }
 
 function cellColor(count: number): string {
-  if (count === 0) return 'bg-slate-100'
-  if (count <= 2) return 'bg-emerald-200'
-  if (count <= 4) return 'bg-emerald-400'
-  return 'bg-emerald-600'
+  if (count === 0) return 'bg-ink/10'
+  if (count <= 2) return 'bg-mark/60'
+  if (count <= 4) return 'bg-mark'
+  return 'bg-ink'
 }

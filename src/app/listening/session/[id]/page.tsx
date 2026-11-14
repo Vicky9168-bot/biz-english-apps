@@ -65,7 +65,7 @@ export default async function ListeningSessionPage({
   }
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/listening" />
 
       <div className="mx-auto max-w-6xl px-6 py-8">

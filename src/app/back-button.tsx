@@ -5,7 +5,7 @@ import Link from 'next/link'
 // 所有頁面統一的「返回」按鈕：同樣的文字、位置（導覽列最左）與樣式
 const LABEL = '← 返回'
 const CLASS_NAME =
-  'inline-flex items-center rounded-lg border border-stone-300 bg-white px-4 py-2 text-sm font-semibold text-stone-800 shadow-sm cursor-pointer transition hover:border-stone-400 hover:bg-stone-100 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400'
+  'inline-flex items-center rounded-md border border-ink/25 px-4 py-2 text-sm font-semibold text-ink cursor-pointer transition hover:border-ink hover:bg-ink hover:text-paper active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2 focus-visible:ring-offset-paper'
 
 // 一般頁面：連到上層頁面
 export function BackButton({ href }: { href: string }) {

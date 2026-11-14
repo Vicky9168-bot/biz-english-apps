@@ -23,37 +23,37 @@ const CATEGORY_META: Record<
 > = {
   meeting: {
     label: '會議',
-    color: 'text-[#8A6508] bg-[#FBF0C8] border-[#EBD891]',
+    color: 'text-ink bg-mark/30 border-mark',
     order: 1,
   },
   negotiation: {
     label: '談判',
-    color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+    color: 'text-ink bg-mark/25 border-mark',
     order: 2,
   },
   strategy: {
     label: '策略',
-    color: 'text-stone-700 bg-stone-100 border-stone-300',
+    color: 'text-ink/80 bg-paper border-ink/25',
     order: 3,
   },
   feedback: {
     label: '回饋',
-    color: 'text-orange-700 bg-orange-50 border-orange-200',
+    color: 'text-pen bg-pen/10 border-pen/30',
     order: 4,
   },
   urgency: {
     label: '時間壓力',
-    color: 'text-rose-700 bg-rose-50 border-rose-200',
+    color: 'text-pen bg-pen/10 border-pen/30',
     order: 5,
   },
   interpersonal: {
     label: '人際',
-    color: 'text-cyan-700 bg-cyan-50 border-cyan-200',
+    color: 'text-ink bg-paper border-ink/15',
     order: 6,
   },
   general: {
     label: '通用',
-    color: 'text-slate-700 bg-slate-50 border-slate-200',
+    color: 'text-ink/80 bg-paper border-ink/15',
     order: 7,
   },
 }
@@ -114,18 +114,15 @@ export default async function IdiomsReviewPage() {
   }
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/idioms" />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <header className="mb-6">
-          <div className="font-mono text-xs tracking-[0.2em] uppercase text-stone-500 mb-2">
-            [Part 4 · Review]
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 text-pretty">
+          <h1 className="text-3xl font-bold text-ink text-pretty">
             全部 100 個俚語瀏覽
           </h1>
-          <p className="text-slate-600 mt-2 max-w-2xl">
+          <p className="text-ink/70 mt-2 max-w-2xl">
             先看一遍中文意思跟情境例句，準備好再按下面「開始測驗」，走現有的複習流程（優先抽你答錯過的）。
           </p>
         </header>
@@ -156,17 +153,17 @@ export default async function IdiomsReviewPage() {
           categoryMeta={CATEGORY_META}
         />
 
-        <div className="mt-10 rounded-xl border border-slate-900 bg-slate-900 p-6 text-center">
-          <p className="text-sm text-slate-300 mb-3">
+        <div className="mt-10 rounded-lg border border-ink bg-ink p-6 text-center">
+          <p className="text-sm text-paper/70 mb-3">
             看完了嗎？來測驗一下
           </p>
           <Link
             href="/idioms/practice?mode=review"
-            className="inline-block text-base font-semibold bg-white text-slate-900 px-6 py-2.5 rounded-lg hover:bg-slate-100 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="inline-block text-base font-semibold bg-white text-ink px-6 py-2.5 rounded-lg hover:bg-paper transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             開始測驗 →
           </Link>
-          <p className="text-xs text-slate-400 mt-3">
+          <p className="text-xs text-ink/60 mt-3">
             走現有邏輯 · 優先抽你答錯過的
           </p>
         </div>
@@ -188,17 +185,17 @@ function StatCard({
 }) {
   const toneClass =
     tone === 'rose'
-      ? 'border-rose-200 bg-rose-50'
-      : 'border-slate-200 bg-white'
+      ? 'border-pen/30 bg-pen/10'
+      : 'border-ink/15 bg-white'
   const valueClass =
-    tone === 'rose' ? 'text-rose-900' : 'text-slate-900'
+    tone === 'rose' ? 'text-pen' : 'text-ink'
   return (
-    <div className={`rounded-xl border p-5 ${toneClass}`}>
-      <div className="text-xs text-slate-500 mb-1">{label}</div>
+    <div className={`rounded-lg border p-5 ${toneClass}`}>
+      <div className="text-xs text-ink/65 mb-1">{label}</div>
       <div className={`text-2xl font-bold tabular-nums ${valueClass}`}>
         {value}
       </div>
-      <div className="text-xs text-slate-500 mt-1">{hint}</div>
+      <div className="text-xs text-ink/65 mt-1">{hint}</div>
     </div>
   )
 }

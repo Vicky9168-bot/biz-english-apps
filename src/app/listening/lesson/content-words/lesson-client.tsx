@@ -155,21 +155,21 @@ export function ContentWordsLesson() {
   return (
     <div className="space-y-8">
       {/* 規則 */}
-      <section className="rounded-xl border border-slate-200 bg-white p-6">
-        <h2 className="text-sm font-semibold tracking-wide uppercase text-slate-500 mb-3">
+      <section className="rounded-lg border border-ink/15 bg-white p-6">
+        <h2 className="text-sm font-semibold tracking-wide uppercase text-ink/65 mb-3">
           規則
         </h2>
-        <p className="text-slate-800 leading-relaxed mb-4">
+        <p className="text-ink leading-relaxed mb-4">
           英文是「重音時序語言」— 母語者只會把力氣放在
-          <strong className="text-slate-900"> 實詞（content words）</strong>{' '}
+          <strong className="text-ink"> 實詞（content words）</strong>{' '}
           上，其他字幾乎糊帶而過，學會只抓實詞，聽力立刻鬆一半。
         </p>
         <div className="grid gap-4 sm:grid-cols-2 text-sm">
-          <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-4">
-            <div className="text-xs font-semibold tracking-wide uppercase text-emerald-700 mb-2">
+          <div className="rounded-lg bg-mark/25 border border-mark p-4">
+            <div className="text-xs font-semibold tracking-wide uppercase text-ink mb-2">
               實詞 · 要抓
             </div>
-            <ul className="space-y-1 text-slate-700">
+            <ul className="space-y-1 text-ink/80">
               <li>名詞 (report, deadline)</li>
               <li>主要動詞 (send, schedule)</li>
               <li>形容詞 (new, quick)</li>
@@ -179,11 +179,11 @@ export function ContentWordsLesson() {
               <li>數字 (Q4, 5, 100)</li>
             </ul>
           </div>
-          <div className="rounded-lg bg-slate-100 border border-slate-200 p-4">
-            <div className="text-xs font-semibold tracking-wide uppercase text-slate-500 mb-2">
+          <div className="rounded-lg bg-paper border border-ink/15 p-4">
+            <div className="text-xs font-semibold tracking-wide uppercase text-ink/65 mb-2">
               虛詞 · 可放掉
             </div>
-            <ul className="space-y-1 text-slate-600">
+            <ul className="space-y-1 text-ink/70">
               <li>冠詞 (a, an, the)</li>
               <li>代名詞 (I, you, he, it)</li>
               <li>介係詞 (of, in, on, to)</li>
@@ -196,15 +196,15 @@ export function ContentWordsLesson() {
       </section>
 
       {/* 對照範例 */}
-      <section className="rounded-xl border border-slate-200 bg-white p-6">
-        <h2 className="text-sm font-semibold tracking-wide uppercase text-slate-500 mb-3">
+      <section className="rounded-lg border border-ink/15 bg-white p-6">
+        <h2 className="text-sm font-semibold tracking-wide uppercase text-ink/65 mb-3">
           對照示範
         </h2>
-        <p className="text-sm text-slate-600 mb-4">
-          <span className="text-slate-900 font-semibold">深色 = 實詞</span>
-          <span className="mx-2 text-slate-400">·</span>
-          <span className="text-slate-400">淺色 = 虛詞</span>
-          <span className="ml-3 text-slate-500">
+        <p className="text-sm text-ink/70 mb-4">
+          <span className="text-ink font-semibold">深色 = 實詞</span>
+          <span className="mx-2 text-ink/60">·</span>
+          <span className="text-ink/60">淺色 = 虛詞</span>
+          <span className="ml-3 text-ink/65">
             只用深色的字就足以理解整句意思
           </span>
         </p>
@@ -216,9 +216,9 @@ export function ContentWordsLesson() {
                   <TokenSpan key={j} token={t} />
                 ))}
               </p>
-              <p className="text-xs text-slate-500 italic pl-1">
+              <p className="text-xs text-ink/65 italic pl-1">
                 聽起來像：
-                <span className="text-slate-800 font-medium" translate="no">
+                <span className="text-ink font-medium" translate="no">
                   {tokens
                     .filter((t) => t.content)
                     .map((t) => t.text.toUpperCase())
@@ -231,11 +231,11 @@ export function ContentWordsLesson() {
       </section>
 
       {/* Mini-drill */}
-      <section className="rounded-xl border border-slate-200 bg-white p-6">
-        <h2 className="text-sm font-semibold tracking-wide uppercase text-slate-500 mb-3">
+      <section className="rounded-lg border border-ink/15 bg-white p-6">
+        <h2 className="text-sm font-semibold tracking-wide uppercase text-ink/65 mb-3">
           小測驗 · 點選你認為的實詞
         </h2>
-        <p className="text-sm text-slate-600 mb-5">
+        <p className="text-sm text-ink/70 mb-5">
           每題點完後按「確認」看解答，全部做完就完成這一課。
         </p>
         <ol className="space-y-6">
@@ -243,7 +243,7 @@ export function ContentWordsLesson() {
             const score = revealed[drillIdx] ? drillScore(drillIdx) : null
             return (
               <li key={drillIdx} className="space-y-3">
-                <div className="text-xs font-medium tracking-wide uppercase text-slate-500">
+                <div className="text-xs font-medium tracking-wide uppercase text-ink/65">
                   題 {drillIdx + 1}
                 </div>
                 <p className="text-base leading-loose">
@@ -260,33 +260,33 @@ export function ContentWordsLesson() {
                 {!revealed[drillIdx] ? (
                   <button
                     onClick={() => checkAnswer(drillIdx)}
-                    className="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/30 transition"
+                    className="rounded-md bg-ink px-4 py-2 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 transition"
                   >
                     確認答案
                   </button>
                 ) : (
                   <div
-                    className="rounded-lg bg-slate-50 border border-slate-200 p-3 text-sm"
+                    className="rounded-lg bg-paper border border-ink/15 p-3 text-sm"
                     aria-live="polite"
                   >
                     <div className="flex items-center gap-2 mb-1">
                       <span
                         className={
                           score && score.correct === score.total
-                            ? 'text-emerald-700 font-semibold'
-                            : 'text-slate-700 font-semibold'
+                            ? 'text-ink font-semibold'
+                            : 'text-ink/80 font-semibold'
                         }
                       >
                         {score?.correct} / {score?.total} 正確
                       </span>
                       {score && score.correct === score.total && (
-                        <span className="text-xs text-emerald-600">
+                        <span className="text-xs text-ink">
                           完美！
                         </span>
                       )}
                     </div>
                     {drill.hint_zh && (
-                      <p className="text-xs text-slate-600">
+                      <p className="text-xs text-ink/70">
                         {drill.hint_zh}
                       </p>
                     )}
@@ -301,20 +301,20 @@ export function ContentWordsLesson() {
       {/* 完成按鈕 */}
       {allDone && (
         <section
-          className="rounded-xl border border-emerald-200 bg-emerald-50 p-6 text-center"
+          className="rounded-lg border border-mark bg-mark/25 p-6 text-center"
           aria-live="polite"
         >
-          <div className="text-xs font-medium tracking-wide uppercase text-emerald-700 mb-2">
+          <div className="text-xs font-medium tracking-wide uppercase text-ink mb-2">
             Ready
           </div>
-          <p className="text-slate-800 mb-4">
+          <p className="text-ink mb-4">
             這一課答對 {totalCorrect} / {totalPossible}
             ，接下來聽 AI 商務對話時，用同樣的策略去抓實詞就好。
           </p>
           <button
             onClick={finish}
             disabled={submitting}
-            className="inline-flex items-center gap-2 rounded-md bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/30 disabled:opacity-50 motion-safe:transition"
+            className="inline-flex items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 disabled:opacity-50 motion-safe:transition"
           >
             {submitting ? '前往中…' : '開始聽力訓練 →'}
           </button>
@@ -327,8 +327,8 @@ export function ContentWordsLesson() {
 function TokenSpan({ token }: { token: Token }) {
   const isPunct = /^[.,?!]$/.test(token.text)
   const classes = token.content
-    ? 'text-slate-900 font-semibold'
-    : 'text-slate-400'
+    ? 'text-ink font-semibold'
+    : 'text-ink/60'
   return (
     <>
       {!isPunct && ' '}
@@ -351,27 +351,27 @@ function DrillToken({
   onClick: () => void
 }) {
   const isPunct = /^[.,?!]$/.test(token.text)
-  if (isPunct) return <span className="text-slate-400">{token.text}</span>
+  if (isPunct) return <span className="text-ink/60">{token.text}</span>
 
   let classes =
     'inline-block px-1.5 py-0.5 rounded-md motion-safe:transition cursor-pointer border '
   if (revealed) {
     const isCorrect = token.content === selected
     if (token.content && selected) {
-      classes += 'bg-emerald-100 border-emerald-300 text-emerald-900'
+      classes += 'bg-mark/40 border-mark text-ink'
     } else if (token.content && !selected) {
-      classes += 'bg-amber-50 border-amber-300 text-amber-900'
+      classes += 'bg-mark/25 border-mark text-ink'
     } else if (!token.content && selected) {
-      classes += 'bg-rose-50 border-rose-300 text-rose-900 line-through'
+      classes += 'bg-pen/10 border-pen/40 text-pen line-through'
     } else {
-      classes += 'border-transparent text-slate-400'
+      classes += 'border-transparent text-ink/60'
     }
     classes += ' cursor-default'
     void isCorrect
   } else {
     classes += selected
-      ? 'bg-slate-900 border-slate-900 text-white'
-      : 'bg-white border-slate-200 hover:border-slate-400 text-slate-800'
+      ? 'bg-ink border-ink text-white'
+      : 'bg-white border-ink/15 hover:border-ink/40 text-ink'
   }
 
   return (

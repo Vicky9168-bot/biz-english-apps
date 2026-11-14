@@ -55,20 +55,20 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="flex-1 flex items-center justify-center px-6 py-12">
+    <main className="flex-1 flex items-center justify-center bg-paper px-6 py-12 text-ink">
       <div className="w-full max-w-md">
         <Link href="/" className="block text-center mb-8">
-          <div className="text-2xl font-bold text-slate-900">BizEnglish</div>
+          <div className="font-display text-2xl font-bold text-ink" translate="no">BizEnglish</div>
         </Link>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">建立帳號</h1>
-          <p className="text-sm text-slate-600 mb-6">開始你的商務英語學習</p>
+        <div className="rounded-lg border border-ink/15 bg-white p-8">
+          <h1 className="text-2xl font-bold text-ink mb-2">建立帳號</h1>
+          <p className="text-sm text-ink/70 mb-6">開始你的商務英語學習</p>
 
           <button
             onClick={handleGoogleSignup}
             disabled={loading}
-            className="w-full mb-4 rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full mb-4 rounded-md border border-ink/25 bg-white px-4 py-2.5 text-sm font-medium text-ink hover:bg-paper transition disabled:opacity-50 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -81,16 +81,16 @@ export default function SignupPage() {
 
           <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
+              <div className="w-full border-t border-ink/15" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-2 text-slate-400">或用 Email</span>
+              <span className="bg-white px-2 text-ink/60">或用 Email</span>
             </div>
           </div>
 
           <form onSubmit={handleSignup} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-ink mb-1">
                 Email
               </label>
               <input
@@ -98,11 +98,11 @@ export default function SignupPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-stone-800 focus:outline-none focus:ring-1 focus:ring-stone-800"
+                className="w-full rounded-md border border-ink/25 px-3 py-2 text-sm focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-ink mb-1">
                 密碼（至少 6 字元）
               </label>
               <input
@@ -111,17 +111,17 @@ export default function SignupPage() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-stone-800 focus:outline-none focus:ring-1 focus:ring-stone-800"
+                className="w-full rounded-md border border-ink/25 px-3 py-2 text-sm focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink"
               />
             </div>
 
             {error && (
-              <div className="rounded-md bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+              <div className="rounded-md border border-pen/30 bg-pen/10 px-3 py-2 text-sm text-pen">
                 {error}
               </div>
             )}
             {info && (
-              <div className="rounded-md bg-[#FBF0C8] border border-[#EBD891] px-3 py-2 text-sm text-[#8A6508]">
+              <div className="rounded-md border border-mark bg-mark/30 px-3 py-2 text-sm text-ink">
                 {info}
               </div>
             )}
@@ -129,15 +129,15 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-md bg-stone-800 px-4 py-2.5 text-sm font-semibold text-[#F5D368] hover:bg-stone-700 transition disabled:opacity-50"
+              className="w-full rounded-md bg-ink px-4 py-2.5 text-sm font-semibold text-paper hover:bg-ink/85 transition disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2"
             >
               {loading ? '註冊中...' : '註冊'}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-600">
+          <p className="mt-6 text-center text-sm text-ink/70">
             已有帳號？{' '}
-            <Link href="/login" className="font-medium text-[#8A6508] hover:text-stone-900">
+            <Link href="/login" className="font-semibold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
               登入
             </Link>
           </p>

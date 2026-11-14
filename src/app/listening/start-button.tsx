@@ -43,7 +43,7 @@ export function StartButton() {
     <div>
       <label
         htmlFor="scenario-select"
-        className="block text-xs font-medium text-slate-600 mb-2"
+        className="block text-xs font-medium text-ink/70 mb-2"
       >
         場景
       </label>
@@ -52,7 +52,7 @@ export function StartButton() {
         value={scenario}
         onChange={(e) => setScenario(e.target.value)}
         disabled={loading}
-        className="w-full mb-4 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 focus:outline-none disabled:opacity-60"
+        className="w-full mb-4 rounded-md border border-ink/25 bg-white px-3 py-2 text-sm text-ink focus:border-ink/50 focus:ring-2 focus:ring-ink/15 focus:outline-none disabled:opacity-60"
       >
         {SCENARIOS.map((s) => (
           <option key={s.value} value={s.value}>
@@ -63,12 +63,12 @@ export function StartButton() {
       <button
         onClick={start}
         disabled={loading}
-        className="w-full rounded-md bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 disabled:opacity-60 disabled:cursor-not-allowed transition"
+        className="w-full rounded-md bg-ink px-4 py-3 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 disabled:opacity-60 disabled:cursor-not-allowed transition"
       >
         {loading ? 'AI 正在寫劇本... (約 10 秒)' : '開始今日聽力訓練'}
       </button>
       {error && (
-        <p className="mt-3 text-sm text-red-600" role="alert">
+        <p className="mt-3 text-sm text-pen" role="alert">
           出錯了：{error}，再試一次？
         </p>
       )}

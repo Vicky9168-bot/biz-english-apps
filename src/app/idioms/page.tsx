@@ -10,37 +10,37 @@ const CATEGORY_META: Record<
   meeting: {
     label: '會議',
     desc: 'touch base · loop in · circle back',
-    color: 'text-[#8A6508] bg-[#FBF0C8] border-[#EBD891]',
+    color: 'text-ink bg-mark/30 border-mark',
   },
   negotiation: {
     label: '談判',
     desc: 'push back · hash out · deal breaker',
-    color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+    color: 'text-ink bg-mark/25 border-mark',
   },
   strategy: {
     label: '策略',
     desc: 'pivot · double down · north star',
-    color: 'text-stone-700 bg-stone-100 border-stone-300',
+    color: 'text-ink/80 bg-paper border-ink/25',
   },
   feedback: {
     label: '回饋',
     desc: 'drop the ball · above and beyond · nail it',
-    color: 'text-orange-700 bg-orange-50 border-orange-200',
+    color: 'text-pen bg-pen/10 border-pen/30',
   },
   urgency: {
     label: '時間壓力',
     desc: 'crunch time · put out fires · buy some time',
-    color: 'text-rose-700 bg-rose-50 border-rose-200',
+    color: 'text-pen bg-pen/10 border-pen/30',
   },
   interpersonal: {
     label: '人際',
     desc: 'team player · rock the boat · see eye to eye',
-    color: 'text-cyan-700 bg-cyan-50 border-cyan-200',
+    color: 'text-ink bg-paper border-ink/15',
   },
   general: {
     label: '通用',
     desc: 'cut corners · bite the bullet · from scratch',
-    color: 'text-slate-700 bg-slate-50 border-slate-200',
+    color: 'text-ink/80 bg-paper border-ink/15',
   },
 }
 
@@ -98,26 +98,23 @@ export default async function IdiomsHome() {
   const seedMissing = total === 0
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper min-h-screen">
       <AppNav />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <header className="mb-8">
-          <div className="font-mono text-xs tracking-[0.2em] uppercase text-stone-500 mb-2">
-            [Part 4]
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 text-pretty">
+          <h1 className="text-3xl font-bold text-ink text-pretty">
             商務俚語練習
           </h1>
-          <p className="text-slate-600 mt-2 max-w-2xl">
+          <p className="text-ink/70 mt-2 max-w-2xl">
             100 個會議、談判、回饋場景常聽到的英文俚語，看情境例句選中文意思，練到聽到就秒懂。
           </p>
         </header>
 
         {seedMissing ? (
-          <div className="rounded-lg border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500 mb-8">
+          <div className="rounded-lg border border-dashed border-ink/25 bg-white p-10 text-center text-sm text-ink/65 mb-8">
             尚未載入題庫，請先在 Supabase 執行{' '}
-            <code className="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">
+            <code className="font-mono text-xs bg-paper px-1.5 py-0.5 rounded">
               docs/apply-idioms.sql
             </code>
           </div>
@@ -170,10 +167,10 @@ export default async function IdiomsHome() {
               <Link
                 href="/idioms/practice"
                 aria-disabled={todayReachedLimit}
-                className={`block rounded-xl border-2 p-6 text-center motion-safe:transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
+                className={`block rounded-lg border-2 p-6 text-center motion-safe:transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
                   todayReachedLimit
-                    ? 'border-slate-200 bg-white text-slate-400 cursor-not-allowed pointer-events-none'
-                    : 'border-slate-900 bg-slate-900 text-white hover:bg-slate-800'
+                    ? 'border-ink/15 bg-white text-ink/60 cursor-not-allowed pointer-events-none'
+                    : 'border-ink bg-ink text-white hover:bg-ink'
                 }`}
               >
                 <div className="text-base font-semibold mb-1">
@@ -181,7 +178,7 @@ export default async function IdiomsHome() {
                 </div>
                 <p
                   className={`text-xs ${
-                    todayReachedLimit ? 'text-slate-400' : 'text-slate-300'
+                    todayReachedLimit ? 'text-ink/60' : 'text-paper/70'
                   }`}
                 >
                   {todayReachedLimit
@@ -191,12 +188,12 @@ export default async function IdiomsHome() {
               </Link>
               <Link
                 href="/idioms/review"
-                className="block rounded-xl border-2 border-slate-300 bg-white p-6 text-center text-slate-900 hover:border-slate-500 hover:bg-slate-50 motion-safe:transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                className="block rounded-lg border-2 border-ink/25 bg-white p-6 text-center text-ink hover:border-ink/50 hover:bg-paper motion-safe:transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
               >
                 <div className="text-base font-semibold mb-1">
                   瀏覽全部 100 題 →
                 </div>
-                <p className="text-xs text-slate-600">
+                <p className="text-xs text-ink/70">
                   {wrongIds.size > 0
                     ? `先看一遍再測驗，優先抽你答錯過的 ${wrongIds.size} 題`
                     : uniqueAttempted.size > 0
@@ -210,21 +207,21 @@ export default async function IdiomsHome() {
 
         {/* 分類簡介 */}
         <section>
-          <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-3">
+          <div className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-3">
             涵蓋 7 大類商務場景
           </div>
           <ul className="grid gap-2 sm:grid-cols-2">
             {Object.entries(CATEGORY_META).map(([key, meta]) => (
               <li
                 key={key}
-                className="flex items-start gap-2 rounded-md border border-slate-200 bg-white p-3"
+                className="flex items-start gap-2 rounded-md border border-ink/15 bg-white p-3"
               >
                 <span
                   className={`text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border shrink-0 ${meta.color}`}
                 >
                   {meta.label}
                 </span>
-                <span className="text-xs text-slate-700 leading-relaxed">
+                <span className="text-xs text-ink/80 leading-relaxed">
                   {meta.desc}
                 </span>
               </li>
@@ -246,12 +243,12 @@ function StatCard({
   hint: string
 }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
-      <div className="text-sm text-slate-500 mb-2">{label}</div>
-      <div className="text-2xl font-bold text-slate-900 tabular-nums">
+    <div className="rounded-lg border border-ink/15 bg-white p-5">
+      <div className="text-sm text-ink/65 mb-2">{label}</div>
+      <div className="text-2xl font-bold text-ink tabular-nums">
         {value}
       </div>
-      <div className="text-xs text-slate-500 mt-1">{hint}</div>
+      <div className="text-xs text-ink/65 mt-1">{hint}</div>
     </div>
   )
 }

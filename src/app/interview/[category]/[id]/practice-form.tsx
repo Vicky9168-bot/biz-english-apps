@@ -15,8 +15,8 @@ export default function PracticeForm({ question }: Props) {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-xl border border-slate-200 bg-white p-6">
-        <div className="text-xs font-medium tracking-wide uppercase text-slate-500 mb-2">
+      <section className="rounded-lg border border-ink/15 bg-white p-6">
+        <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-2">
           你的答案
         </div>
         <textarea
@@ -24,17 +24,17 @@ export default function PracticeForm({ question }: Props) {
           onChange={(e) => setAnswer(e.target.value)}
           placeholder="先用英文寫下你的回答，寫完再看提示。不用完美，先寫出來比較重要。"
           rows={10}
-          className="w-full rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:border-slate-400 resize-y"
+          className="w-full rounded-lg border border-ink/15 bg-paper p-4 text-sm text-ink placeholder:text-ink/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:border-ink/40 resize-y"
         />
         <div className="flex items-center justify-between mt-3">
-          <span className="text-xs font-mono text-slate-500">
+          <span className="text-xs font-mono text-ink/65">
             {wordCount} words
           </span>
           {!revealed ? (
             <button
               type="button"
               onClick={() => setRevealed(true)}
-              className="text-sm font-medium bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+              className="text-sm font-medium bg-ink text-white px-4 py-2 rounded-lg hover:bg-ink transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
             >
               看提示與答題大綱 →
             </button>
@@ -42,7 +42,7 @@ export default function PracticeForm({ question }: Props) {
             <button
               type="button"
               onClick={() => setRevealed(false)}
-              className="text-sm text-slate-600 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 rounded-sm px-1"
+              className="text-sm text-ink/70 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded-sm px-1"
             >
               收起提示
             </button>
@@ -109,24 +109,24 @@ function HintCard({
   mono?: boolean
 }) {
   const toneClass = {
-    slate: 'border-slate-200 bg-white',
-    emerald: 'border-emerald-200 bg-emerald-50/50',
-    amber: 'border-amber-200 bg-amber-50/50',
+    slate: 'border-ink/15 bg-white',
+    emerald: 'border-mark bg-mark/13',
+    amber: 'border-mark bg-mark/13',
   }[tone]
 
   const codeToneClass = {
-    slate: 'bg-slate-100 text-slate-600',
-    emerald: 'bg-emerald-100 text-emerald-700',
-    amber: 'bg-amber-100 text-amber-800',
+    slate: 'bg-paper text-ink/70',
+    emerald: 'bg-mark/40 text-ink',
+    amber: 'bg-mark/40 text-ink',
   }[tone]
 
   return (
-    <section className={`rounded-xl border p-5 ${toneClass}`}>
+    <section className={`rounded-lg border p-5 ${toneClass}`}>
       <div className="flex items-center gap-2 mb-3">
         <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${codeToneClass}`}>
           {code}
         </span>
-        <span className="text-xs font-medium tracking-wide uppercase text-slate-500">
+        <span className="text-xs font-medium tracking-wide uppercase text-ink/65">
           {label}
         </span>
       </div>
@@ -134,9 +134,9 @@ function HintCard({
         {items.map((item, i) => (
           <li
             key={i}
-            className={`text-sm leading-relaxed text-slate-700 flex gap-2 ${mono ? 'font-mono' : ''}`}
+            className={`text-sm leading-relaxed text-ink/80 flex gap-2 ${mono ? 'font-mono' : ''}`}
           >
-            <span className="text-slate-400 shrink-0">·</span>
+            <span className="text-ink/60 shrink-0">·</span>
             <span className="min-w-0">{item}</span>
           </li>
         ))}

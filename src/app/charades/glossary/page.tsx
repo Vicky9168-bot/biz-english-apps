@@ -27,18 +27,15 @@ export default async function GlossaryPage() {
     .limit(1000)
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/charades" />
 
       <div className="mx-auto max-w-5xl px-6 py-10">
         <header className="mb-6">
-          <div className="font-mono text-xs tracking-[0.2em] uppercase text-stone-500 mb-2">
-            [Part 1 · 詞彙表]
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 text-pretty">
+          <h1 className="text-3xl font-bold text-ink text-pretty">
             商務單字庫
           </h1>
-          <p className="text-slate-600 mt-2 max-w-xl">
+          <p className="text-ink/70 mt-2 max-w-xl">
             目前系統收錄 {words?.length ?? 0} 個商務單字，涵蓋動詞、名詞、片語。
             每天練 5 題，系統會挑「你還沒學會或錯過」的字。
           </p>

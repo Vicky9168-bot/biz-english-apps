@@ -20,11 +20,74 @@
   --color-slate-950: var(--color-stone-950);
 }
 
+/* 首頁「校稿」視覺：紙張、墨水、紅筆、螢光筆 */
+@theme static {
+  --color-paper: #f2f3ef;
+  --color-ink: #1a2430;
+  --color-pen: #c23b2e;
+  --color-mark: #f5d368;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-bricolage), 'PingFang TC', 'Noto Sans TC',
+    sans-serif;
+}
+
+/* 首頁示範：紅筆劃掉原句 → 螢光筆標出修改後 → 浮出註記（--d 為每組的延遲） */
+@keyframes redline-strike {
+  from { background-size: 0% 2px; }
+  to { background-size: 100% 2px; }
+}
+@keyframes redline-mark {
+  from { background-size: 0% 60%; }
+  to { background-size: 100% 60%; }
+}
+@keyframes redline-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.redline-before {
+  background: linear-gradient(var(--color-pen), var(--color-pen)) 0 56% / 100%
+    2px no-repeat;
+  animation: redline-strike 0.7s cubic-bezier(0.65, 0, 0.35, 1)
+    calc(var(--d, 0s) + 0.5s) both;
+}
+.redline-after {
+  background: linear-gradient(var(--color-mark), var(--color-mark)) 0 82% / 100%
+    60% no-repeat;
+  animation:
+    redline-fade 0.4s ease-out calc(var(--d, 0s) + 1.3s) both,
+    redline-mark 0.6s ease-out calc(var(--d, 0s) + 1.4s) both;
+}
+.redline-note {
+  animation: redline-fade 0.5s ease-out calc(var(--d, 0s) + 2.1s) both;
+}
+
+/* 功能列 hover / focus：標題底下掃出螢光筆 */
+.mark-hover {
+  background: linear-gradient(var(--color-mark), var(--color-mark)) 0 92% / 0%
+    45% no-repeat;
+  transition: background-size 0.3s ease;
+}
+a:hover .mark-hover,
+a:focus-visible .mark-hover {
+  background-size: 100% 45%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .redline-before,
+  .redline-after,
+  .redline-note {
+    animation: none;
+  }
+  .mark-hover {
+    transition: none;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

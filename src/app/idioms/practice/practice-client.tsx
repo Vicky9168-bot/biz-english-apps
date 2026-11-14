@@ -125,7 +125,7 @@ export default function PracticeClient({
 
   if (loading && !q && !endState) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-10 text-center text-sm text-slate-500">
+      <div className="rounded-lg border border-ink/15 bg-white p-10 text-center text-sm text-ink/65">
         載入中…
       </div>
     )
@@ -133,7 +133,7 @@ export default function PracticeClient({
 
   if (error) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+      <div className="rounded-lg border border-pen/30 bg-pen/10 p-6 text-sm text-pen">
         {error}
         <button
           type="button"
@@ -161,17 +161,17 @@ export default function PracticeClient({
   return (
     <>
       {/* 本次進度列 */}
-      <div className="mb-4 flex items-center justify-between text-xs text-slate-500">
+      <div className="mb-4 flex items-center justify-between text-xs text-ink/65">
         <span>
           本次已練{' '}
-          <span className="font-semibold text-slate-700 tabular-nums">
+          <span className="font-semibold text-ink/80 tabular-nums">
             {session.done}
           </span>{' '}
           題
           {session.done > 0 && (
             <>
               {' '}· 答對{' '}
-              <span className="font-semibold text-slate-700 tabular-nums">
+              <span className="font-semibold text-ink/80 tabular-nums">
                 {session.correct}
               </span>
             </>
@@ -182,7 +182,7 @@ export default function PracticeClient({
             q.wrong_total && q.wrong_total > 0 ? (
               <>
                 錯題池{' '}
-                <span className="font-semibold text-slate-700 tabular-nums">
+                <span className="font-semibold text-ink/80 tabular-nums">
                   {q.wrong_total}
                 </span>{' '}
                 題
@@ -190,7 +190,7 @@ export default function PracticeClient({
             ) : (
               <>
                 已學{' '}
-                <span className="font-semibold text-slate-700 tabular-nums">
+                <span className="font-semibold text-ink/80 tabular-nums">
                   {q.learned_total}
                 </span>{' '}
                 題複習中
@@ -199,7 +199,7 @@ export default function PracticeClient({
           ) : (
             <>
               今日{' '}
-              <span className="font-semibold text-slate-700 tabular-nums">
+              <span className="font-semibold text-ink/80 tabular-nums">
                 {q.today_done + (isAnswered ? 1 : 0)}
               </span>{' '}
               / {q.daily_limit}
@@ -209,20 +209,20 @@ export default function PracticeClient({
       </div>
 
       {/* 題目卡 */}
-      <div className="rounded-xl border border-slate-200 bg-white p-6 mb-4">
+      <div className="rounded-lg border border-ink/15 bg-white p-6 mb-4">
         <div className="flex items-center gap-2 mb-4 text-xs">
-          <span className="font-mono font-semibold px-1.5 py-0.5 rounded border text-slate-700 bg-slate-50 border-slate-200">
+          <span className="font-mono font-semibold px-1.5 py-0.5 rounded border text-ink/80 bg-paper border-ink/15">
             {CATEGORY_LABEL[q.category] ?? q.category}
           </span>
-          <span className="font-mono text-slate-400 tabular-nums">
+          <span className="font-mono text-ink/60 tabular-nums">
             Lv.{q.difficulty}
           </span>
         </div>
 
-        <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">
+        <div className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-2">
           在這個情境裡，畫線的俚語是什麼意思？
         </div>
-        <p className="text-lg text-slate-900 leading-relaxed mb-6">
+        <p className="text-lg text-ink leading-relaxed mb-6">
           {highlighted}
         </p>
 
@@ -231,14 +231,14 @@ export default function PracticeClient({
             const isChosen = chosen === i
             const isRight = i === q.correct_index
             let cls =
-              'border-slate-200 bg-white hover:border-slate-400 hover:bg-slate-50'
+              'border-ink/15 bg-white hover:border-ink/40 hover:bg-paper'
             if (isAnswered) {
               if (isRight) {
-                cls = 'border-emerald-400 bg-emerald-50 text-emerald-900'
+                cls = 'border-mark bg-mark/25 text-ink'
               } else if (isChosen) {
-                cls = 'border-red-300 bg-red-50 text-red-900'
+                cls = 'border-pen/40 bg-pen/10 text-pen'
               } else {
-                cls = 'border-slate-200 bg-white text-slate-500'
+                cls = 'border-ink/15 bg-white text-ink/65'
               }
             }
             return (
@@ -247,19 +247,19 @@ export default function PracticeClient({
                   type="button"
                   disabled={isAnswered}
                   onClick={() => submitAnswer(i)}
-                  className={`w-full text-left rounded-lg border p-4 text-sm motion-safe:transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 disabled:cursor-default ${cls}`}
+                  className={`w-full text-left rounded-lg border p-4 text-sm motion-safe:transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 disabled:cursor-default ${cls}`}
                 >
-                  <span className="font-mono text-xs text-slate-400 mr-2">
+                  <span className="font-mono text-xs text-ink/60 mr-2">
                     {String.fromCharCode(65 + i)}.
                   </span>
                   {opt}
                   {isAnswered && isRight && (
-                    <span className="ml-2 text-xs font-medium text-emerald-700">
+                    <span className="ml-2 text-xs font-medium text-ink">
                       ✓ 正解
                     </span>
                   )}
                   {isAnswered && isChosen && !isRight && (
-                    <span className="ml-2 text-xs font-medium text-red-700">
+                    <span className="ml-2 text-xs font-medium text-pen">
                       ✗ 你選的
                     </span>
                   )}
@@ -272,50 +272,50 @@ export default function PracticeClient({
 
       {/* 解釋區（答完後才顯示） */}
       {isAnswered && (
-        <div className="rounded-xl border border-slate-200 bg-white p-6 mb-4">
+        <div className="rounded-lg border border-ink/15 bg-white p-6 mb-4">
           <div
             className={`text-sm font-semibold mb-3 ${
-              isCorrect ? 'text-emerald-700' : 'text-red-700'
+              isCorrect ? 'text-ink' : 'text-pen'
             }`}
           >
             {isCorrect ? '答對！' : '再看一次'}
           </div>
           <dl className="grid gap-3 text-sm">
             <div>
-              <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
+              <dt className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-1">
                 俚語
               </dt>
-              <dd className="text-slate-900 font-semibold">{q.idiom}</dd>
+              <dd className="text-ink font-semibold">{q.idiom}</dd>
             </div>
             <div>
-              <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
+              <dt className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-1">
                 中文意思
               </dt>
-              <dd className="text-slate-900">{q.meaning_zh}</dd>
+              <dd className="text-ink">{q.meaning_zh}</dd>
             </div>
             <div>
-              <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
+              <dt className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-1">
                 英文解釋
               </dt>
-              <dd className="text-slate-700">{q.meaning_en}</dd>
+              <dd className="text-ink/80">{q.meaning_en}</dd>
             </div>
             {q.formal_alt && (
               <div>
-                <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
+                <dt className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-1">
                   正式對照詞
                 </dt>
-                <dd className="text-slate-700">
-                  <code className="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">
+                <dd className="text-ink/80">
+                  <code className="font-mono text-xs bg-paper px-1.5 py-0.5 rounded">
                     {q.formal_alt}
                   </code>
                 </dd>
               </div>
             )}
             <div>
-              <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
+              <dt className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-1">
                 例句中譯
               </dt>
-              <dd className="text-slate-700 leading-relaxed">
+              <dd className="text-ink/80 leading-relaxed">
                 {q.example_zh}
               </dd>
             </div>
@@ -329,7 +329,7 @@ export default function PracticeClient({
           type="button"
           onClick={loadNext}
           disabled={loading}
-          className="w-full rounded-lg bg-slate-900 text-white py-3 text-sm font-semibold hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 motion-safe:transition disabled:opacity-50"
+          className="w-full rounded-lg bg-ink text-white py-3 text-sm font-semibold hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 motion-safe:transition disabled:opacity-50"
         >
           {loading ? '載入中…' : '下一題 →'}
         </button>
@@ -347,25 +347,25 @@ function EndStateCard({
 }) {
   if (state.kind === 'done_for_today') {
     return (
-      <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-8 text-center">
+      <div className="rounded-lg border border-mark bg-mark/25 p-8 text-center">
         <IconTile icon={Trophy} size="lg" className="mb-3" />
-        <h2 className="text-xl font-bold text-emerald-900 mb-2">
+        <h2 className="text-xl font-bold text-ink mb-2">
           今日 {state.daily_limit} 題已達標
         </h2>
-        <p className="text-sm text-emerald-800 mb-6">
+        <p className="text-sm text-ink mb-6">
           本次答對 {sessionDone > 0 ? `${sessionDone} 題後結束` : ''}
           明天再回來學新的，現在可以複習之前學過的
         </p>
         <div className="flex gap-3 justify-center">
           <Link
             href="/idioms/practice?mode=review"
-            className="rounded-lg bg-slate-900 text-white px-5 py-2.5 text-sm font-semibold hover:bg-slate-800 motion-safe:transition"
+            className="rounded-lg bg-ink text-white px-5 py-2.5 text-sm font-semibold hover:bg-ink motion-safe:transition"
           >
             去複習 →
           </Link>
           <Link
             href="/idioms"
-            className="rounded-lg border border-slate-300 bg-white text-slate-900 px-5 py-2.5 text-sm font-semibold hover:bg-slate-50 motion-safe:transition"
+            className="rounded-lg border border-ink/25 bg-white text-ink px-5 py-2.5 text-sm font-semibold hover:bg-paper motion-safe:transition"
           >
             回題庫首頁
           </Link>
@@ -375,17 +375,17 @@ function EndStateCard({
   }
   if (state.kind === 'all_learned') {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-8 text-center">
+      <div className="rounded-lg border border-ink/15 bg-white p-8 text-center">
         <IconTile icon={Trophy} size="lg" className="mb-3" />
-        <h2 className="text-xl font-bold text-slate-900 mb-2">
+        <h2 className="text-xl font-bold text-ink mb-2">
           100 個俚語全部練過了！
         </h2>
-        <p className="text-sm text-slate-600 mb-6">
+        <p className="text-sm text-ink/70 mb-6">
           剩下就是不斷複習，讓聽到就秒懂
         </p>
         <Link
           href="/idioms/practice?mode=review"
-          className="rounded-lg bg-slate-900 text-white px-5 py-2.5 text-sm font-semibold hover:bg-slate-800 motion-safe:transition"
+          className="rounded-lg bg-ink text-white px-5 py-2.5 text-sm font-semibold hover:bg-ink motion-safe:transition"
         >
           開始複習 →
         </Link>
@@ -394,17 +394,17 @@ function EndStateCard({
   }
   // empty_review
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-8 text-center">
+    <div className="rounded-lg border border-ink/15 bg-white p-8 text-center">
       <IconTile icon={BookOpen} size="lg" className="mb-3" />
-      <h2 className="text-xl font-bold text-slate-900 mb-2">
+      <h2 className="text-xl font-bold text-ink mb-2">
         還沒有可以複習的題目
       </h2>
-      <p className="text-sm text-slate-600 mb-6">
+      <p className="text-sm text-ink/70 mb-6">
         先去學一些新題，之後再回來複習
       </p>
       <Link
         href="/idioms/practice"
-        className="rounded-lg bg-slate-900 text-white px-5 py-2.5 text-sm font-semibold hover:bg-slate-800 motion-safe:transition"
+        className="rounded-lg bg-ink text-white px-5 py-2.5 text-sm font-semibold hover:bg-ink motion-safe:transition"
       >
         去學今日新題 →
       </Link>
@@ -436,7 +436,7 @@ function highlightIdiom(sentence: string, idiom: string) {
     part && re.test(part) ? (
       <span
         key={i}
-        className="font-semibold text-slate-900 underline decoration-2 decoration-amber-400 underline-offset-4"
+        className="font-semibold text-ink underline decoration-2 decoration-mark underline-offset-4"
       >
         {part}
       </span>

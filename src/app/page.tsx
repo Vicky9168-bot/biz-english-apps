@@ -1,12 +1,29 @@
+import type { CSSProperties } from 'react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Clock, Flame, type LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { FEATURE_ICONS } from '@/lib/feature-icons'
 import { getLearningStats } from '@/lib/learning-stats'
 import { FEATURES, FEATURE_GROUPS, HOME_CAROUSEL_KEYS } from '@/lib/constants'
 import { HomeCarousel } from './home-carousel'
 import { SiteNav } from './site-nav'
+
+// 首頁示範：兩句常見的職場英文，被紅筆改成道地說法
+const REDLINE_EDITS = [
+  {
+    before: 'I want to ask you send me the report.',
+    after: 'Could you send me the report by Friday?',
+    note: '改成請求句，並補上期限',
+    delay: '0s',
+  },
+  {
+    before: 'We have a problem about the schedule.',
+    after: "We're running behind schedule.",
+    note: '用商務上常聽到的說法',
+    delay: '2.4s',
+  },
+] as const
 
 export default async function Home() {
   const supabase = await createClient()
@@ -40,133 +57,55 @@ export default async function Home() {
   const featureHref = (href: string) => (user ? href : '/signup')
 
   return (
-    <main className="flex-1 bg-stone-100">
+    <main className="flex-1 bg-paper text-ink">
       <SiteNav
         user={
           user ? { email: user.email ?? null, profileTag, proficiencyLevel } : null
         }
       />
 
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        {/* Hero banner */}
-        <section className="relative isolate mb-6 overflow-hidden rounded-2xl bg-[#3a3632] px-8 py-12 md:px-14 md:py-16 text-white">
-          {/* 大樓玻璃帷幕：細方格暗示窗戶 */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-[0.09]"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(255,255,255,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.7) 1px, transparent 1px)',
-              backgroundSize: '34px 34px',
-            }}
-          />
-          {/* 右上光源漸層 */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(231,229,228,0.28),transparent_60%)]"
-          />
-          {/* 左上點陣波浪 */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -top-10 -left-10 h-56 w-56 opacity-50"
-            style={{
-              backgroundImage:
-                'radial-gradient(circle, rgba(255,255,255,0.85) 1.2px, transparent 1.6px)',
-              backgroundSize: '10px 10px',
-              WebkitMaskImage:
-                'radial-gradient(circle at top left, black 15%, transparent 70%)',
-              maskImage:
-                'radial-gradient(circle at top left, black 15%, transparent 70%)',
-            }}
-          />
-          {/* 右下點陣波浪 */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-12 -right-12 h-72 w-72 opacity-50"
-            style={{
-              backgroundImage:
-                'radial-gradient(circle, rgba(255,255,255,0.85) 1.2px, transparent 1.6px)',
-              backgroundSize: '10px 10px',
-              WebkitMaskImage:
-                'radial-gradient(circle at bottom right, black 15%, transparent 70%)',
-              maskImage:
-                'radial-gradient(circle at bottom right, black 15%, transparent 70%)',
-            }}
-          />
-
-          <div className="relative">
-            {/* 品牌小標 */}
-            <div className="mb-8 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-md border border-white/40">
-                <span
-                  className="text-lg font-black tracking-tighter"
-                  translate="no"
+      {/* Hero：左邊說明，右邊是一張被校稿的紙 */}
+      <section className="border-b border-ink/10">
+        <div className="mx-auto grid max-w-6xl gap-12 px-6 py-14 md:py-20 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-16">
+          <div>
+            <h1 className="text-balance text-[clamp(2.25rem,5vw,3.25rem)] font-bold leading-[1.15]">
+              讓你的英文，聽起來像做過這份工作
+            </h1>
+            <p className="mt-5 max-w-md text-base leading-relaxed text-ink/70">
+              {user
+                ? '每天一點英文，累積成為職場上的即戰力。'
+                : '依你的職位與產業出題，練聽力、口說、履歷與面試，AI 逐句幫你改。'}
+            </p>
+            {!user && (
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                <Link
+                  href="/signup"
+                  className="rounded-md bg-ink px-6 py-3 text-sm font-semibold text-paper transition hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                 >
-                  B
-                </span>
-              </div>
-              <div
-                className="text-[11px] font-mono uppercase tracking-[0.25em] leading-tight text-white/70"
-                translate="no"
-              >
-                BizEnglish
-                <br />
-                <span className="text-white/40">· Daily</span>
-              </div>
-            </div>
-
-            {/* 主標 + 左側直線 */}
-            <div className="flex gap-6 md:gap-8">
-              <div
-                aria-hidden
-                className="w-px shrink-0 self-stretch bg-white/40"
-              />
-              <div className="flex-1">
-                <h1
-                  className="text-balance text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-5xl md:text-7xl"
-                  translate="no"
+                  免費開始學習
+                </Link>
+                <Link
+                  href="/login"
+                  className="rounded-sm text-sm font-semibold underline decoration-ink/30 underline-offset-4 transition hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
                 >
-                  Learning Biz
-                  <br />
-                  Business
-                </h1>
-                <p
-                  className="mt-6 max-w-lg text-sm leading-relaxed text-white/70 md:text-base"
-                  translate="no"
-                >
-                  with ironv makes you happy every day.
-                </p>
-                <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/50">
-                  {user
-                    ? '每天一點英文，累積成為職場上的即戰力'
-                    : '專為商務人士設計的 AI 英語學習平台，依你的職位與產業客製化聽說讀寫訓練'}
-                </p>
-                {!user && (
-                  <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                    <Link
-                      href="/signup"
-                      className="rounded-md bg-[#F5D368] px-6 py-3 text-center text-sm font-semibold text-stone-900 transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                    >
-                      免費開始學習
-                    </Link>
-                    <Link
-                      href="/login"
-                      className="rounded-md border border-white/40 px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                    >
-                      我已有帳號
-                    </Link>
-                  </div>
-                )}
+                  我已有帳號
+                </Link>
               </div>
-            </div>
+            )}
           </div>
-        </section>
 
-        {/* 打卡 + 本月分鐘（登入後才有） */}
-        {user && (
-          <section className="mb-10 grid gap-4 sm:grid-cols-2">
-            <StatCard
-              icon={Flame}
+          <RedlineSheet />
+        </div>
+      </section>
+
+      {/* 打卡 + 本月分鐘（登入後才有） */}
+      {user && (
+        <section
+          aria-label="學習紀錄"
+          className="border-b border-ink/10 bg-white"
+        >
+          <div className="mx-auto grid max-w-6xl grid-cols-2 divide-x divide-ink/10 px-6">
+            <Stat
               label="連續打卡"
               value={stats.streak}
               unit="天"
@@ -178,8 +117,7 @@ export default async function Home() {
                     : '養成習慣中'
               }
             />
-            <StatCard
-              icon={Clock}
+            <Stat
               label="本月學習"
               value={stats.monthMinutes}
               unit="分鐘"
@@ -190,35 +128,31 @@ export default async function Home() {
                     ? '這個月還沒開始'
                     : '持續累積中'
               }
+              inset
             />
-          </section>
-        )}
+          </div>
+        </section>
+      )}
 
+      <div className="mx-auto max-w-6xl px-6 pb-8 pt-14 md:pt-16">
         {/* 熱門功能輪播 */}
-        <div className="mt-10">
-          <HomeCarousel features={carouselFeatures} loggedIn={!!user} />
-        </div>
+        <HomeCarousel features={carouselFeatures} loggedIn={!!user} />
 
-        {/* 完整功能 */}
+        {/* 完整功能：Part 1–6 是學習順序，所以用編號列表 */}
         {FEATURE_GROUPS.map((group) => {
           const items = FEATURES.filter((f) => f.group === group.key)
           return (
-            <section key={group.key} className="mt-10">
-              <div className="mb-4 flex items-baseline justify-between">
-                <h2 className="text-lg font-semibold text-stone-900">
-                  {group.title}
-                </h2>
-                <span className="text-xs text-stone-500">
-                  {group.subtitle}
-                </span>
+            <section
+              key={group.key}
+              className="mt-16 grid gap-6 lg:grid-cols-[15rem_1fr] lg:gap-12"
+            >
+              <div>
+                <h2 className="text-2xl font-bold">{group.title}</h2>
+                <p className="mt-1 text-sm text-ink/65">{group.subtitle}</p>
               </div>
-              <div
-                className={`grid gap-4 sm:grid-cols-2 ${
-                  items.length > 2 ? 'lg:grid-cols-4' : ''
-                }`}
-              >
+              <div className="border-b border-ink/15">
                 {items.map((f) => (
-                  <FeatureLink
+                  <FeatureRow
                     key={f.key}
                     href={featureHref(f.href)}
                     icon={FEATURE_ICONS[f.key]}
@@ -231,61 +165,92 @@ export default async function Home() {
             </section>
           )
         })}
-
-        {user ? (
-          <div className="mt-10 flex justify-end">
-            <Link
-              href="/progress"
-              className="text-sm text-stone-500 hover:text-stone-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded-sm px-1"
-            >
-              看完整成就 →
-            </Link>
-          </div>
-        ) : (
-          <footer className="mt-16 border-t border-stone-200 pt-8 text-center text-sm text-stone-500">
-            © {new Date().getFullYear()} BizEnglish · 用 AI 練商務英語
-          </footer>
-        )}
       </div>
+
+      <footer className="mx-auto mt-12 max-w-6xl border-t border-ink/10 px-6 pb-12 pt-8 text-sm text-ink/65">
+        {user && (
+          <Link
+            href="/progress"
+            className="mb-4 inline-block rounded-sm font-semibold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
+          >
+            看完整成就
+          </Link>
+        )}
+        <p>
+          © {new Date().getFullYear()} BizEnglish ·{' '}
+          <span translate="no">with ironv makes you happy every day.</span>
+        </p>
+      </footer>
     </main>
   )
 }
 
-function StatCard({
-  icon: Icon,
+// 橫線筆記本上的校稿：紅筆劃掉、螢光筆標出新寫法（動畫定義在 globals.css）
+function RedlineSheet() {
+  return (
+    <figure
+      className="relative bg-white px-6 py-9 pl-14 shadow-[0_1px_0_rgba(26,36,48,0.06),0_24px_40px_-28px_rgba(26,36,48,0.4)] sm:pl-16 sm:pr-10"
+      style={{
+        backgroundImage:
+          'repeating-linear-gradient(to bottom, transparent 0 35px, rgba(26,36,48,0.08) 35px 36px)',
+      }}
+    >
+      <span
+        aria-hidden
+        className="absolute inset-y-0 left-10 w-px bg-pen/35 sm:left-12"
+      />
+      <figcaption className="sr-only">英文修改示範</figcaption>
+      {REDLINE_EDITS.map((edit) => (
+        <div
+          key={edit.after}
+          className="mb-9 last:mb-0"
+          style={{ '--d': edit.delay } as CSSProperties}
+          lang="en"
+          translate="no"
+        >
+          <p className="text-lg leading-9 text-ink/60 sm:text-xl">
+            <del className="redline-before no-underline">{edit.before}</del>
+          </p>
+          <p className="text-lg font-medium leading-9 sm:text-xl">
+            <ins className="redline-after no-underline">{edit.after}</ins>
+          </p>
+          <p className="redline-note text-sm leading-9 text-pen" lang="zh-Hant">
+            {edit.note}
+          </p>
+        </div>
+      ))}
+    </figure>
+  )
+}
+
+function Stat({
   label,
   value,
   unit,
   hint,
+  inset = false,
 }: {
-  icon: LucideIcon
   label: string
   value: number
   unit: string
   hint: string
+  inset?: boolean
 }) {
   return (
-    <div className="rounded-xl border border-stone-200 bg-white p-5">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm text-stone-500">{label}</span>
-        <Icon
-          className="h-5 w-5 text-stone-400"
-          strokeWidth={1.5}
-          aria-hidden="true"
-        />
-      </div>
-      <div className="flex items-baseline gap-1.5">
-        <span className="text-3xl font-bold text-stone-900 tabular-nums">
+    <div className={`py-6 ${inset ? 'pl-6 md:pl-10' : 'pr-6'}`}>
+      <p className="text-sm text-ink/65">{label}</p>
+      <p className="mt-1 flex items-baseline gap-1.5">
+        <span className="font-display text-4xl font-bold tabular-nums">
           {value}
         </span>
-        <span className="text-sm text-stone-500">{unit}</span>
-      </div>
-      <div className="text-xs text-stone-500 mt-1">{hint}</div>
+        <span className="text-sm text-ink/65">{unit}</span>
+      </p>
+      <p className="mt-1 text-sm text-ink/65">{hint}</p>
     </div>
   )
 }
 
-function FeatureLink({
+function FeatureRow({
   href,
   icon: Icon,
   title,
@@ -301,18 +266,24 @@ function FeatureLink({
   return (
     <Link
       href={href}
-      className="group block h-full rounded-xl border border-stone-200 bg-white p-6 transition hover:-translate-y-0.5 hover:border-stone-900 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-900/30"
+      className="group grid grid-cols-[4.5rem_1fr_auto] items-start gap-x-4 border-t border-ink/15 px-2 py-6 transition-colors hover:bg-white/70 focus-visible:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink/40 sm:gap-x-6"
     >
-      <div className="flex items-center justify-between mb-4">
-        <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-stone-900 text-[#F5D368]">
-          <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+      <span className="pt-1 font-display text-sm font-semibold text-ink/65">
+        {tag}
+      </span>
+      <span>
+        <span className="block text-lg font-semibold leading-snug">
+          <span className="mark-hover">{title}</span>
         </span>
-        <span className="rounded-full bg-[#FBF0C8] px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-[#8A6508]">
-          {tag}
+        <span className="mt-1 block max-w-md text-sm leading-relaxed text-ink/70">
+          {desc}
         </span>
-      </div>
-      <h3 className="text-lg font-semibold text-stone-900 mb-1">{title}</h3>
-      <p className="text-sm text-stone-600">{desc}</p>
+      </span>
+      <Icon
+        className="mt-1 h-5 w-5 text-ink/50 transition-colors group-hover:text-ink"
+        strokeWidth={1.5}
+        aria-hidden="true"
+      />
     </Link>
   )
 }

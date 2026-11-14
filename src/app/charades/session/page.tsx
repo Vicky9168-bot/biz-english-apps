@@ -138,15 +138,15 @@ export default async function CharadesSessionPage({
       <main className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="max-w-md text-center">
           <IconTile icon={BookOpen} size="lg" className="mb-4" />
-          <h2 className="text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-xl font-semibold text-ink mb-2">
             找不到適合的單字
           </h2>
-          <p className="text-slate-600 mb-6">
+          <p className="text-ink/70 mb-6">
             可能是題庫還沒 seed，或你已經練完了所有字。
           </p>
           <a
             href="/"
-            className="inline-block rounded-md bg-stone-800 px-4 py-2 text-sm font-medium text-[#F5D368]"
+            className="inline-block rounded-md bg-ink px-4 py-2 text-sm font-medium text-paper"
           >
             回 Dashboard
           </a>

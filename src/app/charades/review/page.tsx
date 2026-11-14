@@ -72,42 +72,39 @@ export default async function CharadesReviewPage() {
   }
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/charades" />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <header className="mb-8">
-          <div className="font-mono text-xs tracking-[0.2em] uppercase text-stone-500 mb-2">
-            [Review]
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 text-pretty">
+          <h1 className="text-3xl font-bold text-ink text-pretty">
             錯題複習
           </h1>
-          <p className="text-slate-600 mt-2 max-w-xl">
+          <p className="text-ink/70 mt-2 max-w-xl">
             這些字你曾經答錯，還沒重新掌握，快速看一遍，下次遇到就記起來了。
           </p>
         </header>
 
         {words.length === 0 ? (
-          <div className="rounded-xl border border-slate-200 bg-white p-10 text-center">
+          <div className="rounded-lg border border-ink/15 bg-white p-10 text-center">
             <IconTile icon={Trophy} size="lg" className="mb-3" />
-            <h2 className="text-lg font-semibold text-slate-900 mb-1">
+            <h2 className="text-lg font-semibold text-ink mb-1">
               目前沒有需要複習的字
             </h2>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-ink/65">
               過去 60 天內每個練習過的字都掌握了，繼續保持！
             </p>
             <Link
               href="/charades"
-              className="mt-6 inline-block rounded-md bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/30 transition"
+              className="mt-6 inline-block rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 transition"
             >
               開始今天的練習
             </Link>
           </div>
         ) : (
           <>
-            <div className="text-sm text-slate-600 mb-4">
-              <span className="font-semibold text-slate-900 tabular-nums">
+            <div className="text-sm text-ink/70 mb-4">
+              <span className="font-semibold text-ink tabular-nums">
                 {words.length}
               </span>{' '}
               個字待複習
@@ -116,29 +113,29 @@ export default async function CharadesReviewPage() {
               {words.map((w) => (
                 <li
                   key={w.id}
-                  className="rounded-xl border border-slate-200 bg-white p-5"
+                  className="rounded-lg border border-ink/15 bg-white p-5"
                 >
                   <div className="flex items-start justify-between gap-4 mb-2">
                     <div>
                       <div
-                        className="text-xl font-bold text-slate-900"
+                        className="text-xl font-bold text-ink"
                         translate="no"
                       >
                         {w.word}
                       </div>
                       {w.definition_zh && (
-                        <div className="text-sm text-slate-600 mt-0.5">
+                        <div className="text-sm text-ink/70 mt-0.5">
                           {w.definition_zh}
                         </div>
                       )}
                     </div>
-                    <span className="text-xs text-slate-400 tabular-nums shrink-0">
+                    <span className="text-xs text-ink/60 tabular-nums shrink-0">
                       上次 {w.last_seen}
                     </span>
                   </div>
 
                   {w.example_sentence && (
-                    <p className="text-sm text-slate-700 italic border-l-2 border-slate-200 pl-3 mt-3">
+                    <p className="text-sm text-ink/80 italic border-l-2 border-ink/15 pl-3 mt-3">
                       &ldquo;{w.example_sentence}&rdquo;
                     </p>
                   )}
@@ -148,7 +145,7 @@ export default async function CharadesReviewPage() {
                       {w.scenario_tags.map((tag) => (
                         <span
                           key={tag}
-                          className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600"
+                          className="text-xs px-2 py-0.5 rounded-full bg-paper text-ink/70"
                         >
                           {tag}
                         </span>

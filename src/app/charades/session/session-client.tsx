@@ -484,8 +484,8 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
     return (
       <main className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="text-center" aria-live="polite">
-          <Spinner className="mx-auto mb-4 text-slate-400" size={40} />
-          <p className="text-slate-600">AI 正在分析你的表現…</p>
+          <Spinner className="mx-auto mb-4 text-ink/60" size={40} />
+          <p className="text-ink/70">AI 正在分析你的表現…</p>
         </div>
       </main>
     )
@@ -495,12 +495,12 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
   const lastAttempt = currentAttempts[currentAttempts.length - 1]
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
-      <nav className="border-b border-slate-200 bg-white">
+    <main className="flex-1 bg-paper min-h-screen">
+      <nav className="border-b border-ink/15 bg-white">
         <div className="mx-auto max-w-3xl px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <ExitButton onClick={handleExit} />
-            <span className="text-sm text-slate-600">
+            <span className="text-sm text-ink/70">
               第 {wordIdx + 1} / {words.length} 題
             </span>
           </div>
@@ -511,17 +511,17 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                 className={`w-3 h-3 rounded-full ${
                   i < currentAttempts.length
                     ? currentAttempts[i].isCorrect
-                      ? 'bg-emerald-500'
-                      : 'bg-red-400'
-                    : 'bg-slate-200'
+                      ? 'bg-ink'
+                      : 'bg-pen/80'
+                    : 'bg-ink/10'
                 }`}
               />
             ))}
           </div>
         </div>
-        <div className="h-1 bg-slate-100">
+        <div className="h-1 bg-paper">
           <div
-            className="h-full bg-stone-800 transition-all"
+            className="h-full bg-ink transition-all"
             style={{ width: `${((wordIdx + 1) / words.length) * 100}%` }}
           />
         </div>
@@ -530,18 +530,18 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
       <div className="mx-auto max-w-2xl px-6 py-10">
         {/* 目標字 / AI 描述卡 */}
         {mode === 'user_describes' ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-8 mb-6 text-center shadow-sm">
-            <div className="text-xs font-medium tracking-wide uppercase text-slate-500 mb-3">
+          <div className="rounded-lg border border-ink/15 bg-white p-8 mb-6 text-center">
+            <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-3">
               目標單字 · AI 看不到
             </div>
             <div
-              className="text-4xl font-bold text-slate-900 mb-2 text-balance"
+              className="text-4xl font-bold text-ink mb-2 text-balance"
               translate="no"
             >
               {currentWord.word}
             </div>
             {currentWord.definition_zh && (
-              <div className="text-sm text-slate-500">
+              <div className="text-sm text-ink/65">
                 {currentWord.definition_zh}
               </div>
             )}
@@ -550,7 +550,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                 {currentWord.scenario_tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-700"
+                    className="text-xs px-2 py-0.5 rounded-full bg-paper text-ink/80"
                   >
                     {tag}
                   </span>
@@ -559,15 +559,15 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
             )}
           </div>
         ) : (
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 mb-6 shadow-sm">
+          <div className="rounded-lg border border-ink/15 bg-white p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="text-xs font-medium tracking-wide uppercase text-[#8A6508]">
+              <div className="text-xs font-medium tracking-wide uppercase text-ink">
                 AI 出題 · 聽力理解
               </div>
               {audioUrl && (
                 <button
                   onClick={() => setScriptShown((v) => !v)}
-                  className="text-xs text-slate-500 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 rounded px-1"
+                  className="text-xs text-ink/65 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded px-1"
                 >
                   {scriptShown ? '隱藏原文' : '顯示原文'}
                 </button>
@@ -576,10 +576,10 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
 
             {(descLoading || audioLoading) && !audioUrl && (
               <div
-                className="flex items-center gap-3 py-6 text-sm text-slate-500"
+                className="flex items-center gap-3 py-6 text-sm text-ink/65"
                 aria-live="polite"
               >
-                <Spinner className="text-slate-400" size={20} />
+                <Spinner className="text-ink/60" size={20} />
                 <span>{descLoading ? 'AI 出題中…' : '生成語音中…'}</span>
               </div>
             )}
@@ -588,19 +588,19 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
               <div className="flex items-center gap-4 py-2">
                 <button
                   onClick={replayAudio}
-                  className="w-14 h-14 rounded-full bg-stone-800 text-[#F5D368] shadow-sm hover:bg-stone-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-stone-800/25 motion-safe:transition-transform motion-safe:hover:scale-105 inline-flex items-center justify-center shrink-0"
+                  className="w-14 h-14 rounded-full bg-ink text-paper hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink/25 motion-safe:transition-transform motion-safe:hover:scale-105 inline-flex items-center justify-center shrink-0"
                   aria-label="重新播放題目"
                 >
                   <PlayIcon className="w-6 h-6" />
                 </button>
-                <div className="text-sm text-slate-600">
+                <div className="text-sm text-ink/70">
                   聽 AI 描述，然後說出你猜的英文單字
                 </div>
               </div>
             )}
 
             {audioUrl && scriptShown && aiDescription && (
-              <p className="mt-4 rounded-lg bg-slate-50 p-3 text-sm text-slate-700 leading-relaxed">
+              <p className="mt-4 rounded-lg bg-paper p-3 text-sm text-ink/80 leading-relaxed">
                 {aiDescription}
               </p>
             )}
@@ -619,7 +619,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                 {currentWord.scenario_tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600"
+                    className="text-xs px-2 py-0.5 rounded-full bg-paper text-ink/70"
                   >
                     {tag}
                   </span>
@@ -630,10 +630,10 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
         )}
 
         {/* 錄音按鈕 / 狀態 */}
-        <div className="rounded-2xl bg-white border border-slate-200 p-8 text-center">
+        <div className="rounded-lg bg-white border border-ink/15 p-8 text-center">
           {phase === 'idle' && (
             <>
-              <p className="text-slate-600 mb-6">
+              <p className="text-ink/70 mb-6">
                 {mode === 'user_describes'
                   ? '用英文描述這個字（不要說出這個字本身）'
                   : audioUrl
@@ -643,12 +643,12 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
               <button
                 onClick={startRecording}
                 disabled={mode === 'ai_describes' && !audioUrl}
-                className="group relative w-24 h-24 rounded-full bg-slate-900 text-white shadow-sm hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-slate-900/20 motion-safe:transition-transform motion-safe:hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 inline-flex items-center justify-center"
+                className="group relative w-24 h-24 rounded-full bg-ink text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink/20 motion-safe:transition-transform motion-safe:hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 inline-flex items-center justify-center"
                 aria-label="開始錄音"
               >
                 <MicIcon className="w-9 h-9" />
               </button>
-              <p className="mt-3 text-xs text-slate-500">
+              <p className="mt-3 text-xs text-ink/65">
                 點擊開始錄音（最多 30 秒）
               </p>
             </>
@@ -656,14 +656,14 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
 
           {phase === 'recording' && (
             <>
-              <p className="text-slate-600 mb-4">錄音中…</p>
+              <p className="text-ink/70 mb-4">錄音中…</p>
               <button
                 onClick={stopRecording}
-                className="relative w-24 h-24 rounded-full bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-red-600/25 inline-flex items-center justify-center"
+                className="relative w-24 h-24 rounded-full bg-pen text-white hover:bg-pen/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-pen/10 inline-flex items-center justify-center"
                 aria-label="停止錄音"
               >
                 <span
-                  className="absolute inset-0 rounded-full bg-red-600 motion-safe:animate-ping opacity-40"
+                  className="absolute inset-0 rounded-full bg-pen motion-safe:animate-ping opacity-40"
                   aria-hidden="true"
                 />
                 <span
@@ -671,7 +671,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                   aria-hidden="true"
                 />
               </button>
-              <p className="mt-3 text-sm text-red-700 tabular-nums">
+              <p className="mt-3 text-sm text-pen tabular-nums">
                 {recordingTime}s / 30s
               </p>
             </>
@@ -679,15 +679,15 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
 
           {phase === 'transcribing' && (
             <div className="py-8" aria-live="polite">
-              <Spinner className="mx-auto mb-3 text-slate-400" />
-              <p className="text-slate-600">辨識你的語音…</p>
+              <Spinner className="mx-auto mb-3 text-ink/60" />
+              <p className="text-ink/70">辨識你的語音…</p>
             </div>
           )}
 
           {phase === 'guessing' && (
             <div className="py-8" aria-live="polite">
-              <Spinner className="mx-auto mb-3 text-slate-400" />
-              <p className="text-slate-600">
+              <Spinner className="mx-auto mb-3 text-ink/60" />
+              <p className="text-ink/70">
                 {mode === 'user_describes' ? 'AI 思考中…' : '判定中…'}
               </p>
             </div>
@@ -696,11 +696,11 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
           {phase === 'result' && lastAttempt && (
             <div className="text-left">
               {lastAttempt.transcript && (
-                <div className="mb-4 rounded-lg bg-slate-50 p-4">
-                  <div className="text-xs text-slate-500 mb-1">
+                <div className="mb-4 rounded-lg bg-paper p-4">
+                  <div className="text-xs text-ink/65 mb-1">
                     {mode === 'user_describes' ? '你剛才說' : '你猜的'}
                   </div>
-                  <div className="text-sm text-slate-800">
+                  <div className="text-sm text-ink">
                     &ldquo;{lastAttempt.transcript}&rdquo;
                   </div>
                 </div>
@@ -710,20 +710,20 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                 <div
                   className={`mb-4 rounded-lg p-4 ${
                     lastAttempt.isCorrect
-                      ? 'bg-emerald-50 border border-emerald-200'
-                      : 'bg-orange-50 border border-orange-200'
+                      ? 'bg-mark/25 border border-mark'
+                      : 'bg-pen/10 border border-pen/30'
                   }`}
                 >
                   <div
                     className={`text-xs mb-1 font-semibold ${
-                      lastAttempt.isCorrect ? 'text-emerald-800' : 'text-orange-800'
+                      lastAttempt.isCorrect ? 'text-ink' : 'text-pen'
                     }`}
                   >
                     {lastAttempt.isCorrect ? '✓ AI 猜對了！' : '✗ AI 猜錯了'}
                   </div>
                   <div
                     className={`text-lg font-semibold ${
-                      lastAttempt.isCorrect ? 'text-emerald-900' : 'text-orange-900'
+                      lastAttempt.isCorrect ? 'text-ink' : 'text-pen'
                     }`}
                     translate="no"
                   >
@@ -736,13 +736,13 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                 <div
                   className={`mb-4 rounded-lg p-4 ${
                     lastAttempt.isCorrect
-                      ? 'bg-emerald-50 border border-emerald-200'
-                      : 'bg-orange-50 border border-orange-200'
+                      ? 'bg-mark/25 border border-mark'
+                      : 'bg-pen/10 border border-pen/30'
                   }`}
                 >
                   <div
                     className={`text-xs mb-1 font-semibold ${
-                      lastAttempt.isCorrect ? 'text-emerald-800' : 'text-orange-800'
+                      lastAttempt.isCorrect ? 'text-ink' : 'text-pen'
                     }`}
                   >
                     {lastAttempt.isCorrect ? '✓ 猜對了！' : '✗ 不對喔'}
@@ -753,13 +753,13 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
               {revealed && (
                 <>
                   {!lastAttempt.isCorrect && (
-                    <div className="rounded-lg bg-[#FBF0C8] border border-[#EBD891] p-4 mb-3">
-                      <div className="text-xs text-[#8A6508] mb-1">答案</div>
-                      <div className="text-xl font-bold text-[#8A6508]">
+                    <div className="rounded-lg bg-mark/30 border border-mark p-4 mb-3">
+                      <div className="text-xs text-ink mb-1">答案</div>
+                      <div className="text-xl font-bold text-ink">
                         {currentWord.word}
                       </div>
                       {currentWord.example_sentence && (
-                        <div className="mt-2 text-sm text-slate-700 italic">
+                        <div className="mt-2 text-sm text-ink/80 italic">
                           &ldquo;{currentWord.example_sentence}&rdquo;
                         </div>
                       )}
@@ -767,48 +767,48 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                   )}
 
                   <div
-                    className="rounded-lg bg-white border border-slate-200 p-4 mb-4"
+                    className="rounded-lg bg-white border border-ink/15 p-4 mb-4"
                     aria-live="polite"
                   >
-                    <div className="text-xs font-medium text-slate-500 mb-2">
+                    <div className="text-xs font-medium text-ink/65 mb-2">
                       本題解說
                     </div>
                     {explainLoading && (
-                      <div className="text-sm text-slate-500">AI 正在準備解說…</div>
+                      <div className="text-sm text-ink/65">AI 正在準備解說…</div>
                     )}
                     {explanation && (
                       <div className="space-y-3 text-sm">
-                        <div className="flex gap-2 text-slate-800">
+                        <div className="flex gap-2 text-ink">
                           <span
-                            className="inline-block w-1 h-4 mt-0.5 rounded-sm bg-stone-800 shrink-0"
+                            className="inline-block w-1 h-4 mt-0.5 rounded-sm bg-ink shrink-0"
                             aria-hidden="true"
                           />
                           <span>{explanation.one_tip_zh}</span>
                         </div>
                         {explanation.better_phrase && (
-                          <div className="rounded bg-slate-50 p-3">
-                            <div className="text-xs text-slate-500 mb-1">你說</div>
-                            <div className="text-slate-700 mb-2 line-through">
+                          <div className="rounded bg-paper p-3">
+                            <div className="text-xs text-ink/65 mb-1">你說</div>
+                            <div className="text-ink/80 mb-2 line-through">
                               {explanation.better_phrase.you_said}
                             </div>
-                            <div className="text-xs text-slate-500 mb-1">更好</div>
-                            <div className="text-[#8A6508] font-medium">
+                            <div className="text-xs text-ink/65 mb-1">更好</div>
+                            <div className="text-ink font-medium">
                               {explanation.better_phrase.better}
                             </div>
                           </div>
                         )}
                         {explanation.describe_next_time?.angle_zh && (
-                          <div className="rounded-md border border-emerald-200 bg-emerald-50 p-3">
-                            <div className="text-[10px] font-semibold tracking-wide uppercase text-emerald-700 mb-1.5">
+                          <div className="rounded-md border border-mark bg-mark/25 p-3">
+                            <div className="text-[10px] font-semibold tracking-wide uppercase text-ink mb-1.5">
                               下次這樣描述，對方更容易猜到
                             </div>
-                            <div className="text-sm text-slate-800 leading-relaxed mb-2">
+                            <div className="text-sm text-ink leading-relaxed mb-2">
                               {explanation.describe_next_time.angle_zh}
                             </div>
                             {explanation.describe_next_time.sample_en && (
-                              <div className="rounded bg-white border border-emerald-100 px-3 py-2 text-sm text-slate-800 italic">
+                              <div className="rounded bg-white border border-mark/40 px-3 py-2 text-sm text-ink italic">
                                 <span
-                                  className="not-italic text-[10px] font-mono font-semibold text-emerald-700 mr-2 uppercase tracking-wide"
+                                  className="not-italic text-[10px] font-mono font-semibold text-ink mr-2 uppercase tracking-wide"
                                   translate="no"
                                 >
                                   Sample
@@ -820,23 +820,23 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                             )}
                           </div>
                         )}
-                        <div className="text-xs text-slate-600 border-t border-slate-100 pt-2">
-                          <span className="font-medium text-slate-700">
+                        <div className="text-xs text-ink/70 border-t border-ink/10 pt-2">
+                          <span className="font-medium text-ink/80">
                             你的職務怎麼用
                           </span>
-                          <span className="mx-1 text-slate-400">·</span>
+                          <span className="mx-1 text-ink/60">·</span>
                           {explanation.usage_context_zh}
                         </div>
                       </div>
                     )}
                     {!explainLoading && !explanation && (
-                      <div className="text-xs text-slate-500">解說載入失敗</div>
+                      <div className="text-xs text-ink/65">解說載入失敗</div>
                     )}
                   </div>
 
                   <button
                     onClick={nextWord}
-                    className="w-full rounded-md bg-stone-800 py-3 text-[#F5D368] font-semibold hover:bg-stone-700 transition"
+                    className="w-full rounded-md bg-ink py-3 text-paper font-semibold hover:bg-ink/85 transition"
                   >
                     {isLast ? '看今日回饋 →' : '下一題 →'}
                   </button>
@@ -847,13 +847,13 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                 <div className="space-y-2">
                   <button
                     onClick={() => setPhase('idle')}
-                    className="w-full rounded-md bg-stone-800 py-3 text-[#F5D368] font-semibold hover:bg-stone-700 transition"
+                    className="w-full rounded-md bg-ink py-3 text-paper font-semibold hover:bg-ink/85 transition"
                   >
                     再試一次 (剩 {attemptsLeft} 次)
                   </button>
                   <button
                     onClick={giveUp}
-                    className="w-full rounded-md border border-slate-300 py-2 text-sm text-slate-600 hover:bg-slate-50 transition"
+                    className="w-full rounded-md border border-ink/25 py-2 text-sm text-ink/70 hover:bg-paper transition"
                   >
                     放棄，看答案
                   </button>
@@ -863,7 +863,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
           )}
 
           {error && (
-            <div className="mt-4 rounded-md bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+            <div className="mt-4 rounded-md bg-pen/10 border border-pen/30 px-3 py-2 text-sm text-pen">
               {error}
             </div>
           )}
@@ -871,18 +871,18 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
 
         {/* 累積歷史 */}
         {currentAttempts.length > 0 && phase !== 'result' && (
-          <div className="mt-6 rounded-lg bg-white border border-slate-200 p-4">
-            <div className="text-xs font-medium tracking-wide uppercase text-slate-500 mb-2">
+          <div className="mt-6 rounded-lg bg-white border border-ink/15 p-4">
+            <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-2">
               本題歷史
             </div>
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-ink/10">
               {currentAttempts.map((a, i) => (
                 <li
                   key={i}
-                  className="flex items-center justify-between text-xs text-slate-600 py-1.5"
+                  className="flex items-center justify-between text-xs text-ink/70 py-1.5"
                 >
                   <span>
-                    <span className="text-slate-400 tabular-nums mr-2">
+                    <span className="text-ink/60 tabular-nums mr-2">
                       #{i + 1}
                     </span>
                     {mode === 'user_describes'
@@ -891,7 +891,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                   </span>
                   <span
                     className={
-                      a.isCorrect ? 'text-emerald-600' : 'text-slate-400'
+                      a.isCorrect ? 'text-ink' : 'text-ink/60'
                     }
                   >
                     {a.isCorrect ? '對' : '否'}
@@ -931,17 +931,17 @@ function CompleteView({
   const maxStars = results.length * 3
 
   return (
-    <main className="flex-1 bg-slate-100 py-10 px-6">
+    <main className="flex-1 bg-paper py-10 px-6">
       <div className="max-w-2xl mx-auto">
         {/* 總覽 */}
-        <div className="rounded-2xl bg-white border border-slate-200 p-8 mb-6 text-center">
-          <div className="inline-block px-3 py-1 mb-4 text-xs font-medium tracking-wide uppercase text-[#8A6508] bg-[#FBF0C8] rounded-full">
+        <div className="rounded-lg bg-white border border-ink/15 p-8 mb-6 text-center">
+          <div className="inline-block px-3 py-1 mb-4 text-xs font-medium tracking-wide uppercase text-ink bg-mark/30 rounded-full">
             Session Complete
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 mb-2 text-pretty">
+          <h1 className="text-2xl font-bold text-ink mb-2 text-pretty">
             今日練習完成
           </h1>
-          <p className="text-slate-600 mb-6">
+          <p className="text-ink/70 mb-6">
             {feedback?.overall_encouragement_zh ?? '每天一點點，進步看得見。'}
           </p>
 
@@ -952,7 +952,7 @@ function CompleteView({
               value={
                 <>
                   {'★'.repeat(Math.min(3, Math.floor(totalStars / results.length)))}
-                  <span className="text-sm text-slate-500 ml-1">
+                  <span className="text-sm text-ink/65 ml-1">
                     {totalStars}/{maxStars}
                   </span>
                 </>
@@ -963,25 +963,25 @@ function CompleteView({
         </div>
 
         {/* 每題結果 */}
-        <section className="rounded-xl bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="text-sm font-semibold tracking-wide uppercase text-slate-500 mb-3">
+        <section className="rounded-lg bg-white border border-ink/15 p-6 mb-6">
+          <h2 className="text-sm font-semibold tracking-wide uppercase text-ink/65 mb-3">
             每題結果
           </h2>
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-ink/10">
             {results.map((r, i) => (
               <li
                 key={i}
                 className="flex items-center justify-between py-2.5 text-sm"
               >
-                <span className="flex items-center gap-2 font-medium text-slate-900">
-                  <span className="text-xs text-slate-400 tabular-nums w-4">
+                <span className="flex items-center gap-2 font-medium text-ink">
+                  <span className="text-xs text-ink/60 tabular-nums w-4">
                     {i + 1}
                   </span>
                   <span translate="no">{r.targetWord}</span>
                 </span>
                 <span
                   className={
-                    r.guessedCorrectly ? 'text-emerald-700' : 'text-slate-400'
+                    r.guessedCorrectly ? 'text-ink' : 'text-ink/60'
                   }
                 >
                   {r.guessedCorrectly
@@ -1001,13 +1001,13 @@ function CompleteView({
                 <div className="space-y-4">
                   {feedback.grammar_errors.map((e, i) => (
                     <div key={i} className="text-sm">
-                      <div className="text-rose-700 line-through">
+                      <div className="text-pen line-through">
                         {e.original}
                       </div>
-                      <div className="text-emerald-700 font-medium">
+                      <div className="text-ink font-medium">
                         {e.corrected}
                       </div>
-                      <div className="text-xs text-slate-500 mt-1">
+                      <div className="text-xs text-ink/65 mt-1">
                         {e.explanation_zh}
                       </div>
                     </div>
@@ -1021,11 +1021,11 @@ function CompleteView({
                 <div className="space-y-4">
                   {feedback.better_expressions.map((e, i) => (
                     <div key={i} className="text-sm">
-                      <div className="text-slate-600">你說：{e.you_said}</div>
-                      <div className="text-[#8A6508] font-medium">
+                      <div className="text-ink/70">你說：{e.you_said}</div>
+                      <div className="text-ink font-medium">
                         更好：{e.better}
                       </div>
-                      <div className="text-xs text-slate-500 mt-1">{e.why_zh}</div>
+                      <div className="text-xs text-ink/65 mt-1">{e.why_zh}</div>
                     </div>
                   ))}
                 </div>
@@ -1038,38 +1038,38 @@ function CompleteView({
                   {feedback.description_tips.map((tip, i) => (
                     <div
                       key={i}
-                      className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+                      className="rounded-lg border border-ink/15 bg-paper p-4"
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <span
-                          className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-900 text-white"
+                          className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-ink text-white"
                           translate="no"
                         >
                           {String(i + 1).padStart(2, '0')}
                         </span>
                         <span
-                          className="text-sm font-semibold text-slate-900"
+                          className="text-sm font-semibold text-ink"
                           translate="no"
                         >
                           {tip.word}
                         </span>
                       </div>
-                      <div className="text-xs text-slate-500 mb-1">
+                      <div className="text-xs text-ink/65 mb-1">
                         你當時的描述
                       </div>
-                      <div className="text-sm text-slate-700 mb-3 leading-relaxed">
+                      <div className="text-sm text-ink/80 mb-3 leading-relaxed">
                         {tip.your_description_summary_zh}
                       </div>
-                      <div className="text-xs text-emerald-700 font-medium mb-1">
+                      <div className="text-xs text-ink font-medium mb-1">
                         下次可以這樣切入
                       </div>
-                      <div className="text-sm text-slate-800 leading-relaxed">
+                      <div className="text-sm text-ink leading-relaxed">
                         {tip.better_approach_zh}
                       </div>
                       {tip.sample_sentence && (
-                        <div className="mt-3 rounded-md border border-emerald-200 bg-white px-3 py-2 text-sm text-slate-800 italic">
+                        <div className="mt-3 rounded-md border border-mark bg-white px-3 py-2 text-sm text-ink italic">
                           <span
-                            className="not-italic text-[10px] font-mono font-semibold text-emerald-700 mr-2 uppercase tracking-wide"
+                            className="not-italic text-[10px] font-mono font-semibold text-ink mr-2 uppercase tracking-wide"
                             translate="no"
                           >
                             Sample
@@ -1085,11 +1085,11 @@ function CompleteView({
 
             {feedback.business_tip && (
               <FeedbackCard title="商業實戰 Tip" accent="slate">
-                <div className="text-sm text-slate-800">
+                <div className="text-sm text-ink">
                   <span className="font-semibold" translate="no">
                     {feedback.business_tip.word}
                   </span>
-                  <span className="text-slate-500 mx-1">·</span>
+                  <span className="text-ink/65 mx-1">·</span>
                   {feedback.business_tip.tip_zh}
                 </div>
               </FeedbackCard>
@@ -1100,13 +1100,13 @@ function CompleteView({
         <div className="flex gap-3">
           <Link
             href="/"
-            className="flex-1 rounded-md border border-slate-300 bg-white px-4 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+            className="flex-1 rounded-md border border-ink/25 bg-white px-4 py-3 text-center text-sm font-semibold text-ink/80 hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
             回 Dashboard
           </Link>
           <Link
             href="/charades"
-            className="flex-1 rounded-md bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/30 transition"
+            className="flex-1 rounded-md bg-ink px-4 py-3 text-center text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 transition"
           >
             再練一輪
           </Link>
@@ -1118,9 +1118,9 @@ function CompleteView({
 
 function StatBig({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="rounded-lg bg-slate-50 py-3">
-      <div className="text-xs text-slate-500 mb-1">{label}</div>
-      <div className="text-xl font-bold text-slate-900 tabular-nums">{value}</div>
+    <div className="rounded-lg bg-paper py-3">
+      <div className="text-xs text-ink/65 mb-1">{label}</div>
+      <div className="text-xl font-bold text-ink tabular-nums">{value}</div>
     </div>
   )
 }
@@ -1136,20 +1136,20 @@ function FeedbackCard({
 }) {
   const bar =
     accent === 'rose'
-      ? 'bg-rose-500'
+      ? 'bg-pen'
       : accent === 'blue'
-        ? 'bg-stone-800'
+        ? 'bg-ink'
         : accent === 'emerald'
-          ? 'bg-emerald-500'
-          : 'bg-slate-500'
+          ? 'bg-ink'
+          : 'bg-ink/50'
   return (
-    <section className="rounded-xl bg-white border border-slate-200 overflow-hidden">
+    <section className="rounded-lg bg-white border border-ink/15 overflow-hidden">
       <header className="flex items-center gap-3 px-6 pt-5">
         <span
           className={`inline-block w-1 h-4 rounded-sm ${bar}`}
           aria-hidden="true"
         />
-        <h3 className="text-sm font-semibold tracking-wide uppercase text-slate-500">
+        <h3 className="text-sm font-semibold tracking-wide uppercase text-ink/65">
           {title}
         </h3>
       </header>

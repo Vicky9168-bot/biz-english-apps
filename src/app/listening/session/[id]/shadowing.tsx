@@ -117,18 +117,18 @@ export function ShadowingPractice({
   }
 
   return (
-    <section className="mb-6 rounded-xl border border-slate-200 bg-white p-6">
+    <section className="mb-6 rounded-lg border border-ink/15 bg-white p-6">
       <header className="mb-4">
-        <div className="font-mono text-xs tracking-[0.2em] uppercase text-stone-500 mb-2">
+        <div className="font-mono text-xs tracking-[0.2em] uppercase text-ink/65 mb-2">
           Shadowing 練習 · 前 30 秒
         </div>
-        <h2 className="text-lg font-semibold text-slate-900">跟讀原音，AI 給發音回饋</h2>
-        <p className="text-sm text-slate-600 mt-1">
+        <h2 className="text-lg font-semibold text-ink">跟讀原音，AI 給發音回饋</h2>
+        <p className="text-sm text-ink/70 mt-1">
           先聽 1–2 次，再邊聽邊跟讀，播完後按錄音，朗讀相同內容。
         </p>
       </header>
 
-      <div className="aspect-video rounded-lg overflow-hidden border border-slate-200 bg-black mb-4">
+      <div className="aspect-video rounded-lg overflow-hidden border border-ink/15 bg-black mb-4">
         <iframe
           src={embedSrc}
           title="Shadowing segment"
@@ -138,11 +138,11 @@ export function ShadowingPractice({
         />
       </div>
 
-      <div className="rounded-lg bg-slate-50 border border-slate-200 p-4 mb-4">
-        <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">
+      <div className="rounded-lg bg-paper border border-ink/15 p-4 mb-4">
+        <div className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-2">
           逐字稿
         </div>
-        <p className="text-sm text-slate-800 leading-relaxed" translate="no">
+        <p className="text-sm text-ink leading-relaxed" translate="no">
           {referenceText}
         </p>
       </div>
@@ -151,7 +151,7 @@ export function ShadowingPractice({
         {state === 'idle' || state === 'done' || state === 'error' ? (
           <button
             onClick={startRecording}
-            className="rounded-md bg-red-600 text-white px-4 py-2 text-sm font-semibold hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 transition"
+            className="rounded-md bg-pen text-white px-4 py-2 text-sm font-semibold hover:bg-pen/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pen/40 transition"
           >
             {feedback ? '再試一次' : '開始錄音'}
           </button>
@@ -159,25 +159,25 @@ export function ShadowingPractice({
           <>
             <button
               onClick={stopRecording}
-              className="rounded-md bg-slate-900 text-white px-4 py-2 text-sm font-semibold hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+              className="rounded-md bg-ink text-white px-4 py-2 text-sm font-semibold hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
             >
               ⏹ 結束錄音
             </button>
-            <span className="text-sm text-slate-600 font-mono">
-              <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-2 animate-pulse" />
+            <span className="text-sm text-ink/70 font-mono">
+              <span className="inline-block w-2 h-2 rounded-full bg-pen mr-2 animate-pulse" />
               {elapsed}s
             </span>
           </>
         ) : (
-          <div className="text-sm text-slate-600 flex items-center gap-2">
-            <span className="inline-block w-3 h-3 rounded-full border-2 border-slate-300 border-t-slate-900 animate-spin" />
+          <div className="text-sm text-ink/70 flex items-center gap-2">
+            <span className="inline-block w-3 h-3 rounded-full border-2 border-ink/25 border-t-ink animate-spin" />
             AI 分析中...
           </div>
         )}
       </div>
 
       {errorMsg && (
-        <p className="text-sm text-red-600 mb-4" role="alert">
+        <p className="text-sm text-pen mb-4" role="alert">
           {errorMsg}
         </p>
       )}
@@ -202,18 +202,18 @@ export function ShadowingPractice({
           </div>
 
           {feedback.contentWords?.length > 0 && (
-            <div className="rounded-lg border border-slate-200 bg-white p-4">
+            <div className="rounded-lg border border-ink/15 bg-white p-4">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+                <div className="text-xs font-medium text-ink/65 uppercase tracking-wide">
                   實詞逐字檢查
                 </div>
-                <div className="flex items-center gap-3 text-[10px] text-slate-500">
+                <div className="flex items-center gap-3 text-[10px] text-ink/65">
                   <span className="flex items-center gap-1">
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="inline-block w-2 h-2 rounded-full bg-ink" />
                     唸到
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="inline-block w-2 h-2 rounded-full bg-red-400" />
+                    <span className="inline-block w-2 h-2 rounded-full bg-pen/80" />
                     漏掉
                   </span>
                 </div>
@@ -224,8 +224,8 @@ export function ShadowingPractice({
                     key={`${w.word}-${i}`}
                     className={`text-xs font-mono rounded px-2 py-0.5 border ${
                       w.hit
-                        ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
-                        : 'bg-red-50 border-red-200 text-red-900 line-through'
+                        ? 'bg-mark/25 border-mark text-ink'
+                        : 'bg-pen/10 border-pen/30 text-pen line-through'
                     }`}
                     translate="no"
                   >
@@ -236,26 +236,26 @@ export function ShadowingPractice({
             </div>
           )}
 
-          <div className="rounded-lg border border-slate-200 bg-white p-4">
-            <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">
+          <div className="rounded-lg border border-ink/15 bg-white p-4">
+            <div className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-2">
               你剛才說的 (Whisper 轉文字)
             </div>
-            <p className="text-sm text-slate-800 italic" translate="no">
+            <p className="text-sm text-ink italic" translate="no">
               &ldquo;{feedback.userText}&rdquo;
             </p>
           </div>
 
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
-            <div className="text-xs font-medium text-amber-800 uppercase tracking-wide mb-2">
+          <div className="rounded-lg border border-mark bg-mark/25 p-4">
+            <div className="text-xs font-medium text-ink uppercase tracking-wide mb-2">
               發音提醒
             </div>
-            <p className="text-sm text-slate-800">{feedback.pronunciation_notes}</p>
+            <p className="text-sm text-ink">{feedback.pronunciation_notes}</p>
             {feedback.missed_or_wrong?.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {feedback.missed_or_wrong.map((w) => (
                   <span
                     key={w}
-                    className="text-xs font-mono bg-white border border-amber-300 text-amber-900 rounded px-2 py-0.5"
+                    className="text-xs font-mono bg-white border border-mark text-ink rounded px-2 py-0.5"
                     translate="no"
                   >
                     {w}
@@ -265,30 +265,30 @@ export function ShadowingPractice({
             )}
           </div>
 
-          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
-            <div className="text-xs font-medium text-emerald-800 uppercase tracking-wide mb-1">
+          <div className="rounded-lg border border-mark bg-mark/25 p-4">
+            <div className="text-xs font-medium text-ink uppercase tracking-wide mb-1">
               做得好
             </div>
-            <p className="text-sm text-slate-800">{feedback.praise}</p>
+            <p className="text-sm text-ink">{feedback.praise}</p>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <div className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
+          <div className="rounded-lg border border-ink/15 bg-paper p-4">
+            <div className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-1">
               下次練習重點
             </div>
-            <p className="text-sm text-slate-800">{feedback.next_focus}</p>
+            <p className="text-sm text-ink">{feedback.next_focus}</p>
           </div>
 
           <div className="flex justify-center gap-2 pt-2">
             <button
               onClick={startRecording}
-              className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+              className="rounded-md border border-ink/25 bg-white px-4 py-2 text-sm text-ink/80 hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
             >
               再錄一次
             </button>
             <Link
               href="/listening"
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+              className="rounded-md bg-ink px-4 py-2 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
             >
               完成 · 回聽力首頁 →
             </Link>
@@ -302,10 +302,10 @@ export function ShadowingPractice({
 function ScoreCard({ label, value }: { label: string; value: number }) {
   const color =
     value >= 80
-      ? 'text-emerald-700 border-emerald-200 bg-emerald-50'
+      ? 'text-ink border-mark bg-mark/25'
       : value >= 60
-        ? 'text-amber-700 border-amber-200 bg-amber-50'
-        : 'text-red-700 border-red-200 bg-red-50'
+        ? 'text-ink border-mark bg-mark/25'
+        : 'text-pen border-pen/30 bg-pen/10'
   return (
     <div className={`rounded-lg border p-4 ${color}`}>
       <div className="text-xs font-medium uppercase tracking-wide opacity-80 mb-1">

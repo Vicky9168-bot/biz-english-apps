@@ -18,21 +18,18 @@ export default async function IdiomsPracticePage({
   const mode = modeParam === 'review' ? 'review' : 'learn'
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/idioms" />
 
       <div className="mx-auto max-w-2xl px-6 py-10">
         <header className="mb-6">
-          <div className="font-mono text-xs tracking-[0.2em] uppercase text-stone-500 mb-2">
-            [Part 4 · {mode === 'review' ? '複習模式' : '今日新題'}]
-          </div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-ink">
             {mode === 'review'
               ? '複習學過的俚語（優先答錯過的）'
               : '看情境，選出俚語的中文意思'}
           </h1>
           {mode === 'learn' && (
-            <p className="text-xs text-slate-500 mt-2">
+            <p className="text-xs text-ink/65 mt-2">
               每天最多 10 題新題，達標後可回來複習
             </p>
           )}

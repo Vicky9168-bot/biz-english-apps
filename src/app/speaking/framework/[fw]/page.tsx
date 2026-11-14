@@ -5,10 +5,10 @@ import { AppNav } from '../../../site-nav'
 type FrameworkKey = 'STAR' | 'PREP' | 'SCQA' | 'PYRAMID'
 
 const FRAMEWORK_COLOR: Record<FrameworkKey, string> = {
-  STAR: 'text-[#8A6508] bg-[#FBF0C8] border-[#EBD891]',
-  PREP: 'text-emerald-700 bg-emerald-50 border-emerald-200',
-  SCQA: 'text-stone-700 bg-stone-100 border-stone-300',
-  PYRAMID: 'text-orange-700 bg-orange-50 border-orange-200',
+  STAR: 'text-ink bg-mark/30 border-mark',
+  PREP: 'text-ink bg-mark/25 border-mark',
+  SCQA: 'text-ink/80 bg-paper border-ink/25',
+  PYRAMID: 'text-pen bg-pen/10 border-pen/30',
 }
 
 type LetterBreakdown = { letter: string; label: string; desc: string }
@@ -315,28 +315,28 @@ export default async function FrameworkDetailPage({
   if (!content) notFound()
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/speaking" />
 
       <div className="mx-auto max-w-3xl px-6 py-10 space-y-6">
         {/* Header */}
-        <header className="rounded-xl border border-slate-200 bg-white p-6">
+        <header className="rounded-lg border border-ink/15 bg-white p-6">
           <div className="flex items-baseline gap-3 mb-2">
             <span
               className={`text-sm font-mono font-bold px-2.5 py-1 rounded border ${FRAMEWORK_COLOR[key]}`}
             >
               {content.title}
             </span>
-            <span className="text-sm text-slate-600">{content.subtitle}</span>
+            <span className="text-sm text-ink/70">{content.subtitle}</span>
           </div>
-          <p className="text-slate-700 leading-relaxed mt-4">
+          <p className="text-ink/80 leading-relaxed mt-4">
             {content.overview}
           </p>
         </header>
 
         {/* 字母拆解 */}
-        <section className="rounded-xl border border-slate-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">
+        <section className="rounded-lg border border-ink/15 bg-white p-6">
+          <h2 className="text-lg font-semibold text-ink mb-4">
             每個字母代表什麼
           </h2>
           <ul className="space-y-3">
@@ -350,10 +350,10 @@ export default async function FrameworkDetailPage({
                   </span>
                 </div>
                 <div className="flex-1 pt-0.5">
-                  <div className="text-sm font-semibold text-slate-900">
+                  <div className="text-sm font-semibold text-ink">
                     {l.label}
                   </div>
-                  <p className="text-sm text-slate-600 mt-0.5">{l.desc}</p>
+                  <p className="text-sm text-ink/70 mt-0.5">{l.desc}</p>
                 </div>
               </li>
             ))}
@@ -362,21 +362,21 @@ export default async function FrameworkDetailPage({
 
         {/* 什麼時候用 / 不用 */}
         <section className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
-            <div className="text-xs font-medium text-emerald-800 uppercase tracking-wide mb-2">
+          <div className="rounded-lg border border-mark bg-mark/25 p-5">
+            <div className="text-xs font-medium text-ink uppercase tracking-wide mb-2">
               ✓ 什麼時候用
             </div>
-            <ul className="space-y-1.5 text-sm text-slate-800">
+            <ul className="space-y-1.5 text-sm text-ink">
               {content.whenUse.map((s) => (
                 <li key={s}>· {s}</li>
               ))}
             </ul>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
-            <div className="text-xs font-medium text-slate-600 uppercase tracking-wide mb-2">
+          <div className="rounded-lg border border-ink/15 bg-paper p-5">
+            <div className="text-xs font-medium text-ink/70 uppercase tracking-wide mb-2">
               ✗ 什麼時候不用
             </div>
-            <ul className="space-y-1.5 text-sm text-slate-800">
+            <ul className="space-y-1.5 text-sm text-ink">
               {content.whenNotUse.map((s) => (
                 <li key={s}>· {s}</li>
               ))}
@@ -385,30 +385,30 @@ export default async function FrameworkDetailPage({
         </section>
 
         {/* 範例 */}
-        <section className="rounded-xl border border-slate-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-1">
+        <section className="rounded-lg border border-ink/15 bg-white p-6">
+          <h2 className="text-lg font-semibold text-ink mb-1">
             兩個範例 · 逐段拆解
           </h2>
-          <p className="text-xs text-slate-500 mb-5">
+          <p className="text-xs text-ink/65 mb-5">
             右側標籤對應框架的每個階段，幫你看清楚哪一段在做什麼。
           </p>
           <div className="space-y-6">
             {content.examples.map((ex, i) => (
               <div
                 key={i}
-                className="rounded-lg border border-slate-200 bg-slate-50 p-5"
+                className="rounded-lg border border-ink/15 bg-paper p-5"
               >
-                <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wide mb-1">
+                <div className="text-[10px] font-mono text-ink/60 uppercase tracking-wide mb-1">
                   範例 {i + 1}
                 </div>
-                <div className="text-sm font-semibold text-slate-900 mb-3">
+                <div className="text-sm font-semibold text-ink mb-3">
                   {ex.scenario}
                 </div>
                 <div className="space-y-2">
                   {ex.annotated.map((seg, j) => (
                     <div
                       key={j}
-                      className="flex gap-3 items-start rounded-md bg-white border border-slate-200 p-3"
+                      className="flex gap-3 items-start rounded-md bg-white border border-ink/15 p-3"
                     >
                       <span
                         className={`shrink-0 text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border ${FRAMEWORK_COLOR[key]}`}
@@ -416,7 +416,7 @@ export default async function FrameworkDetailPage({
                         {seg.tag}
                       </span>
                       <p
-                        className="text-sm text-slate-800 leading-relaxed"
+                        className="text-sm text-ink leading-relaxed"
                         translate="no"
                       >
                         {seg.text}
@@ -433,7 +433,7 @@ export default async function FrameworkDetailPage({
         <div className="flex justify-center pt-2">
           <Link
             href="/speaking"
-            className="rounded-md bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+            className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
             來練 {content.title} 題目 →
           </Link>

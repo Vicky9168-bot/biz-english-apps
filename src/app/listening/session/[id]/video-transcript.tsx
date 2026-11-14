@@ -276,7 +276,7 @@ export function VideoTranscript({
         }`}
       >
         <div
-          className={`aspect-video self-start overflow-hidden rounded-xl border border-slate-200 bg-black ${
+          className={`aspect-video self-start overflow-hidden rounded-lg border border-ink/15 bg-black ${
             showTranscript ? 'lg:col-span-3' : ''
           }`}
         >
@@ -303,7 +303,7 @@ export function VideoTranscript({
               ref={listRef}
               onWheel={pauseAutoScroll}
               onTouchMove={pauseAutoScroll}
-              className="absolute inset-0 overflow-y-auto rounded-xl border border-slate-200 bg-white p-2"
+              className="absolute inset-0 overflow-y-auto rounded-lg border border-ink/15 bg-white p-2"
               aria-label={mode === 'zh' ? '中文逐字稿' : '英文逐字稿'}
             >
               {transcript.map((line, i) => {
@@ -319,15 +319,15 @@ export function VideoTranscript({
                     onClick={() => seekTo(line.start)}
                     aria-current={active ? 'true' : undefined}
                     disabled={apiFailed}
-                    className={`flex w-full gap-3 rounded-md px-3 py-2 text-left text-sm leading-relaxed transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
+                    className={`flex w-full gap-3 rounded-md px-3 py-2 text-left text-sm leading-relaxed transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
                       active
-                        ? 'bg-slate-900 text-white'
-                        : 'text-slate-600 hover:bg-slate-100'
+                        ? 'bg-ink text-white'
+                        : 'text-ink/70 hover:bg-paper'
                     } ${apiFailed ? 'cursor-default' : 'cursor-pointer'}`}
                   >
                     <span
                       className={`shrink-0 pt-0.5 font-mono text-[11px] tabular-nums ${
-                        active ? 'text-white/60' : 'text-slate-400'
+                        active ? 'text-white/60' : 'text-ink/60'
                       }`}
                     >
                       {formatTime(line.start)}
@@ -343,11 +343,11 @@ export function VideoTranscript({
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500">字幕</span>
+          <span className="text-xs text-ink/65">字幕</span>
           <div
             role="group"
             aria-label="字幕模式"
-            className="flex rounded-md border border-slate-300 bg-white p-0.5"
+            className="flex rounded-md border border-ink/25 bg-white p-0.5"
           >
             {SUBTITLE_MODES.map((m) => (
               <button
@@ -355,10 +355,10 @@ export function VideoTranscript({
                 type="button"
                 onClick={() => writeMode(m.value)}
                 aria-pressed={mode === m.value}
-                className={`rounded px-3 py-1 text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
+                className={`rounded px-3 py-1 text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
                   mode === m.value
-                    ? 'bg-slate-900 text-white'
-                    : 'text-slate-700 hover:bg-slate-100'
+                    ? 'bg-ink text-white'
+                    : 'text-ink/80 hover:bg-paper'
                 }`}
               >
                 {m.label}
@@ -371,10 +371,10 @@ export function VideoTranscript({
           <button
             type="button"
             onClick={onStartQuiz}
-            className={`rounded-md px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 ${
+            className={`rounded-md px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
               ended
-                ? 'bg-slate-900 text-white hover:bg-slate-800'
-                : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                ? 'bg-ink text-white hover:bg-ink'
+                : 'border border-ink/25 bg-white text-ink/80 hover:bg-paper'
             }`}
           >
             聽完了，開始練習題目 ↓

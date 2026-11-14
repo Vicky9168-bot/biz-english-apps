@@ -28,18 +28,15 @@ export default async function ContentWordsLessonPage({
     review === '1' && !!profile.content_words_lesson_completed_at
 
   return (
-    <main className="flex-1 bg-slate-100 min-h-screen">
+    <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref={isReview ? '/listening' : '/'} />
 
       <div className="mx-auto max-w-3xl px-6 py-10">
         <header className="mb-8">
-          <div className="font-mono text-xs tracking-[0.2em] uppercase text-stone-500 mb-2">
-            [Listening · Lesson 1]
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 text-pretty">
+          <h1 className="text-3xl font-bold text-ink text-pretty">
             如何抓住 Content Words
           </h1>
-          <p className="text-slate-600 mt-2 max-w-xl">
+          <p className="text-ink/70 mt-2 max-w-xl">
             正式聽力練習前必修的一課 — 母語者只重讀「實詞」，學會這個策略聽力立刻輕鬆一半。
           </p>
         </header>

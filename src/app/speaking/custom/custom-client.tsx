@@ -16,10 +16,10 @@ type Recommendation = {
 }
 
 const FRAMEWORK_COLOR: Record<FW, string> = {
-  STAR: 'text-[#8A6508] bg-[#FBF0C8] border-[#EBD891]',
-  PREP: 'text-emerald-700 bg-emerald-50 border-emerald-200',
-  SCQA: 'text-stone-700 bg-stone-100 border-stone-300',
-  PYRAMID: 'text-orange-700 bg-orange-50 border-orange-200',
+  STAR: 'text-ink bg-mark/30 border-mark',
+  PREP: 'text-ink bg-mark/25 border-mark',
+  SCQA: 'text-ink/80 bg-paper border-ink/25',
+  PYRAMID: 'text-pen bg-pen/10 border-pen/30',
 }
 
 const FRAMEWORK_DESC: Record<FW, string> = {
@@ -82,8 +82,8 @@ export function CustomScenarioWizard() {
     const chosen = chosenFramework ?? rec.recommended_framework
     return (
       <div className="space-y-6">
-        <section className="rounded-xl border border-slate-200 bg-white p-6">
-          <div className="text-xs font-medium tracking-wide uppercase text-slate-500 mb-2">
+        <section className="rounded-lg border border-ink/15 bg-white p-6">
+          <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-2">
             AI 的建議
           </div>
           <div className="flex flex-wrap items-baseline gap-3 mb-3">
@@ -92,17 +92,17 @@ export function CustomScenarioWizard() {
             >
               {rec.recommended_framework}
             </span>
-            <span className="text-sm text-slate-600">
+            <span className="text-sm text-ink/70">
               {FRAMEWORK_DESC[rec.recommended_framework]}
             </span>
           </div>
-          <p className="text-sm text-slate-700 leading-relaxed">
+          <p className="text-sm text-ink/80 leading-relaxed">
             {rec.recommended_reason_zh}
           </p>
 
           {rec.alternative_framework && (
-            <div className="mt-4 pt-4 border-t border-slate-100">
-              <div className="text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-1">
+            <div className="mt-4 pt-4 border-t border-ink/10">
+              <div className="text-[11px] font-medium text-ink/65 uppercase tracking-wide mb-1">
                 備選
               </div>
               <div className="flex items-baseline gap-2 mb-1">
@@ -111,37 +111,37 @@ export function CustomScenarioWizard() {
                 >
                   {rec.alternative_framework}
                 </span>
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-ink/65">
                   {FRAMEWORK_DESC[rec.alternative_framework]}
                 </span>
               </div>
-              <p className="text-xs text-slate-600">{rec.alternative_when_zh}</p>
+              <p className="text-xs text-ink/70">{rec.alternative_when_zh}</p>
             </div>
           )}
         </section>
 
-        <section className="rounded-xl border border-slate-200 bg-white p-6">
-          <div className="text-xs font-medium tracking-wide uppercase text-slate-500 mb-3">
+        <section className="rounded-lg border border-ink/15 bg-white p-6">
+          <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-3">
             你要練習的英文提問
           </div>
-          <p className="text-base text-slate-900 leading-relaxed" translate="no">
+          <p className="text-base text-ink leading-relaxed" translate="no">
             &ldquo;{rec.prompt_en}&rdquo;
           </p>
         </section>
 
-        <section className="rounded-xl border border-amber-200 bg-amber-50 p-6">
-          <div className="text-xs font-medium text-amber-800 uppercase tracking-wide mb-2">
+        <section className="rounded-lg border border-mark bg-mark/25 p-6">
+          <div className="text-xs font-medium text-ink uppercase tracking-wide mb-2">
             {chosen} 應用提示（針對這個情境）
           </div>
-          <p className="text-sm text-slate-800 leading-relaxed whitespace-pre-line">
+          <p className="text-sm text-ink leading-relaxed whitespace-pre-line">
             {rec.framework_hint_zh}
           </p>
         </section>
 
         {/* 允許改用備選框架 */}
         {rec.alternative_framework && (
-          <section className="rounded-xl border border-slate-200 bg-white p-4">
-            <div className="text-xs font-medium text-slate-500 mb-2">
+          <section className="rounded-lg border border-ink/15 bg-white p-4">
+            <div className="text-xs font-medium text-ink/65 mb-2">
               要用哪個框架練？
             </div>
             <div className="flex gap-2">
@@ -155,7 +155,7 @@ export function CustomScenarioWizard() {
                   className={`text-xs px-3 py-1.5 rounded-md border transition ${
                     chosen === fw
                       ? `${FRAMEWORK_COLOR[fw]} font-semibold`
-                      : 'bg-white border-slate-200 text-slate-700 hover:border-slate-400'
+                      : 'bg-white border-ink/15 text-ink/80 hover:border-ink/40'
                   }`}
                 >
                   {fw}
@@ -176,14 +176,14 @@ export function CustomScenarioWizard() {
               setRec(null)
               setChosenFramework(null)
             }}
-            className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+            className="rounded-md border border-ink/25 bg-white px-4 py-2 text-sm text-ink/80 hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
             ← 改情境
           </button>
           <button
             type="button"
             onClick={() => setState('practicing')}
-            className="rounded-md bg-slate-900 px-5 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+            className="rounded-md bg-ink px-5 py-2 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
             用 {chosen} 開始練習 →
           </button>
@@ -196,16 +196,16 @@ export function CustomScenarioWizard() {
   return (
     <form
       onSubmit={submitForm}
-      className="rounded-xl border border-slate-200 bg-white p-6 space-y-5"
+      className="rounded-lg border border-ink/15 bg-white p-6 space-y-5"
     >
       <div>
         <label
           htmlFor="context"
-          className="block text-sm font-semibold text-slate-900 mb-1"
+          className="block text-sm font-semibold text-ink mb-1"
         >
-          情境描述 <span className="text-red-500">*</span>
+          情境描述 <span className="text-pen">*</span>
         </label>
-        <p className="text-xs text-slate-500 mb-2">
+        <p className="text-xs text-ink/65 mb-2">
           誰在問你、你想達成什麼、有什麼背景資訊，越具體 AI 挑得越準。
         </p>
         <textarea
@@ -217,10 +217,10 @@ export function CustomScenarioWizard() {
           value={context}
           onChange={(e) => setContext(e.target.value)}
           placeholder="例：下週要跟 VP of Product 一對一，他會問我為什麼上個 sprint 的 velocity 掉了 30%，我想解釋原因但不要聽起來像找藉口。"
-          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 focus:outline-none resize-y"
+          className="w-full rounded-md border border-ink/25 bg-white px-3 py-2 text-sm text-ink placeholder-ink/50 focus:border-ink/50 focus:ring-2 focus:ring-ink/15 focus:outline-none resize-y"
           disabled={state === 'loading'}
         />
-        <div className="text-[11px] text-slate-400 mt-1 text-right tabular-nums">
+        <div className="text-[11px] text-ink/60 mt-1 text-right tabular-nums">
           {context.length} / 800
         </div>
       </div>
@@ -228,11 +228,11 @@ export function CustomScenarioWizard() {
       <div>
         <label
           htmlFor="promptEn"
-          className="block text-sm font-semibold text-slate-900 mb-1"
+          className="block text-sm font-semibold text-ink mb-1"
         >
-          對方的英文提問 <span className="text-slate-400">(optional)</span>
+          對方的英文提問 <span className="text-ink/60">(optional)</span>
         </label>
-        <p className="text-xs text-slate-500 mb-2">
+        <p className="text-xs text-ink/65 mb-2">
           知道對方會怎麼問就填，沒填 AI 會幫你寫一句。
         </p>
         <input
@@ -242,14 +242,14 @@ export function CustomScenarioWizard() {
           value={promptEn}
           onChange={(e) => setPromptEn(e.target.value)}
           placeholder="e.g. Why did velocity drop last sprint?"
-          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 focus:outline-none"
+          className="w-full rounded-md border border-ink/25 bg-white px-3 py-2 text-sm text-ink placeholder-ink/50 focus:border-ink/50 focus:ring-2 focus:ring-ink/15 focus:outline-none"
           disabled={state === 'loading'}
           translate="no"
         />
       </div>
 
       {error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm text-pen" role="alert">
           {error}
         </p>
       )}
@@ -257,7 +257,7 @@ export function CustomScenarioWizard() {
       <button
         type="submit"
         disabled={state === 'loading' || context.trim().length < 10}
-        className="w-full rounded-md bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition disabled:bg-slate-300 disabled:cursor-not-allowed"
+        className="w-full rounded-md bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition disabled:bg-ink/20 disabled:cursor-not-allowed"
       >
         {state === 'loading' ? (
           <span className="inline-flex items-center gap-2">

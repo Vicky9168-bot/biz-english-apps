@@ -25,17 +25,17 @@ type Result = {
 }
 
 const CATEGORY_TONE: Record<Category, string> = {
-  Summary: 'text-[#8A6508] bg-[#FBF0C8] border-[#EBD891]',
-  Experience: 'text-emerald-700 bg-emerald-50 border-emerald-200',
-  Skills: 'text-stone-700 bg-stone-100 border-stone-300',
-  Structure: 'text-orange-700 bg-orange-50 border-orange-200',
-  Keywords: 'text-cyan-700 bg-cyan-50 border-cyan-200',
+  Summary: 'text-ink bg-mark/30 border-mark',
+  Experience: 'text-ink bg-mark/25 border-mark',
+  Skills: 'text-ink/80 bg-paper border-ink/25',
+  Structure: 'text-pen bg-pen/10 border-pen/30',
+  Keywords: 'text-ink bg-paper border-ink/15',
 }
 
 const PRIORITY_TONE: Record<Priority, string> = {
-  high: 'bg-rose-100 text-rose-700 border-rose-200',
-  medium: 'bg-amber-100 text-amber-800 border-amber-200',
-  low: 'bg-slate-100 text-slate-600 border-slate-200',
+  high: 'bg-pen/15 text-pen border-pen/30',
+  medium: 'bg-mark/40 text-ink border-mark',
+  low: 'bg-paper text-ink/70 border-ink/15',
 }
 
 const PRIORITY_LABEL: Record<Priority, string> = {
@@ -95,16 +95,16 @@ export default function HealthCheckClient() {
   return (
     <form
       onSubmit={submit}
-      className="rounded-xl border border-slate-200 bg-white p-6 space-y-5"
+      className="rounded-lg border border-ink/15 bg-white p-6 space-y-5"
     >
       <div>
         <label
           htmlFor="jd"
-          className="block text-sm font-semibold text-slate-900 mb-1"
+          className="block text-sm font-semibold text-ink mb-1"
         >
-          Job Description <span className="text-red-500">*</span>
+          Job Description <span className="text-pen">*</span>
         </label>
-        <p className="text-xs text-slate-500 mb-2">
+        <p className="text-xs text-ink/65 mb-2">
           貼上你想投的完整 JD（含 Responsibilities、Qualifications 越好）。
         </p>
         <textarea
@@ -116,11 +116,11 @@ export default function HealthCheckClient() {
           value={jd}
           onChange={(e) => setJd(e.target.value)}
           placeholder="Paste the full job description here..."
-          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 focus:outline-none resize-y font-mono"
+          className="w-full rounded-md border border-ink/25 bg-white px-3 py-2 text-sm text-ink placeholder-ink/50 focus:border-ink/50 focus:ring-2 focus:ring-ink/15 focus:outline-none resize-y font-mono"
           disabled={state === 'loading'}
           translate="no"
         />
-        <div className="flex justify-between text-[11px] text-slate-400 mt-1 tabular-nums">
+        <div className="flex justify-between text-[11px] text-ink/60 mt-1 tabular-nums">
           <span>
             {jd.trim().length < JD_MIN
               ? `至少再輸入 ${JD_MIN - jd.trim().length} 字`
@@ -135,11 +135,11 @@ export default function HealthCheckClient() {
       <div>
         <label
           htmlFor="resume"
-          className="block text-sm font-semibold text-slate-900 mb-1"
+          className="block text-sm font-semibold text-ink mb-1"
         >
-          你的英文履歷 <span className="text-red-500">*</span>
+          你的英文履歷 <span className="text-pen">*</span>
         </label>
-        <p className="text-xs text-slate-500 mb-2">
+        <p className="text-xs text-ink/65 mb-2">
           貼 Summary + Work Experience 段落即可，不用整份 PDF 文字。
         </p>
         <textarea
@@ -151,11 +151,11 @@ export default function HealthCheckClient() {
           value={resume}
           onChange={(e) => setResume(e.target.value)}
           placeholder={`Summary:\n...\n\nWork Experience:\n- Company A, Title, Date\n  · Bullet 1\n  · Bullet 2`}
-          className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 focus:outline-none resize-y font-mono"
+          className="w-full rounded-md border border-ink/25 bg-white px-3 py-2 text-sm text-ink placeholder-ink/50 focus:border-ink/50 focus:ring-2 focus:ring-ink/15 focus:outline-none resize-y font-mono"
           disabled={state === 'loading'}
           translate="no"
         />
-        <div className="flex justify-between text-[11px] text-slate-400 mt-1 tabular-nums">
+        <div className="flex justify-between text-[11px] text-ink/60 mt-1 tabular-nums">
           <span>
             {resume.trim().length < RESUME_MIN
               ? `至少再輸入 ${RESUME_MIN - resume.trim().length} 字`
@@ -168,20 +168,20 @@ export default function HealthCheckClient() {
       </div>
 
       {error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm text-pen" role="alert">
           {error}
         </p>
       )}
 
-      <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 leading-relaxed">
-        <span className="font-semibold text-slate-700">隱私提醒：</span>
+      <div className="rounded-md border border-ink/15 bg-paper p-3 text-xs text-ink/70 leading-relaxed">
+        <span className="font-semibold text-ink/80">隱私提醒：</span>
         內容會傳給 OpenAI 做分析，不會存到資料庫，重新整理頁面就消失。避免貼敏感個資（身分證、地址）。
       </div>
 
       <button
         type="submit"
         disabled={!canSubmit}
-        className="w-full rounded-md bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition disabled:bg-slate-300 disabled:cursor-not-allowed"
+        className="w-full rounded-md bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition disabled:bg-ink/20 disabled:cursor-not-allowed"
       >
         {state === 'loading' ? (
           <span className="inline-flex items-center gap-2">
@@ -205,10 +205,10 @@ function ResultView({
 }) {
   const scoreTone =
     result.match_score >= 75
-      ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+      ? 'text-ink bg-mark/25 border-mark'
       : result.match_score >= 50
-        ? 'text-amber-800 bg-amber-50 border-amber-200'
-        : 'text-rose-700 bg-rose-50 border-rose-200'
+        ? 'text-ink bg-mark/25 border-mark'
+        : 'text-pen bg-pen/10 border-pen/30'
 
   const scoreLabel =
     result.match_score >= 75
@@ -221,7 +221,7 @@ function ResultView({
     <div className="space-y-6">
       {/* Score */}
       <section
-        className={`rounded-xl border p-6 ${scoreTone.replace('text-', 'bg-').split(' ')[0].replace('bg-', 'border-')} ${scoreTone}`}
+        className={`rounded-lg border p-6 ${scoreTone.replace('text-', 'bg-').split(' ')[0].replace('bg-', 'border-')} ${scoreTone}`}
       >
         <div className="flex items-baseline justify-between gap-4">
           <div>
@@ -245,25 +245,25 @@ function ResultView({
       </section>
 
       {/* Keyword match */}
-      <section className="rounded-xl border border-slate-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-slate-900 mb-1">
+      <section className="rounded-lg border border-ink/15 bg-white p-6">
+        <h2 className="text-lg font-semibold text-ink mb-1">
           關鍵字對照
         </h2>
-        <p className="text-xs text-slate-500 mb-5">
+        <p className="text-xs text-ink/65 mb-5">
           JD 常見關鍵字在你履歷有沒有出現。缺的優先補進 Summary 或 Skills。
         </p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 uppercase">
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-mark/40 text-ink uppercase">
                 Matched
               </span>
-              <span className="text-xs text-slate-500 tabular-nums">
+              <span className="text-xs text-ink/65 tabular-nums">
                 {result.keyword_match.matched.length}
               </span>
             </div>
             {result.keyword_match.matched.length === 0 ? (
-              <p className="text-xs text-slate-400 italic">
+              <p className="text-xs text-ink/60 italic">
                 沒抓到明顯對得上的關鍵字
               </p>
             ) : (
@@ -271,7 +271,7 @@ function ResultView({
                 {result.keyword_match.matched.map((k) => (
                   <li
                     key={k}
-                    className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-800"
+                    className="text-xs font-mono px-2 py-0.5 rounded bg-mark/25 border border-mark text-ink"
                     translate="no"
                   >
                     {k}
@@ -282,15 +282,15 @@ function ResultView({
           </div>
           <div>
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 uppercase">
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-pen/15 text-pen uppercase">
                 Missing
               </span>
-              <span className="text-xs text-slate-500 tabular-nums">
+              <span className="text-xs text-ink/65 tabular-nums">
                 {result.keyword_match.missing.length}
               </span>
             </div>
             {result.keyword_match.missing.length === 0 ? (
-              <p className="text-xs text-slate-400 italic">
+              <p className="text-xs text-ink/60 italic">
                 JD 主要關鍵字都有涵蓋，讚
               </p>
             ) : (
@@ -298,7 +298,7 @@ function ResultView({
                 {result.keyword_match.missing.map((k) => (
                   <li
                     key={k}
-                    className="text-xs font-mono px-2 py-0.5 rounded bg-rose-50 border border-rose-200 text-rose-800"
+                    className="text-xs font-mono px-2 py-0.5 rounded bg-pen/10 border border-pen/30 text-pen"
                     translate="no"
                   >
                     {k}
@@ -312,54 +312,54 @@ function ResultView({
 
       {/* Bullet rewrites */}
       {result.bullet_rewrites.length > 0 && (
-        <section className="rounded-xl border border-slate-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-1">
+        <section className="rounded-lg border border-ink/15 bg-white p-6">
+          <h2 className="text-lg font-semibold text-ink mb-1">
             AI 改寫的 {result.bullet_rewrites.length} 條 bullet
           </h2>
-          <p className="text-xs text-slate-500 mb-6">
+          <p className="text-xs text-ink/65 mb-6">
             挑最需要修的幾條 — 動詞 + 策略 + 量化成果，並對齊 JD 關鍵字。
           </p>
           <div className="space-y-6">
             {result.bullet_rewrites.map((b, i) => (
               <article
                 key={i}
-                className="rounded-xl border border-slate-200 bg-slate-50 overflow-hidden"
+                className="rounded-lg border border-ink/15 bg-paper overflow-hidden"
               >
-                <div className="border-b border-slate-200 bg-white px-4 py-2 flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-900 text-white">
+                <div className="border-b border-ink/15 bg-white px-4 py-2 flex items-center gap-2">
+                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-ink text-white">
                     #{i + 1}
                   </span>
-                  <span className="text-xs text-slate-600">Bullet 改寫</span>
+                  <span className="text-xs text-ink/70">Bullet 改寫</span>
                 </div>
                 <div className="p-4 space-y-3">
-                  <div className="rounded-md border border-rose-200 bg-rose-50/40">
+                  <div className="rounded-md border border-pen/30 bg-pen/4">
                     <div className="px-3 pt-2">
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 uppercase">
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-pen/15 text-pen uppercase">
                         Original
                       </span>
                     </div>
                     <p
-                      className="text-sm text-slate-800 leading-relaxed px-3 py-2"
+                      className="text-sm text-ink leading-relaxed px-3 py-2"
                       translate="no"
                     >
                       {b.original}
                     </p>
                   </div>
-                  <div className="rounded-md border border-emerald-200 bg-emerald-50/40">
+                  <div className="rounded-md border border-mark bg-mark/10">
                     <div className="px-3 pt-2">
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 uppercase">
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-mark/40 text-ink uppercase">
                         Improved
                       </span>
                     </div>
                     <p
-                      className="text-sm text-slate-800 leading-relaxed px-3 py-2"
+                      className="text-sm text-ink leading-relaxed px-3 py-2"
                       translate="no"
                     >
                       {b.improved}
                     </p>
                   </div>
-                  <p className="text-xs text-slate-600 leading-relaxed pl-1">
-                    <span className="font-semibold text-slate-700">
+                  <p className="text-xs text-ink/70 leading-relaxed pl-1">
+                    <span className="font-semibold text-ink/80">
                       Why：
                     </span>
                     {b.why_zh}
@@ -373,18 +373,18 @@ function ResultView({
 
       {/* Suggestions */}
       {result.suggestions.length > 0 && (
-        <section className="rounded-xl border border-slate-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-1">
+        <section className="rounded-lg border border-ink/15 bg-white p-6">
+          <h2 className="text-lg font-semibold text-ink mb-1">
             {result.suggestions.length} 個具體建議
           </h2>
-          <p className="text-xs text-slate-500 mb-5">
+          <p className="text-xs text-ink/65 mb-5">
             依優先順序排 — 先把「現在就改」的做完再看下一批。
           </p>
           <ul className="space-y-3">
             {result.suggestions.map((s, i) => (
               <li
                 key={i}
-                className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+                className="rounded-lg border border-ink/15 bg-paper p-4"
               >
                 <div className="flex flex-wrap items-baseline gap-2 mb-2">
                   <span
@@ -399,7 +399,7 @@ function ResultView({
                     {PRIORITY_LABEL[s.priority]}
                   </span>
                 </div>
-                <p className="text-sm text-slate-800 leading-relaxed">
+                <p className="text-sm text-ink leading-relaxed">
                   {s.tip_zh}
                 </p>
               </li>
@@ -413,7 +413,7 @@ function ResultView({
         <button
           type="button"
           onClick={onReset}
-          className="rounded-md bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 transition"
+          className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
         >
           ← 換一份 JD 或履歷再健檢
         </button>
