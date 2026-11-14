@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { ContentWordsLesson } from './lesson-client'
 import { AppNav } from '../../../site-nav'
+import { PageHeader } from '@/app/page-kit'
 
 export default async function ContentWordsLessonPage({
   searchParams,
@@ -32,14 +33,10 @@ export default async function ContentWordsLessonPage({
       <AppNav backHref={isReview ? '/listening' : '/'} />
 
       <div className="mx-auto max-w-3xl px-6 py-10">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-ink text-pretty">
-            如何抓住 Content Words
-          </h1>
-          <p className="text-ink/70 mt-2 max-w-xl">
-            正式聽力練習前必修的一課 — 母語者只重讀「實詞」，學會這個策略聽力立刻輕鬆一半。
-          </p>
-        </header>
+        <PageHeader
+          title="如何抓住 Content Words"
+          subtitle={<>正式聽力練習前必修的一課 — 母語者只重讀「實詞」，學會這個策略聽力立刻輕鬆一半。</>}
+        />
 
         <ContentWordsLesson />
       </div>

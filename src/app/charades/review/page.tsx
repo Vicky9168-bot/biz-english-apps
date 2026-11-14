@@ -3,8 +3,14 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import type { Vocabulary } from '@/lib/supabase/types'
 import { AppNav } from '../../site-nav'
-import { Trophy } from 'lucide-react'
-import { IconTile } from '../../icon-tile'
+import {
+  EmptyNote,
+  IndexList,
+  IndexRow,
+  Mark,
+  PageHeader,
+  SectionTitle,
+} from '@/app/page-kit'
 
 export default async function CharadesReviewPage() {
   const supabase = await createClient()
@@ -76,85 +82,55 @@ export default async function CharadesReviewPage() {
       <AppNav backHref="/charades" />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-ink text-pretty">
-            錯題複習
-          </h1>
-          <p className="text-ink/70 mt-2 max-w-xl">
-            這些字你曾經答錯，還沒重新掌握，快速看一遍，下次遇到就記起來了。
-          </p>
-        </header>
+        <PageHeader
+          title="錯題複習"
+          subtitle={<>這些字你曾經答錯，還沒重新掌握，快速看一遍，下次遇到就記起來了。</>}
+        />
 
         {words.length === 0 ? (
-          <div className="rounded-lg border border-ink/15 bg-white p-10 text-center">
-            <IconTile icon={Trophy} size="lg" className="mb-3" />
-            <h2 className="text-lg font-semibold text-ink mb-1">
-              目前沒有需要複習的字
-            </h2>
-            <p className="text-sm text-ink/65">
-              過去 60 天內每個練習過的字都掌握了，繼續保持！
-            </p>
+          <div>
+            <EmptyNote>
+              目前沒有需要複習的字。過去 60 天內每個練習過的字都掌握了，繼續保持！
+            </EmptyNote>
             <Link
               href="/charades"
-              className="mt-6 inline-block rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 transition"
+              className="mt-6 inline-block rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2 transition"
             >
               開始今天的練習
             </Link>
           </div>
         ) : (
           <>
-            <div className="text-sm text-ink/70 mb-4">
-              <span className="font-semibold text-ink tabular-nums">
-                {words.length}
-              </span>{' '}
-              個字待複習
-            </div>
-            <ul className="space-y-3">
-              {words.map((w) => (
-                <li
+            <SectionTitle title={`${words.length} 個字待複習`} />
+            <IndexList>
+              {words.map((w, i) => (
+                <IndexRow
                   key={w.id}
-                  className="rounded-lg border border-ink/15 bg-white p-5"
-                >
-                  <div className="flex items-start justify-between gap-4 mb-2">
-                    <div>
-                      <div
-                        className="text-xl font-bold text-ink"
-                        translate="no"
-                      >
-                        {w.word}
-                      </div>
-                      {w.definition_zh && (
-                        <div className="text-sm text-ink/70 mt-0.5">
-                          {w.definition_zh}
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-xs text-ink/60 tabular-nums shrink-0">
-                      上次 {w.last_seen}
-                    </span>
-                  </div>
-
-                  {w.example_sentence && (
-                    <p className="text-sm text-ink/80 italic border-l-2 border-ink/15 pl-3 mt-3">
-                      &ldquo;{w.example_sentence}&rdquo;
-                    </p>
-                  )}
-
-                  {w.scenario_tags.length > 0 && (
-                    <div className="mt-3 flex gap-1.5 flex-wrap">
-                      {w.scenario_tags.map((tag) => (
+                  tag={String(i + 1).padStart(2, '0')}
+                  title={w.word}
+                  translateTitle={false}
+                  desc={
+                    <>
+                      {w.definition_zh && <Mark>{w.definition_zh}</Mark>}
+                      {w.example_sentence && (
                         <span
-                          key={tag}
-                          className="text-xs px-2 py-0.5 rounded-full bg-paper text-ink/70"
+                          className="mt-2 block border-l-2 border-ink/25 pl-3 italic text-ink/80"
+                          translate="no"
                         >
-                          {tag}
+                          &ldquo;{w.example_sentence}&rdquo;
                         </span>
-                      ))}
-                    </div>
-                  )}
-                </li>
+                      )}
+                      {w.scenario_tags.length > 0 && (
+                        <span className="mt-2 block text-ink/65">
+                          {w.scenario_tags.join(' · ')}
+                        </span>
+                      )}
+                    </>
+                  }
+                  aside={<span className="tabular-nums">上次 {w.last_seen}</span>}
+                />
               ))}
-            </ul>
+            </IndexList>
           </>
         )}
       </div>

@@ -1,8 +1,14 @@
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AppNav } from '../site-nav'
 import { BookOpen, Target } from 'lucide-react'
+import {
+  IndexList,
+  IndexRow,
+  PageHeader,
+  SectionTitle,
+  StatStrip,
+} from '../page-kit'
 
 const DAILY_TARGET = 5
 
@@ -45,231 +51,80 @@ export default async function CharadesHome() {
 
   const done = (todayCount ?? 0) >= DAILY_TARGET
   const remaining = Math.max(0, DAILY_TARGET - (todayCount ?? 0))
-  const progressPct = Math.min(100, ((todayCount ?? 0) / DAILY_TARGET) * 100)
 
   return (
-    <main className="flex-1 bg-paper min-h-screen">
+    <main className="flex-1 bg-paper text-ink min-h-screen">
       <AppNav />
 
       <div className="mx-auto max-w-3xl px-6 py-10">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-ink text-pretty">
-            比手畫腳單字
-          </h1>
-          <p className="text-ink/70 mt-2 max-w-xl">
-            用英文描述目標單字，讓 AI 猜出來 — 訓練口說表達與商務詞彙。
-          </p>
-        </header>
+        <PageHeader
+          title="比手畫腳單字"
+          subtitle="用英文描述目標單字，讓 AI 猜出來 — 訓練口說表達與商務詞彙。"
+        />
 
-        {/* 學習進度 stats */}
-        <section className="mb-6 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border border-ink/15 bg-white p-5">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-ink/65">今日單字</span>
-              <Target className="h-5 w-5 text-ink/60" strokeWidth={1.5} aria-hidden="true" />
-            </div>
-            <div className="text-2xl font-bold text-ink tabular-nums mb-3">
-              {todayCount ?? 0} / {DAILY_TARGET}
-            </div>
-            <div
-              className="h-1.5 bg-paper rounded-full overflow-hidden"
-              role="progressbar"
-              aria-valuenow={todayCount ?? 0}
-              aria-valuemin={0}
-              aria-valuemax={DAILY_TARGET}
-            >
-              <div
-                className="h-full bg-ink motion-safe:transition-[width] duration-500"
-                style={{ width: `${progressPct}%` }}
-              />
-            </div>
-            <div className="text-xs text-ink/65 mt-2">
-              {done ? '今日已完成！' : `還差 ${remaining} 題`}
-            </div>
-          </div>
-          <div className="rounded-lg border border-ink/15 bg-white p-5">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-ink/65">本週學會</span>
-              <BookOpen className="h-5 w-5 text-ink/60" strokeWidth={1.5} aria-hidden="true" />
-            </div>
-            <div className="text-2xl font-bold text-ink tabular-nums">
-              {weeklyMasteredCount} 個字
-            </div>
-            <div className="text-xs text-ink/65 mt-1">
-              {weeklyMasteredCount >= 20
-                ? '這週有硬底子'
-                : weeklyMasteredCount === 0
-                  ? '開始累積吧'
-                  : '持續加碼中'}
-            </div>
-          </div>
-        </section>
+        <StatStrip
+          items={[
+            {
+              label: '今日單字',
+              value: `${todayCount ?? 0} / ${DAILY_TARGET}`,
+              hint: done ? '今日已完成' : `還差 ${remaining} 題`,
+            },
+            {
+              label: '本週學會',
+              value: `${weeklyMasteredCount} 個字`,
+              hint:
+                weeklyMasteredCount >= 20
+                  ? '這週有硬底子'
+                  : weeklyMasteredCount === 0
+                    ? '開始累積吧'
+                    : '持續加碼中',
+            },
+          ]}
+        />
 
-        {/* 開始練習 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-8">
-          <h2 className="text-sm font-semibold tracking-wide uppercase text-ink/65 mb-4">
-            {done ? '今日目標達成 · 想再多練幾題' : '選擇今天的練習模式'}
-          </h2>
-
-          <div className="grid gap-3 md:grid-cols-2 mb-6">
-            <ModeLink
+        <section className="mb-10">
+          <SectionTitle
+            title={done ? '今日目標達成，想再多練幾題' : '選擇今天的練習模式'}
+          />
+          <IndexList>
+            <IndexRow
               href="/charades/session?mode=user_describes"
-              icon={<MicIcon />}
               title="我來描述"
               desc="AI 給你一個字，你用英文描述，讓 AI 猜"
-              cta={done ? '再多練 →' : `開始 ${remaining} 題 →`}
-              variant="primary"
+              aside={
+                <span className="hl-mark font-semibold text-ink">
+                  {done ? '再多練' : `開始 ${remaining} 題`}
+                </span>
+              }
             />
-            <ModeLink
+            <IndexRow
               href="/charades/session?mode=ai_describes"
-              icon={<EarIcon />}
               title="AI 來描述"
               desc="AI 描述一個字，你用英文猜出來"
-              cta={done ? '再多練 →' : `開始 ${remaining} 題 →`}
-              variant="secondary"
+              aside={done ? '再多練' : `開始 ${remaining} 題`}
             />
-          </div>
-
-          <p className="text-xs text-ink/65 text-center">
-            需要允許瀏覽器使用麥克風
-          </p>
+          </IndexList>
+          <p className="mt-3 text-sm text-ink/65">需要允許瀏覽器使用麥克風</p>
         </section>
 
-        {/* 錯題複習 + 詞彙表 */}
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <Link
-            href="/charades/review"
-            className="flex items-center justify-between rounded-lg border border-ink/15 bg-white px-5 py-4 hover:border-ink/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 motion-safe:transition group"
-          >
-            <div>
-              <div className="text-sm font-semibold text-ink">
-                錯題複習
-              </div>
-              <div className="text-xs text-ink/65 mt-0.5">
-                翻看過去答錯的字
-              </div>
-            </div>
-            <span
-              aria-hidden="true"
-              className="text-ink/60 group-hover:text-ink motion-safe:transition"
-            >
-              →
-            </span>
-          </Link>
-
-          <Link
-            href="/charades/glossary"
-            className="flex items-center justify-between rounded-lg border border-ink/15 bg-white px-5 py-4 hover:border-ink/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 motion-safe:transition group"
-          >
-            <div>
-              <div className="text-sm font-semibold text-ink">
-                單字庫
-              </div>
-              <div className="text-xs text-ink/65 mt-0.5">
-                看有哪些字可以練
-              </div>
-            </div>
-            <span
-              aria-hidden="true"
-              className="text-ink/60 group-hover:text-ink motion-safe:transition"
-            >
-              →
-            </span>
-          </Link>
-        </div>
+        <section>
+          <SectionTitle title="複習與詞彙" />
+          <IndexList>
+            <IndexRow
+              href="/charades/review"
+              title="錯題複習"
+              desc="翻看過去答錯的字"
+              aside={<Target className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />}
+            />
+            <IndexRow
+              href="/charades/glossary"
+              title="單字庫"
+              desc="看有哪些字可以練"
+              aside={<BookOpen className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />}
+            />
+          </IndexList>
+        </section>
       </div>
     </main>
-  )
-}
-
-
-function ModeLink({
-  href,
-  icon,
-  title,
-  desc,
-  cta,
-  variant,
-}: {
-  href: string
-  icon: React.ReactNode
-  title: string
-  desc: string
-  cta: string
-  variant: 'primary' | 'secondary'
-}) {
-  const base =
-    'group block rounded-lg border p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/20 motion-safe:transition'
-  const style =
-    variant === 'primary'
-      ? 'border-ink bg-ink text-white hover:bg-ink'
-      : 'border-ink/15 bg-white text-ink hover:border-ink/40'
-  const ctaClass =
-    variant === 'primary'
-      ? 'text-paper'
-      : 'text-ink/65 group-hover:text-ink'
-  return (
-    <Link href={href} className={`${base} ${style}`}>
-      <div
-        className={
-          variant === 'primary' ? 'text-paper mb-3' : 'text-ink/65 mb-3'
-        }
-      >
-        {icon}
-      </div>
-      <div className="font-semibold mb-1">{title}</div>
-      <div
-        className={
-          variant === 'primary'
-            ? 'text-xs text-paper/70 mb-4'
-            : 'text-xs text-ink/70 mb-4'
-        }
-      >
-        {desc}
-      </div>
-      <div className={`text-xs font-medium tabular-nums ${ctaClass}`}>
-        {cta}
-      </div>
-    </Link>
-  )
-}
-
-function MicIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="9" y="2" width="6" height="12" rx="3" />
-      <path d="M5 10a7 7 0 0 0 14 0" />
-      <path d="M12 17v4" />
-      <path d="M8 21h8" />
-    </svg>
-  )
-}
-
-function EarIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M6 8a6 6 0 0 1 12 0c0 3-2 4-3 5s-1 3-3 3-2-1-3-1-2 1-3-1 1-3-1-4S6 9 6 8Z" />
-      <path d="M9 12a3 3 0 0 1 6 0" />
-    </svg>
   )
 }

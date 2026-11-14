@@ -1,15 +1,9 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { AppNav } from '../../../site-nav'
+import { IndexList, IndexRow, PageHeader, SectionTitle } from '@/app/page-kit'
 
 type FrameworkKey = 'STAR' | 'PREP' | 'SCQA' | 'PYRAMID'
-
-const FRAMEWORK_COLOR: Record<FrameworkKey, string> = {
-  STAR: 'text-ink bg-mark/30 border-mark',
-  PREP: 'text-ink bg-mark/25 border-mark',
-  SCQA: 'text-ink/80 bg-paper border-ink/25',
-  PYRAMID: 'text-pen bg-pen/10 border-pen/30',
-}
 
 type LetterBreakdown = { letter: string; label: string; desc: string }
 type Example = {
@@ -318,126 +312,94 @@ export default async function FrameworkDetailPage({
     <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/speaking" />
 
-      <div className="mx-auto max-w-3xl px-6 py-10 space-y-6">
-        {/* Header */}
-        <header className="rounded-lg border border-ink/15 bg-white p-6">
-          <div className="flex items-baseline gap-3 mb-2">
-            <span
-              className={`text-sm font-mono font-bold px-2.5 py-1 rounded border ${FRAMEWORK_COLOR[key]}`}
-            >
-              {content.title}
-            </span>
-            <span className="text-sm text-ink/70">{content.subtitle}</span>
-          </div>
-          <p className="text-ink/80 leading-relaxed mt-4">
-            {content.overview}
-          </p>
-        </header>
+      <div className="mx-auto max-w-3xl px-6 py-10">
+        <PageHeader
+          title={content.title}
+          subtitle={
+            <>
+              <span className="font-semibold text-ink">{content.subtitle}</span>
+              <span className="mt-3 block">{content.overview}</span>
+            </>
+          }
+        />
 
-        {/* 字母拆解 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
-          <h2 className="text-lg font-semibold text-ink mb-4">
-            每個字母代表什麼
-          </h2>
-          <ul className="space-y-3">
+        {/* 字母拆解：框架本身就是順序 */}
+        <section className="mb-12">
+          <SectionTitle title="每個字母代表什麼" />
+          <IndexList>
             {content.letters.map((l) => (
-              <li key={`${l.letter}-${l.label}`} className="flex gap-4">
-                <div
-                  className={`shrink-0 w-12 h-12 rounded-lg border flex flex-col items-center justify-center ${FRAMEWORK_COLOR[key]}`}
-                >
-                  <span className="text-lg font-bold font-mono leading-none">
-                    {l.letter}
-                  </span>
-                </div>
-                <div className="flex-1 pt-0.5">
-                  <div className="text-sm font-semibold text-ink">
-                    {l.label}
-                  </div>
-                  <p className="text-sm text-ink/70 mt-0.5">{l.desc}</p>
-                </div>
-              </li>
+              <IndexRow
+                key={`${l.letter}-${l.label}`}
+                tag={l.letter}
+                title={l.label}
+                translateTitle={false}
+                desc={l.desc}
+              />
             ))}
-          </ul>
+          </IndexList>
         </section>
 
         {/* 什麼時候用 / 不用 */}
-        <section className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border border-mark bg-mark/25 p-5">
-            <div className="text-xs font-medium text-ink uppercase tracking-wide mb-2">
-              ✓ 什麼時候用
-            </div>
-            <ul className="space-y-1.5 text-sm text-ink">
+        <section className="mb-12 grid gap-8 sm:grid-cols-2">
+          <div className="border-l-4 border-mark pl-5">
+            <h2 className="mb-2 text-lg font-bold">什麼時候用</h2>
+            <ul className="space-y-1.5 text-sm leading-relaxed">
               {content.whenUse.map((s) => (
-                <li key={s}>· {s}</li>
+                <li key={s}>{s}</li>
               ))}
             </ul>
           </div>
-          <div className="rounded-lg border border-ink/15 bg-paper p-5">
-            <div className="text-xs font-medium text-ink/70 uppercase tracking-wide mb-2">
-              ✗ 什麼時候不用
-            </div>
-            <ul className="space-y-1.5 text-sm text-ink">
+          <div className="border-l-4 border-pen pl-5">
+            <h2 className="mb-2 text-lg font-bold">什麼時候不用</h2>
+            <ul className="space-y-1.5 text-sm leading-relaxed">
               {content.whenNotUse.map((s) => (
-                <li key={s}>· {s}</li>
+                <li key={s}>{s}</li>
               ))}
             </ul>
           </div>
         </section>
 
         {/* 範例 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">
-            兩個範例 · 逐段拆解
-          </h2>
-          <p className="text-xs text-ink/65 mb-5">
-            右側標籤對應框架的每個階段，幫你看清楚哪一段在做什麼。
+        <section className="mb-12">
+          <SectionTitle title="兩個範例，逐段拆解" />
+          <p className="mb-6 text-sm text-ink/65">
+            左側標籤對應框架的每個階段，幫你看清楚哪一段在做什麼。
           </p>
-          <div className="space-y-6">
+          <div className="space-y-10">
             {content.examples.map((ex, i) => (
-              <div
-                key={i}
-                className="rounded-lg border border-ink/15 bg-paper p-5"
-              >
-                <div className="text-[10px] font-mono text-ink/60 uppercase tracking-wide mb-1">
-                  範例 {i + 1}
-                </div>
-                <div className="text-sm font-semibold text-ink mb-3">
+              <div key={i}>
+                <h3 className="mb-3 text-base font-semibold">
+                  <span className="mr-3 font-display text-ink/65">
+                    範例 {i + 1}
+                  </span>
                   {ex.scenario}
-                </div>
-                <div className="space-y-2">
+                </h3>
+                <ol className="border-t border-ink/15">
                   {ex.annotated.map((seg, j) => (
-                    <div
+                    <li
                       key={j}
-                      className="flex gap-3 items-start rounded-md bg-white border border-ink/15 p-3"
+                      className="grid grid-cols-[6rem_1fr] gap-x-4 border-b border-ink/10 py-3 sm:grid-cols-[8rem_1fr]"
                     >
-                      <span
-                        className={`shrink-0 text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border ${FRAMEWORK_COLOR[key]}`}
-                      >
+                      <span className="font-display text-sm font-semibold text-ink/65">
                         {seg.tag}
                       </span>
-                      <p
-                        className="text-sm text-ink leading-relaxed"
-                        translate="no"
-                      >
+                      <p className="text-sm leading-relaxed" translate="no">
                         {seg.text}
                       </p>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ol>
               </div>
             ))}
           </div>
         </section>
 
-        {/* CTA */}
-        <div className="flex justify-center pt-2">
-          <Link
-            href="/speaking"
-            className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
-          >
-            來練 {content.title} 題目 →
-          </Link>
-        </div>
+        <Link
+          href="/speaking"
+          className="inline-block rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2 transition"
+        >
+          來練 {content.title} 題目
+        </Link>
       </div>
     </main>
   )

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import ReviewClient from './review-client'
 import { AppNav } from '../../site-nav'
+import { PageHeader, StatStrip } from '@/app/page-kit'
 
 type Idiom = {
   id: string
@@ -118,50 +119,37 @@ export default async function IdiomsReviewPage() {
       <AppNav backHref="/idioms" />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
-        <header className="mb-6">
-          <h1 className="text-3xl font-bold text-ink text-pretty">
-            全部 100 個俚語瀏覽
-          </h1>
-          <p className="text-ink/70 mt-2 max-w-2xl">
-            先看一遍中文意思跟情境例句，準備好再按下面「開始測驗」，走現有的複習流程（優先抽你答錯過的）。
-          </p>
-        </header>
+        <PageHeader
+          title="全部 100 個俚語瀏覽"
+          subtitle={<>先看一遍中文意思跟情境例句，準備好再按下面「開始測驗」，走現有的複習流程（優先抽你答錯過的）。</>}
+        />
 
-        <section className="mb-6 grid gap-3 sm:grid-cols-3">
-          <StatCard
-            label="曾答錯"
-            value={stats.wrong}
-            hint="優先複習這批"
-            tone="rose"
-          />
-          <StatCard
-            label="學過"
-            value={stats.learned}
-            hint={`累積作答 ${attempts?.length ?? 0} 次`}
-            tone="slate"
-          />
-          <StatCard
-            label="沒碰過"
-            value={stats.fresh}
-            hint="還沒進到今日題目"
-            tone="slate"
-          />
-        </section>
+        <StatStrip
+          items={[
+            { label: '曾答錯', value: stats.wrong, hint: '優先複習這批' },
+            {
+              label: '學過',
+              value: stats.learned,
+              hint: `累積作答 ${attempts?.length ?? 0} 次`,
+            },
+            { label: '沒碰過', value: stats.fresh, hint: '還沒進到今日題目' },
+          ]}
+        />
 
         <ReviewClient
           idioms={withStatus}
           categoryMeta={CATEGORY_META}
         />
 
-        <div className="mt-10 rounded-lg border border-ink bg-ink p-6 text-center">
-          <p className="text-sm text-paper/70 mb-3">
+        <div className="mt-10 border-t border-ink/15 pt-6">
+          <p className="text-sm text-ink/70 mb-3">
             看完了嗎？來測驗一下
           </p>
           <Link
             href="/idioms/practice?mode=review"
-            className="inline-block text-base font-semibold bg-white text-ink px-6 py-2.5 rounded-lg hover:bg-paper transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="inline-block rounded-md bg-ink px-6 py-3 text-sm font-semibold text-paper hover:bg-ink/85 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2"
           >
-            開始測驗 →
+            開始測驗
           </Link>
           <p className="text-xs text-ink/60 mt-3">
             走現有邏輯 · 優先抽你答錯過的
@@ -169,33 +157,5 @@ export default async function IdiomsReviewPage() {
         </div>
       </div>
     </main>
-  )
-}
-
-function StatCard({
-  label,
-  value,
-  hint,
-  tone,
-}: {
-  label: string
-  value: number
-  hint: string
-  tone: 'slate' | 'rose'
-}) {
-  const toneClass =
-    tone === 'rose'
-      ? 'border-pen/30 bg-pen/10'
-      : 'border-ink/15 bg-white'
-  const valueClass =
-    tone === 'rose' ? 'text-pen' : 'text-ink'
-  return (
-    <div className={`rounded-lg border p-5 ${toneClass}`}>
-      <div className="text-xs text-ink/65 mb-1">{label}</div>
-      <div className={`text-2xl font-bold tabular-nums ${valueClass}`}>
-        {value}
-      </div>
-      <div className="text-xs text-ink/65 mt-1">{hint}</div>
-    </div>
   )
 }

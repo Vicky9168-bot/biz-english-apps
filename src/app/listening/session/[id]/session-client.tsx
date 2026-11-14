@@ -6,8 +6,7 @@ import { classifyLine, type ClassifiedToken } from '@/lib/content-words'
 import type { ListeningQuestion } from '@/lib/listening-questions'
 import { ShadowingPractice } from './shadowing'
 import { VideoTranscript, type TranscriptLine } from './video-transcript'
-import { Dumbbell, Headphones, Target, ThumbsUp } from 'lucide-react'
-import { IconTile } from '../../../icon-tile'
+import { Mark, Pen } from '@/app/page-kit'
 
 // module-level cache 避免 StrictMode 雙 mount 重複打 TTS
 const ttsCache = new Map<string, Promise<string>>()
@@ -197,12 +196,12 @@ export function ListeningSession({
 
   return (
     <div className={hasTranscript ? '' : 'mx-auto max-w-3xl'}>
-      <header className="mb-6">
-        <div className="font-mono text-xs tracking-[0.2em] uppercase text-ink/65 mb-2">
+      <header className="mb-6 border-b border-ink/15 pb-6">
+        <div className="text-sm text-ink/65 mb-2">
           {SCENARIO_LABELS[scenario] ?? scenario}
           {isReview && ' · 複習模式'}
         </div>
-        <h1 className="text-2xl font-bold text-ink text-pretty">
+        <h1 className="text-3xl font-bold leading-[1.15] text-pretty">
           {title}
         </h1>
       </header>
@@ -234,8 +233,8 @@ export function ListeningSession({
 
       <div className="mx-auto max-w-3xl">
       {isYoutube && summaryZh && (
-        <div className="mb-6 rounded-lg border border-ink/15 bg-paper p-5">
-          <div className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-2">
+        <div className="mb-6 border-l-4 border-mark pl-5">
+          <div className="text-base font-bold mb-2">
             影片摘要
           </div>
           <p className="text-sm text-ink leading-relaxed">{summaryZh}</p>
@@ -244,7 +243,7 @@ export function ListeningSession({
 
       {/* 音檔播放器 (AI 對話) */}
       {!isYoutube && (
-      <section className="rounded-lg border border-ink/15 bg-white p-6 mb-6">
+      <section className="border-y border-ink/15 py-6 mb-6">
         {audioLoading && (
           <div className="text-center py-6 text-sm text-ink/65">
             AI 正在錄音中... (約 5–8 秒)
@@ -269,7 +268,7 @@ export function ListeningSession({
             <div className="flex items-center justify-center gap-3 mb-4">
               <button
                 onClick={togglePlay}
-                className="rounded-full bg-ink text-white w-14 h-14 flex items-center justify-center hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+                className="rounded-full bg-ink text-white w-14 h-14 flex items-center justify-center hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
                 aria-label={playing ? '暫停' : '播放'}
               >
                 {playing ? (
@@ -312,25 +311,19 @@ export function ListeningSession({
         {!scriptVisible ? (
           <button
             onClick={() => setScriptVisible(true)}
-            className="text-sm text-ink/70 hover:text-ink underline underline-offset-2"
+            className="rounded-sm text-sm text-ink/70 underline decoration-ink/30 underline-offset-4 hover:text-ink hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
           >
             聽不清楚？顯示原文
           </button>
         ) : (
-          <div className="rounded-lg border border-ink/15 bg-paper p-5">
+          <div className="border-l-4 border-ink/25 pl-5">
             <div className="flex items-center justify-between mb-3">
-              <div className="text-xs font-medium text-ink/65 uppercase tracking-wide">
-                原文 · Content Words 標記
+              <div className="text-base font-bold">
+                原文，Content Words 標記
               </div>
-              <div className="flex items-center gap-3 text-[10px] text-ink/65">
-                <span className="flex items-center gap-1">
-                  <span className="inline-block w-2 h-2 rounded-full bg-ink" />
-                  實詞
-                </span>
-                <span className="flex items-center gap-1">
-                  <span className="inline-block w-2 h-2 rounded-full bg-ink/20" />
-                  虛詞
-                </span>
+              <div className="flex items-center gap-3 text-sm text-ink/65">
+                <span className="hl-mark">實詞</span>
+                <span>虛詞</span>
               </div>
             </div>
             <ol className="space-y-2 text-sm">
@@ -350,9 +343,8 @@ export function ListeningSession({
 
       {/* 純觀看模式（沒有題目）:直接給 CTA 回首頁 */}
       {!hasQuestions && (
-        <div className="rounded-lg border border-ink/15 bg-white p-6 text-center">
-          <IconTile icon={Headphones} size="lg" className="mb-2" />
-          <div className="text-sm font-semibold text-ink mb-1">
+        <div className="border-l-4 border-mark pl-6 py-2">
+          <div className="text-base font-bold mb-1">
             這是延伸觀點影片
           </div>
           <p className="text-sm text-ink/70 mb-5">
@@ -360,9 +352,9 @@ export function ListeningSession({
           </p>
           <Link
             href="/listening"
-            className="inline-block rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 motion-safe:transition"
+            className="inline-block rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 motion-safe:transition"
           >
-            回聽力首頁 →
+            回聽力首頁
           </Link>
         </div>
       )}
@@ -374,17 +366,14 @@ export function ListeningSession({
           const chosen = answers[qIdx]
           const isCorrect = chosen === q.answer_idx
           return (
-            <div
-              key={qIdx}
-              className="rounded-lg border border-ink/15 bg-white p-5"
-            >
-              <div className="flex items-baseline gap-2 mb-3">
-                <span className="text-xs font-mono text-ink/60">
+            <div key={qIdx} className="border-t border-ink/15 pt-5">
+              <div className="flex items-baseline gap-3 mb-3">
+                <span className="font-display text-sm font-semibold text-ink/65">
                   Q{qIdx + 1}
                 </span>
-                <p className="text-sm font-medium text-ink">{q.q}</p>
+                <p className="text-base font-semibold">{q.q}</p>
               </div>
-              <div className="space-y-2">
+              <div>
                 {q.options.map((opt, oIdx) => {
                   const chosenThis = chosen === oIdx
                   const showCorrect = submitted && oIdx === q.answer_idx
@@ -401,27 +390,41 @@ export function ListeningSession({
                         })
                       }}
                       disabled={submitted}
-                      className={`w-full text-left rounded-md border px-3 py-2 text-sm transition ${
-                        showCorrect
-                          ? 'border-mark bg-mark/25 text-ink'
-                          : showWrong
-                            ? 'border-pen/40 bg-pen/10 text-pen'
-                            : chosenThis
-                              ? 'border-ink bg-ink text-white'
-                              : 'border-ink/15 bg-white text-ink hover:border-ink/40'
+                      className={`w-full text-left border-t border-ink/10 px-2 py-2.5 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink/40 ${
+                        chosenThis && !submitted
+                          ? 'bg-white font-semibold text-ink'
+                          : showCorrect || showWrong
+                            ? 'text-ink'
+                            : submitted
+                              ? 'text-ink/60'
+                              : 'text-ink hover:bg-white/70'
                       } ${submitted ? 'cursor-default' : 'cursor-pointer'}`}
                     >
-                      <span className="font-mono text-xs mr-2 opacity-60">
+                      <span className="font-display text-sm font-semibold text-ink/65 mr-3">
                         {String.fromCharCode(65 + oIdx)}
                       </span>
-                      {opt}
+                      {showCorrect ? (
+                        <Mark>{opt}</Mark>
+                      ) : showWrong ? (
+                        <Pen>{opt}</Pen>
+                      ) : (
+                        opt
+                      )}
+                      {showCorrect && (
+                        <span className="ml-3 font-semibold">正解</span>
+                      )}
+                      {showWrong && (
+                        <span className="ml-3 font-semibold text-pen">
+                          你選的
+                        </span>
+                      )}
                     </button>
                   )
                 })}
               </div>
               {submitted && (
-                <div className="mt-3 text-xs text-ink/70 bg-paper rounded-md p-3">
-                  <span className="font-semibold text-ink/80">解說：</span>{' '}
+                <div className="mt-3 border-l-2 border-ink/25 pl-3 text-sm text-ink/75">
+                  <span className="font-semibold text-ink">解說：</span>{' '}
                   {q.explanation_zh}
                 </div>
               )}
@@ -433,33 +436,23 @@ export function ListeningSession({
 
       {/* 送出 / 結果 */}
       {hasQuestions && (!submitted ? (
-        <div className="rounded-lg border border-ink/15 bg-white p-5 flex items-center justify-between">
+        <div className="border-y border-ink/15 py-5 flex items-center justify-between">
           <div className="text-sm text-ink/70">
             已回答 {answers.filter((a) => a !== null).length} / {questions.length}
           </div>
           <button
             onClick={submit}
             disabled={!allAnswered || saving}
-            className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+            className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink/85 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
             {saving ? '儲存中...' : '送出答案'}
           </button>
         </div>
       ) : (
-        <div className="rounded-lg border border-mark bg-mark/25 p-6 text-center">
-          <IconTile
-            icon={
-              correctCount === questions.length
-                ? Target
-                : correctCount >= 2
-                  ? ThumbsUp
-                  : Dumbbell
-            }
-            size="lg"
-            className="mb-2"
-          />
-          <div className="text-lg font-semibold text-ink mb-1">
-            {correctCount} / {questions.length} 答對
+        <div className="border-l-4 border-mark pl-6 py-2">
+          <div className="font-display text-3xl font-bold tabular-nums mb-1">
+            {correctCount} / {questions.length}
+            <span className="ml-2 text-base font-normal text-ink/65">答對</span>
           </div>
           <p className="text-sm text-ink/70 mb-5">
             {correctCount === questions.length
@@ -468,18 +461,18 @@ export function ListeningSession({
                 ? '大部分抓到重點，再多聽兩題會更穩'
                 : '沒關係，聽力靠累積 — 明天再來一題'}
           </p>
-          <div className="flex justify-center gap-2">
+          <div className="flex gap-2">
             <Link
               href="/listening"
-              className="rounded-md border border-ink/25 bg-white px-4 py-2 text-sm text-ink/80 hover:bg-paper transition"
+              className="rounded-md border border-ink/25 px-4 py-2 text-sm text-ink hover:bg-white transition"
             >
               回聽力首頁
             </Link>
             <Link
               href="/listening"
-              className="rounded-md bg-ink px-4 py-2 text-sm font-semibold text-white hover:bg-ink transition"
+              className="rounded-md bg-ink px-4 py-2 text-sm font-semibold text-white hover:bg-ink/85 transition"
             >
-              再練一題 →
+              再練一題
             </Link>
           </div>
         </div>
@@ -494,8 +487,8 @@ export function ListeningSession({
       {/* 下一關:Shadowing 練習 (答完題目才解鎖) */}
       {submitted && isYoutube && youtubeVideoId && shadowingText && (
         <div className="mt-8">
-          <div className="mb-4 text-center">
-            <div className="font-mono text-xs tracking-[0.2em] uppercase text-ink/65 mb-2">
+          <div className="mb-4">
+            <div className="text-sm text-ink/65 mb-1">
               下一關
             </div>
             <h2 className="text-xl font-bold text-ink">
@@ -532,7 +525,7 @@ function ClassifiedText({ tokens }: { tokens: ClassifiedToken[] }) {
         // 縮寫尾巴('ll / n't) 貼在前一個 token 後
         const noSpaceBefore = t.text.startsWith("'") || t.text === "n't"
         const cls = t.content
-          ? 'font-semibold text-ink'
+          ? 'hl-mark font-semibold text-ink'
           : 'text-ink/60'
         return (
           <span key={i}>

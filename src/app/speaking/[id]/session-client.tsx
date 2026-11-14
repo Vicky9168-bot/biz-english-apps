@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { Mark, Pen } from '@/app/page-kit'
 
 type Feedback = {
   userText: string
@@ -21,13 +22,6 @@ type Feedback = {
 
 const MAX_RECORD_MS = 90_000
 const MIN_PREP_S = 30
-
-const FRAMEWORK_COLOR: Record<string, string> = {
-  STAR: 'text-ink bg-mark/30 border-mark',
-  PREP: 'text-ink bg-mark/25 border-mark',
-  SCQA: 'text-ink/80 bg-paper border-ink/25',
-  PYRAMID: 'text-pen bg-pen/10 border-pen/30',
-}
 
 export function SpeakingSession({
   scenarioId,
@@ -194,46 +188,28 @@ export function SpeakingSession({
       : null
 
   return (
-    <div className="space-y-6">
-      {/* 情境卡 */}
-      <section className="rounded-lg border border-ink/15 bg-white p-6">
-        <div className="flex items-baseline gap-3 mb-2">
-          <span
-            className={`text-xs font-mono font-semibold px-2 py-1 rounded border ${FRAMEWORK_COLOR[framework]}`}
-          >
+    <div className="space-y-12">
+      {/* 情境 */}
+      <section className="border-b border-ink/15 pb-8">
+        <p className="mb-3 flex flex-wrap items-baseline gap-x-3 text-sm text-ink/65">
+          <span className="font-display text-base font-bold text-ink">
             {framework}
           </span>
-          <span className="text-[11px] font-mono text-ink/60 tabular-nums">
-            Lv.{difficulty}
-          </span>
-          {tags.slice(0, 3).map((t) => (
-            <span
-              key={t}
-              className="text-[10px] px-1.5 py-0.5 rounded bg-paper text-ink/70"
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-        <h1 className="text-2xl font-bold text-ink mb-3">{titleZh}</h1>
+          <span className="tabular-nums">Lv.{difficulty}</span>
+          {tags.slice(0, 3).length > 0 && <span>{tags.slice(0, 3).join(' · ')}</span>}
+        </p>
+        <h1 className="mb-3 text-balance text-3xl font-bold leading-[1.15]">{titleZh}</h1>
         {contextZh && (
-          <p className="text-sm text-ink/70 mb-4">{contextZh}</p>
+          <p className="mb-6 max-w-xl text-base leading-relaxed text-ink/70">{contextZh}</p>
         )}
-        <div className="rounded-lg bg-paper border border-ink/15 p-4 mb-4">
-          <div className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-2">
-            對方問你（Prompt）
-          </div>
-          <p
-            className="text-base text-ink leading-relaxed"
-            translate="no"
-          >
+        <div className="mb-6 border-l-4 border-ink/25 pl-5">
+          <div className="mb-1 text-sm text-ink/65">對方問你</div>
+          <p className="text-xl leading-relaxed" translate="no">
             &ldquo;{promptEn}&rdquo;
           </p>
         </div>
-        <div className="rounded-lg bg-mark/25 border border-mark p-4">
-          <div className="text-xs font-medium text-ink uppercase tracking-wide mb-2">
-            {framework} 應用提示
-          </div>
+        <div className="border-l-4 border-mark pl-5">
+          <div className="mb-1 text-base font-bold">{framework} 應用提示</div>
           <p className="text-sm text-ink leading-relaxed whitespace-pre-line">
             {frameworkHintZh}
           </p>
@@ -241,12 +217,10 @@ export function SpeakingSession({
       </section>
 
       {/* 錄音區 */}
-      <section className="rounded-lg border border-ink/15 bg-white p-6">
+      <section>
         <header className="mb-4">
-          <div className="font-mono text-xs tracking-[0.2em] uppercase text-ink/65 mb-2">
-            回答 · 建議 30–90 秒
-          </div>
-          <h2 className="text-lg font-semibold text-ink">
+          <div className="mb-1 text-sm text-ink/65">回答，建議 30–90 秒</div>
+          <h2 className="text-2xl font-bold">
             {state === 'idle' && '先花 30 秒思考，再按錄音'}
             {state === 'prep' &&
               (prepLeft > 0 ? '思考中...' : '準備好了，按開始錄音')}
@@ -261,13 +235,13 @@ export function SpeakingSession({
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={startPrep}
-              className="rounded-md bg-ink text-white px-4 py-2 text-sm font-semibold hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+              className="rounded-md bg-ink text-paper px-4 py-2 text-sm font-semibold hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
             >
               開始 30 秒思考
             </button>
             <button
               onClick={startRecording}
-              className="rounded-md border border-ink/25 bg-white text-ink/80 px-4 py-2 text-sm hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+              className="rounded-md border border-ink/25 text-ink px-4 py-2 text-sm hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
             >
               直接錄音
             </button>
@@ -276,7 +250,7 @@ export function SpeakingSession({
 
         {state === 'prep' && (
           <div className="flex flex-wrap items-center gap-3">
-            <div className="text-3xl font-bold text-ink font-mono tabular-nums">
+            <div className="font-display text-3xl font-bold tabular-nums">
               {prepLeft}s
             </div>
             <button
@@ -288,7 +262,7 @@ export function SpeakingSession({
             {prepLeft > 0 && (
               <button
                 onClick={skipPrep}
-                className="text-xs text-ink/65 hover:text-ink"
+                className="rounded-sm text-sm text-ink/65 underline decoration-ink/30 underline-offset-4 hover:text-ink hover:decoration-ink"
               >
                 跳過倒數
               </button>
@@ -300,7 +274,7 @@ export function SpeakingSession({
           <div className="flex items-center gap-3">
             <button
               onClick={stopRecording}
-              className="rounded-md bg-ink text-white px-4 py-2 text-sm font-semibold hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+              className="rounded-md bg-ink text-paper px-4 py-2 text-sm font-semibold hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
             >
               ⏹ 結束錄音
             </button>
@@ -325,18 +299,18 @@ export function SpeakingSession({
         )}
 
         {feedback?.tooShort && (
-          <div className="mt-4 rounded-lg border border-mark bg-mark/25 p-4">
+          <div className="mt-4 border-l-4 border-pen pl-4">
             <div className="text-sm text-ink mb-2">
               沒錄到足夠內容，請完整說完再送出。
             </div>
             {feedback.userText && (
-              <p className="text-xs text-ink/70 italic" translate="no">
+              <p className="text-sm text-ink/70 italic" translate="no">
                 聽到的：&ldquo;{feedback.userText}&rdquo;
               </p>
             )}
             <button
               onClick={startRecording}
-              className="mt-3 rounded-md bg-ink text-white px-3 py-1.5 text-xs font-semibold hover:bg-ink"
+              className="mt-3 rounded-md bg-ink text-paper px-3 py-1.5 text-sm font-semibold hover:bg-ink/85"
             >
               再試一次
             </button>
@@ -347,21 +321,19 @@ export function SpeakingSession({
       {/* 回饋區 */}
       {feedback && !feedback.tooShort && state === 'done' && (
         <>
-          <section className="rounded-lg border border-ink/15 bg-white p-6">
-            <div className="flex items-baseline justify-between mb-4">
-              <h2 className="text-lg font-semibold text-ink">
-                四大面向分數
-              </h2>
+          <section>
+            <div className="mb-4 flex items-baseline justify-between">
+              <h2 className="text-2xl font-bold">四大面向分數</h2>
               {avgScore != null && (
-                <div className="text-sm text-ink/65">
+                <p className="text-sm text-ink/65">
                   平均{' '}
-                  <span className="text-2xl font-bold text-ink tabular-nums">
+                  <span className="font-display text-3xl font-bold tabular-nums text-ink">
                     {avgScore}
                   </span>
-                </div>
+                </p>
               )}
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 border-y border-ink/15 sm:grid-cols-4">
               <ScoreCard
                 label={`${framework} 框架`}
                 value={feedback.framework_score}
@@ -370,73 +342,55 @@ export function SpeakingSession({
               <ScoreCard label="文法" value={feedback.grammar_score} />
               <ScoreCard label="流暢度" value={feedback.fluency_score} />
             </div>
-            <ul className="mt-4 space-y-2 text-sm text-ink/80">
-              <li>
-                <span className="text-xs font-mono text-ink/60 mr-2">
-                  框架
-                </span>
-                {feedback.framework_note}
-              </li>
-              <li>
-                <span className="text-xs font-mono text-ink/60 mr-2">
-                  用詞
-                </span>
-                {feedback.vocab_note}
-              </li>
-              <li>
-                <span className="text-xs font-mono text-ink/60 mr-2">
-                  文法
-                </span>
-                {feedback.grammar_note}
-              </li>
-              <li>
-                <span className="text-xs font-mono text-ink/60 mr-2">
-                  流暢
-                </span>
-                {feedback.fluency_note}
-              </li>
+            <ul className="mt-2 text-sm text-ink/80">
+              {[
+                ['框架', feedback.framework_note],
+                ['用詞', feedback.vocab_note],
+                ['文法', feedback.grammar_note],
+                ['流暢', feedback.fluency_note],
+              ].map(([k, note]) => (
+                <li
+                  key={k}
+                  className="grid grid-cols-[3.5rem_1fr] gap-x-3 border-b border-ink/10 py-3"
+                >
+                  <span className="font-display font-semibold text-ink/65">
+                    {k}
+                  </span>
+                  <span className="leading-relaxed">{note}</span>
+                </li>
+              ))}
             </ul>
           </section>
 
-          <section className="rounded-lg border border-ink/15 bg-white p-6">
-            <div className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-2">
+          <section className="border-l-4 border-ink/25 pl-5">
+            <div className="mb-1 text-sm text-ink/65">
               你剛才說的（Whisper 轉文字）
             </div>
-            <p className="text-sm text-ink italic" translate="no">
+            <p className="text-sm italic" translate="no">
               &ldquo;{feedback.userText}&rdquo;
             </p>
           </section>
 
           {feedback.rewrites?.length > 0 && (
-            <section className="rounded-lg border border-ink/15 bg-white p-6">
-              <h2 className="text-lg font-semibold text-ink mb-3">
+            <section>
+              <h2 className="mb-3 text-2xl font-bold">
                 逐句改寫建議
               </h2>
               <ul className="space-y-4">
                 {feedback.rewrites.map((r, i) => (
                   <li
                     key={i}
-                    className="rounded-lg border border-ink/15 bg-paper p-4"
+                    className="border-t border-ink/15 pt-4"
                   >
-                    <div className="text-[10px] font-mono text-ink/60 uppercase mb-1">
-                      原句
-                    </div>
-                    <p
-                      className="text-sm text-ink/80 mb-3 line-through opacity-75"
-                      translate="no"
-                    >
-                      {r.original}
+                    <div className="text-sm text-ink/65 mb-1">原句</div>
+                    <p className="text-sm mb-3" translate="no">
+                      <Pen>{r.original}</Pen>
                     </p>
-                    <div className="text-[10px] font-mono text-ink uppercase mb-1">
-                      改寫
-                    </div>
-                    <p
-                      className="text-sm text-ink font-medium mb-2"
-                      translate="no"
-                    >
-                      {r.improved}
+                    <div className="text-sm text-ink/65 mb-1">改寫</div>
+                    <p className="text-sm font-medium mb-2" translate="no">
+                      <Mark>{r.improved}</Mark>
                     </p>
-                    <p className="text-xs text-ink/65">→ {r.why_zh}</p>
+                    <p className="text-sm text-ink/70">{r.why_zh}</p>
                   </li>
                 ))}
               </ul>
@@ -444,8 +398,8 @@ export function SpeakingSession({
           )}
 
           {feedback.model_answer_en && (
-            <section className="rounded-lg border border-mark bg-mark/25 p-6">
-              <div className="text-xs font-medium text-ink uppercase tracking-wide mb-2">
+            <section className="border-l-4 border-mark pl-5">
+              <div className="mb-2 text-lg font-bold">
                 {framework} 模範答案
               </div>
               <p
@@ -458,29 +412,27 @@ export function SpeakingSession({
           )}
 
           {feedback.next_focus_zh && (
-            <section className="rounded-lg border border-ink/15 bg-white p-6">
-              <div className="text-xs font-medium text-ink/65 uppercase tracking-wide mb-1">
-                下次練習重點
-              </div>
-              <p className="text-sm text-ink">{feedback.next_focus_zh}</p>
+            <section className="border-l-4 border-ink/25 pl-5">
+              <div className="mb-1 text-lg font-bold">下次練習重點</div>
+              <p className="text-sm">{feedback.next_focus_zh}</p>
             </section>
           )}
 
-          <div className="flex flex-wrap justify-center gap-2 pt-2">
+          <div className="flex flex-wrap gap-2 border-t border-ink/15 pt-6">
             <button
               onClick={() => {
                 setFeedback(null)
                 setState('idle')
               }}
-              className="rounded-md border border-ink/25 bg-white px-4 py-2 text-sm text-ink/80 hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+              className="rounded-md border border-ink/25 px-4 py-2 text-sm text-ink hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
             >
               這題再試一次
             </button>
             <Link
               href={isCustom ? '/speaking/custom' : '/speaking'}
-              className="rounded-md bg-ink px-4 py-2 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+              className="rounded-md bg-ink px-4 py-2 text-sm font-semibold text-paper hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
             >
-              {isCustom ? '再自訂一題 →' : '換一題 →'}
+              {isCustom ? '再自訂一題' : '換一題'}
             </Link>
           </div>
         </>
@@ -490,18 +442,16 @@ export function SpeakingSession({
 }
 
 function ScoreCard({ label, value }: { label: string; value: number }) {
-  const color =
-    value >= 80
-      ? 'text-ink border-mark bg-mark/25'
-      : value >= 60
-        ? 'text-ink border-mark bg-mark/25'
-        : 'text-pen border-pen/30 bg-pen/10'
   return (
-    <div className={`rounded-lg border p-4 ${color}`}>
-      <div className="text-[11px] font-medium uppercase tracking-wide opacity-80 mb-1">
-        {label}
+    <div className="border-ink/15 px-4 py-4 first:pl-0 sm:[&:not(:first-child)]:border-l">
+      <div className="mb-1 text-sm text-ink/65">{label}</div>
+      <div
+        className={`font-display text-3xl font-bold tabular-nums ${
+          value >= 60 ? 'text-ink' : 'text-pen'
+        }`}
+      >
+        {value}
       </div>
-      <div className="text-3xl font-bold tabular-nums">{value}</div>
     </div>
   )
 }

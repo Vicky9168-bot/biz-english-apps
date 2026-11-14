@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Mark, Pen } from '@/app/page-kit'
 
 type Category = 'Summary' | 'Experience' | 'Skills' | 'Structure' | 'Keywords'
 type Priority = 'high' | 'medium' | 'low'
@@ -95,7 +96,7 @@ export default function HealthCheckClient() {
   return (
     <form
       onSubmit={submit}
-      className="rounded-lg border border-ink/15 bg-white p-6 space-y-5"
+      className="rounded-sm border border-ink/15 bg-white p-6 space-y-5"
     >
       <div>
         <label
@@ -181,7 +182,7 @@ export default function HealthCheckClient() {
       <button
         type="submit"
         disabled={!canSubmit}
-        className="w-full rounded-md bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition disabled:bg-ink/20 disabled:cursor-not-allowed"
+        className="w-full rounded-md bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition disabled:bg-ink/20 disabled:cursor-not-allowed"
       >
         {state === 'loading' ? (
           <span className="inline-flex items-center gap-2">
@@ -225,7 +226,7 @@ function ResultView({
       >
         <div className="flex items-baseline justify-between gap-4">
           <div>
-            <div className="text-xs font-medium uppercase tracking-wide mb-1 opacity-80">
+            <div className="text-xs font-medium  mb-1 opacity-80">
               Match Score
             </div>
             <div className="flex items-baseline gap-2">
@@ -245,7 +246,7 @@ function ResultView({
       </section>
 
       {/* Keyword match */}
-      <section className="rounded-lg border border-ink/15 bg-white p-6">
+      <section className="rounded-sm border border-ink/15 bg-white p-6">
         <h2 className="text-lg font-semibold text-ink mb-1">
           關鍵字對照
         </h2>
@@ -255,7 +256,7 @@ function ResultView({
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-mark/40 text-ink uppercase">
+              <span className="text-xs font-display font-bold px-1.5 py-0.5 rounded bg-mark/40 text-ink ">
                 Matched
               </span>
               <span className="text-xs text-ink/65 tabular-nums">
@@ -282,7 +283,7 @@ function ResultView({
           </div>
           <div>
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-pen/15 text-pen uppercase">
+              <span className="text-xs font-display font-bold px-1.5 py-0.5 rounded bg-pen/15 text-pen ">
                 Missing
               </span>
               <span className="text-xs text-ink/65 tabular-nums">
@@ -312,7 +313,7 @@ function ResultView({
 
       {/* Bullet rewrites */}
       {result.bullet_rewrites.length > 0 && (
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
+        <section className="rounded-sm border border-ink/15 bg-white p-6">
           <h2 className="text-lg font-semibold text-ink mb-1">
             AI 改寫的 {result.bullet_rewrites.length} 條 bullet
           </h2>
@@ -326,36 +327,22 @@ function ResultView({
                 className="rounded-lg border border-ink/15 bg-paper overflow-hidden"
               >
                 <div className="border-b border-ink/15 bg-white px-4 py-2 flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-ink text-white">
+                  <span className="text-xs font-display font-bold px-1.5 py-0.5 rounded bg-ink text-white">
                     #{i + 1}
                   </span>
                   <span className="text-xs text-ink/70">Bullet 改寫</span>
                 </div>
                 <div className="p-4 space-y-3">
-                  <div className="rounded-md border border-pen/30 bg-pen/4">
-                    <div className="px-3 pt-2">
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-pen/15 text-pen uppercase">
-                        Original
-                      </span>
-                    </div>
-                    <p
-                      className="text-sm text-ink leading-relaxed px-3 py-2"
-                      translate="no"
-                    >
-                      {b.original}
+                  <div className="border-l-4 border-pen pl-3">
+                    <div className="text-sm text-ink/65">原句</div>
+                    <p className="text-sm leading-relaxed" translate="no">
+                      <Pen>{b.original}</Pen>
                     </p>
                   </div>
-                  <div className="rounded-md border border-mark bg-mark/10">
-                    <div className="px-3 pt-2">
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-mark/40 text-ink uppercase">
-                        Improved
-                      </span>
-                    </div>
-                    <p
-                      className="text-sm text-ink leading-relaxed px-3 py-2"
-                      translate="no"
-                    >
-                      {b.improved}
+                  <div className="border-l-4 border-mark pl-3">
+                    <div className="text-sm text-ink/65">改寫後</div>
+                    <p className="text-sm leading-relaxed" translate="no">
+                      <Mark>{b.improved}</Mark>
                     </p>
                   </div>
                   <p className="text-xs text-ink/70 leading-relaxed pl-1">
@@ -373,7 +360,7 @@ function ResultView({
 
       {/* Suggestions */}
       {result.suggestions.length > 0 && (
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
+        <section className="rounded-sm border border-ink/15 bg-white p-6">
           <h2 className="text-lg font-semibold text-ink mb-1">
             {result.suggestions.length} 個具體建議
           </h2>
@@ -388,13 +375,13 @@ function ResultView({
               >
                 <div className="flex flex-wrap items-baseline gap-2 mb-2">
                   <span
-                    className={`text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border ${CATEGORY_TONE[s.category]}`}
+                    className={`text-xs font-display font-semibold px-1.5 py-0.5 rounded border ${CATEGORY_TONE[s.category]}`}
                     translate="no"
                   >
                     {s.category}
                   </span>
                   <span
-                    className={`text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border ${PRIORITY_TONE[s.priority]}`}
+                    className={`text-xs font-display font-semibold px-1.5 py-0.5 rounded border ${PRIORITY_TONE[s.priority]}`}
                   >
                     {PRIORITY_LABEL[s.priority]}
                   </span>
@@ -413,7 +400,7 @@ function ResultView({
         <button
           type="button"
           onClick={onReset}
-          className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+          className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
         >
           ← 換一份 JD 或履歷再健檢
         </button>

@@ -63,7 +63,7 @@ export function StartButton() {
       <button
         onClick={start}
         disabled={loading}
-        className="w-full rounded-md bg-ink px-4 py-3 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 disabled:opacity-60 disabled:cursor-not-allowed transition"
+        className="w-full rounded-md bg-ink px-4 py-3 text-sm font-semibold text-white hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 disabled:opacity-60 disabled:cursor-not-allowed transition"
       >
         {loading ? 'AI 正在寫劇本... (約 10 秒)' : '開始今日聽力訓練'}
       </button>

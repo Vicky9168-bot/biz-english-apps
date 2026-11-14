@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { GlossaryClient } from './glossary-client'
 import type { Vocabulary } from '@/lib/supabase/types'
 import { AppNav } from '../../site-nav'
+import { PageHeader } from '@/app/page-kit'
 
 export default async function GlossaryPage() {
   const supabase = await createClient()
@@ -31,15 +32,11 @@ export default async function GlossaryPage() {
       <AppNav backHref="/charades" />
 
       <div className="mx-auto max-w-5xl px-6 py-10">
-        <header className="mb-6">
-          <h1 className="text-3xl font-bold text-ink text-pretty">
-            商務單字庫
-          </h1>
-          <p className="text-ink/70 mt-2 max-w-xl">
-            目前系統收錄 {words?.length ?? 0} 個商務單字，涵蓋動詞、名詞、片語。
-            每天練 5 題，系統會挑「你還沒學會或錯過」的字。
-          </p>
-        </header>
+        <PageHeader
+          title="商務單字庫"
+          subtitle={<>目前系統收錄 {words?.length ?? 0} 個商務單字，涵蓋動詞、名詞、片語。
+            每天練 5 題，系統會挑「你還沒學會或錯過」的字。</>}
+        />
 
         <GlossaryClient words={(words ?? []) as Vocabulary[]} />
       </div>

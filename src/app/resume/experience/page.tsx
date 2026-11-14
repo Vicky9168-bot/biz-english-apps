@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AppNav } from '../../site-nav'
+import { PageHeader, Pen } from '@/app/page-kit'
 
 const ACTION_VERBS: Array<{
   tag: string
@@ -161,49 +162,42 @@ export default async function ResumeExperiencePage() {
     <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/resume" />
 
-      <div className="mx-auto max-w-3xl px-6 py-10 space-y-6">
-        <header className="rounded-lg border border-ink/15 bg-white p-6">
-          <h1 className="text-2xl font-bold text-ink text-pretty mb-3">
-            工作經驗怎麼寫，才會被 HR 記住
-          </h1>
-          <p className="text-ink/80 leading-relaxed">
-            寫工作經驗只有一個公式：<span className="font-semibold">動詞 + 藉由策略 + 量化成就</span>。每一條 bullet 都要能明確看到你做了什麼行動、用什麼方法、拿到什麼結果。
-          </p>
-        </header>
+      <div className="mx-auto max-w-3xl px-6 py-10 space-y-12">
+        <PageHeader
+          title="工作經驗怎麼寫，才會被 HR 記住"
+          subtitle={<>寫工作經驗只有一個公式：<span className="font-semibold">動詞 + 藉由策略 + 量化成就</span>。每一條 bullet 都要能明確看到你做了什麼行動、用什麼方法、拿到什麼結果。</>}
+        />
 
         {/* 核心公式 */}
-        <section className="rounded-lg border border-ink bg-ink p-6 text-white">
-          <div className="text-xs font-mono uppercase tracking-wide text-ink/60 mb-2">
-            The Formula
-          </div>
+        <section className="border-l-4 border-mark pl-5">
           <h2 className="text-lg font-semibold mb-4">
             動詞 + 策略 + 量化成就
           </h2>
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-lg bg-ink p-4">
-              <div className="text-[10px] font-mono uppercase text-mark mb-1">
+            <div className="border-t border-ink/15 pt-3">
+              <div className="text-sm font-display font-semibold text-ink/65 mb-1">
                 Verb
               </div>
               <div className="text-sm font-semibold mb-1">動詞</div>
-              <p className="text-xs text-paper/70 leading-relaxed">
+              <p className="text-sm text-ink/70 leading-relaxed">
                 Powerful action verb 開頭，分「Routine」與「Creative」兩類。
               </p>
             </div>
-            <div className="rounded-lg bg-ink p-4">
-              <div className="text-[10px] font-mono uppercase text-mark mb-1">
+            <div className="border-t border-ink/15 pt-3">
+              <div className="text-sm font-display font-semibold text-ink/65 mb-1">
                 Strategy
               </div>
               <div className="text-sm font-semibold mb-1">策略</div>
-              <p className="text-xs text-paper/70 leading-relaxed">
+              <p className="text-sm text-ink/70 leading-relaxed">
                 by Ving / through / based on 說明你的方法或途徑。
               </p>
             </div>
-            <div className="rounded-lg bg-ink p-4">
-              <div className="text-[10px] font-mono uppercase text-mark mb-1">
+            <div className="border-t border-ink/15 pt-3">
+              <div className="text-sm font-display font-semibold text-ink/65 mb-1">
                 Result
               </div>
               <div className="text-sm font-semibold mb-1">量化成就</div>
-              <p className="text-xs text-paper/70 leading-relaxed">
+              <p className="text-sm text-ink/70 leading-relaxed">
                 to V / which resulted in / from...to... 帶入數字。
               </p>
             </div>
@@ -211,30 +205,30 @@ export default async function ResumeExperiencePage() {
         </section>
 
         {/* Action verbs 分類表 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">
+        <section>
+          <h2 className="text-2xl font-bold mb-3">
             Powerful Action Verbs
           </h2>
-          <p className="text-xs text-ink/65 mb-4">
+          <p className="text-sm text-ink/65 mb-4">
             依你當時做的事情類型挑動詞，避開「Responsible for」「Handled」這種被 HR 秒略過的字。
           </p>
           <ul className="space-y-3">
             {ACTION_VERBS.map((row) => (
               <li
                 key={row.tag}
-                className="rounded-lg border border-ink/15 bg-paper p-4"
+                className="border-t border-ink/15 pt-4"
               >
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border border-ink/25 bg-white text-ink/80">
+                  <span className="font-display text-sm font-semibold text-ink">
                     {row.tag}
                   </span>
-                  <span className="text-xs text-ink/70">{row.purpose}</span>
+                  <span className="text-sm text-ink/70">{row.purpose}</span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {row.verbs.map((v) => (
                     <span
                       key={v}
-                      className="text-xs font-mono px-2 py-0.5 rounded bg-white border border-ink/15 text-ink/80"
+                      className="rounded-sm border border-ink/15 bg-white px-2 py-0.5 font-mono text-sm text-ink/80"
                       translate="no"
                     >
                       {v}
@@ -247,45 +241,45 @@ export default async function ResumeExperiencePage() {
         </section>
 
         {/* 策略介系詞 + 成果連接詞 */}
-        <section className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border border-mark bg-mark/25 p-5">
-            <div className="text-xs font-medium text-ink uppercase tracking-wide mb-2">
+        <section className="grid gap-8 sm:grid-cols-2">
+          <div className="border-l-4 border-mark pl-5">
+            <div className="text-base font-bold mb-1">
               策略介系詞
             </div>
-            <p className="text-[11px] text-ink/70 mb-3">
+            <p className="text-sm text-ink/70 mb-3">
               接在動詞後面，說明你怎麼做到的
             </p>
             <ul className="space-y-2 text-sm text-ink">
               {STRATEGY_PREPOSITIONS.map((p) => (
                 <li key={p.prep} className="flex items-baseline gap-2">
                   <span
-                    className="text-xs font-mono font-semibold text-ink shrink-0 w-20"
+                    className="text-sm font-mono font-semibold text-ink shrink-0 w-20"
                     translate="no"
                   >
                     {p.prep}
                   </span>
-                  <span className="text-xs text-ink/80">{p.use}</span>
+                  <span className="text-sm text-ink/80">{p.use}</span>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="rounded-lg border border-mark bg-mark/25 p-5">
-            <div className="text-xs font-medium text-ink uppercase tracking-wide mb-2">
+          <div className="border-l-4 border-mark pl-5">
+            <div className="text-base font-bold mb-1">
               成果連接詞
             </div>
-            <p className="text-[11px] text-ink/70 mb-3">
+            <p className="text-sm text-ink/70 mb-3">
               把結果接上去，讓數據不孤單
             </p>
             <ul className="space-y-2 text-sm text-ink">
               {RESULT_CONNECTORS.map((c) => (
                 <li key={c.conn} className="flex items-baseline gap-2">
                   <span
-                    className="text-xs font-mono font-semibold text-ink shrink-0 w-32"
+                    className="text-sm font-mono font-semibold text-ink shrink-0 w-32"
                     translate="no"
                   >
                     {c.conn}
                   </span>
-                  <span className="text-xs text-ink/80">{c.use}</span>
+                  <span className="text-sm text-ink/80">{c.use}</span>
                 </li>
               ))}
             </ul>
@@ -293,18 +287,18 @@ export default async function ResumeExperiencePage() {
         </section>
 
         {/* 量化成就四種類型 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">
+        <section>
+          <h2 className="text-2xl font-bold mb-3">
             量化成就的 4 種類型
           </h2>
-          <p className="text-xs text-ink/65 mb-4">
+          <p className="text-sm text-ink/65 mb-4">
             數字最有說服力，但也要合理 — 想清楚這個數字是要證明你什麼特質。
           </p>
           <ul className="grid gap-3 sm:grid-cols-2">
             {QUANTIFY_TYPES.map((q) => (
               <li
                 key={q.type}
-                className="rounded-lg border border-ink/15 bg-paper p-4"
+                className="border-t border-ink/15 pt-4"
               >
                 <div
                   className="text-sm font-semibold text-ink mb-1"
@@ -312,9 +306,9 @@ export default async function ResumeExperiencePage() {
                 >
                   {q.type}
                 </div>
-                <p className="text-xs text-ink/70 mb-2">{q.desc}</p>
+                <p className="text-sm text-ink/70 mb-2">{q.desc}</p>
                 <p
-                  className="text-xs text-ink/65 italic border-l-2 border-ink/25 pl-2"
+                  className="text-sm text-ink/65 italic border-l-2 border-ink/25 pl-3"
                   translate="no"
                 >
                   {q.examples}
@@ -325,81 +319,45 @@ export default async function ResumeExperiencePage() {
         </section>
 
         {/* 修改前後 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">
+        <section>
+          <h2 className="text-2xl font-bold mb-3">
             修改前 vs 修改後
           </h2>
-          <p className="text-xs text-ink/65 mb-6">
-            綠底標示是新增的部分 — 看清楚加了什麼，說服力差在哪。
+          <p className="text-sm text-ink/65 mb-6">
+            螢光標出的是新增的部分 — 看清楚加了什麼，說服力差在哪。
           </p>
           <div className="space-y-8">
             {REWRITES.map((r) => (
-              <article
-                key={r.method}
-                className="rounded-lg border border-ink/15 bg-paper overflow-hidden"
-              >
-                {/* Method header */}
-                <div className="border-b border-ink/15 bg-white px-5 py-3 flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-ink text-white">
-                    METHOD
+              <article key={r.method} className="border-t border-ink/15 pt-5">
+                <p className="mb-4 text-base font-semibold" translate="no">
+                  <span className="mr-3 font-display text-sm text-ink/65">
+                    方法
                   </span>
-                  <span
-                    className="text-sm font-semibold text-ink"
-                    translate="no"
-                  >
-                    {r.method}
-                  </span>
-                </div>
+                  {r.method}
+                </p>
 
-                <div className="p-5 space-y-3">
-                  {/* Before */}
-                  <div className="rounded-md border border-pen/30 bg-pen/4">
-                    <div className="flex items-center gap-2 px-3 pt-2.5">
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-pen/15 text-pen uppercase">
-                        Before
-                      </span>
-                      <span className="text-[11px] text-pen/80">
-                        泛泛而談、看不到策略
-                      </span>
-                    </div>
-                    <p
-                      className="text-sm text-ink leading-relaxed px-3 py-2.5"
-                      translate="no"
-                    >
-                      {r.before}
+                <div className="space-y-5">
+                  {/* Before：紅筆劃掉 */}
+                  <div className="border-l-4 border-pen pl-4">
+                    <p className="mb-1 text-sm text-ink/65">
+                      修改前，泛泛而談、看不到策略
+                    </p>
+                    <p className="text-sm leading-relaxed" translate="no">
+                      <Pen>{r.before}</Pen>
                     </p>
                   </div>
 
-                  {/* Arrow */}
-                  <div
-                    className="flex items-center justify-center gap-2 text-ink/60"
-                    aria-hidden="true"
-                  >
-                    <span className="h-px flex-1 bg-ink/10" />
-                    <span className="text-xs font-mono">加上細節</span>
-                    <span className="text-lg leading-none">↓</span>
-                    <span className="h-px flex-1 bg-ink/10" />
-                  </div>
-
-                  {/* After (with highlighted additions) */}
-                  <div className="rounded-md border border-mark bg-mark/10">
-                    <div className="flex items-center gap-2 px-3 pt-2.5">
-                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-mark/40 text-ink uppercase">
-                        After
-                      </span>
-                      <span className="text-[11px] text-ink/80">
-                        看得到情境、策略、成果
-                      </span>
-                    </div>
-                    <p
-                      className="text-sm text-ink leading-relaxed px-3 py-2.5"
-                      translate="no"
-                    >
+                  {/* After：新增的部分用螢光筆標出 */}
+                  <div className="border-l-4 border-mark pl-4">
+                    <p className="mb-1 text-sm text-ink/65">
+                      修改後，看得到情境、策略、成果
+                    </p>
+                    <p className="text-sm leading-relaxed" translate="no">
                       {r.afterSegments.map((seg, i) =>
                         seg.added ? (
                           <mark
                             key={i}
-                            className="bg-mark/40 text-ink rounded px-0.5 py-px"
+                            className="hl-mark bg-transparent font-medium text-ink"
                           >
                             {seg.text}
                           </mark>
@@ -411,20 +369,20 @@ export default async function ResumeExperiencePage() {
                   </div>
 
                   {/* Additions breakdown */}
-                  <div className="rounded-md bg-white border border-ink/15 p-3 mt-2">
-                    <div className="text-[10px] font-mono font-semibold text-ink/65 uppercase tracking-wide mb-2">
-                      加了什麼 · 為什麼變好
-                    </div>
+                  <div>
+                    <p className="mb-2 text-sm font-semibold text-ink/65">
+                      加了什麼，為什麼變好
+                    </p>
                     <ul className="space-y-1.5">
                       {r.additions.map((a) => (
-                        <li key={a.tag} className="flex items-baseline gap-2">
+                        <li key={a.tag} className="flex items-baseline gap-3">
                           <span
-                            className="shrink-0 text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border border-mark bg-mark/25 text-ink"
+                            className="hl-mark shrink-0 text-sm font-semibold"
                             translate="no"
                           >
                             + {a.tag}
                           </span>
-                          <span className="text-xs text-ink/80 leading-relaxed">
+                          <span className="text-sm leading-relaxed text-ink/80">
                             {a.content}
                           </span>
                         </li>
@@ -438,8 +396,8 @@ export default async function ResumeExperiencePage() {
         </section>
 
         {/* 檢查清單 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
-          <h2 className="text-lg font-semibold text-ink mb-3">
+        <section>
+          <h2 className="text-2xl font-bold mb-3">
             最後檢查清單
           </h2>
           <ul className="space-y-2 text-sm text-ink/80">
@@ -467,18 +425,18 @@ export default async function ResumeExperiencePage() {
         </section>
 
         {/* CTA */}
-        <div className="flex justify-center gap-3 pt-2">
+        <div className="flex flex-wrap gap-3 border-t border-ink/15 pt-6">
           <Link
             href="/resume/summary"
-            className="rounded-md border border-ink/25 bg-white px-5 py-2.5 text-sm font-semibold text-ink/80 hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+            className="rounded-md border border-ink/25 px-5 py-2.5 text-sm font-semibold text-ink hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
             ← 看 Summary 寫法
           </Link>
           <Link
             href="/resume/cover-letter"
-            className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+            className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
-            下一步：Cover Letter →
+            下一步：Cover Letter
           </Link>
         </div>
       </div>

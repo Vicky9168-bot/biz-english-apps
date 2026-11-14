@@ -1,7 +1,14 @@
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AppNav } from '../site-nav'
+import {
+  Callout,
+  IndexList,
+  IndexRow,
+  PageHeader,
+  Pen,
+  SectionTitle,
+} from '../page-kit'
 
 type ResumeType = {
   slug: string | null
@@ -106,166 +113,97 @@ export default async function ResumeHome() {
   if (!profile?.onboarding_completed) redirect('/onboarding')
 
   return (
-    <main className="flex-1 bg-paper min-h-screen">
+    <main className="flex-1 bg-paper text-ink min-h-screen">
       <AppNav />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-ink text-pretty">
-            英文履歷
-          </h1>
-          <p className="text-ink/70 mt-2 max-w-2xl">
-            英文履歷是給公司 HR 和聘用主管看的 — 他們只有 8 秒抓眼球。三大主體：Summary、Work Experience、Cover Letter，把「做過什麼」改寫成「影響是什麼」，用對動詞、加對數據。
-          </p>
-        </header>
+        <PageHeader
+          title="英文履歷"
+          subtitle="英文履歷是給公司 HR 和聘用主管看的 — 他們只有 8 秒抓眼球。三大主體：Summary、Work Experience、Cover Letter，把「做過什麼」改寫成「影響是什麼」，用對動詞、加對數據。"
+        />
 
         {/* 寫履歷前 — 讀懂 JD */}
-        <section className="mb-10 rounded-lg border border-ink/15 bg-white p-6">
-          <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-ink text-white">
-              STEP 0
-            </span>
-            <span className="text-xs font-medium tracking-wide uppercase text-ink/65">
-              寫履歷之前 · 讀懂 JD
-            </span>
-          </div>
-          <h2 className="text-lg font-semibold text-ink mb-3">
-            先從 Job Description 抓對關鍵字
-          </h2>
-          <p className="text-sm text-ink/70 leading-relaxed mb-5">
+        <section className="mb-12">
+          <SectionTitle title="先從 Job Description 抓對關鍵字" hint="寫履歷之前" />
+          <p className="mb-6 max-w-2xl text-sm leading-relaxed text-ink/70">
             好的 JD 會用完整句子交代 Summary、Responsibilities、Qualifications，說清楚職缺要用什麼能力達到什麼目標。壞的 JD 只列短 bullet、範圍模糊 — 這種可以直接跳過。
           </p>
 
-          <div className="grid gap-4 sm:grid-cols-2 mb-5">
+          <div className="mb-6 grid gap-x-10 gap-y-6 sm:grid-cols-2">
             <div>
-              <div className="text-xs font-medium text-ink/80 uppercase tracking-wide mb-2">
-                4 個抓關鍵字的原則
-              </div>
-              <ul className="space-y-1.5 text-sm text-ink/80">
+              <h3 className="mb-2 text-base font-semibold">4 個抓關鍵字的原則</h3>
+              <ul className="border-t border-ink/15">
                 {JD_KEYWORD_CRITERIA.map((c) => (
-                  <li key={c.criterion}>
-                    <span
-                      className="text-xs font-mono font-semibold text-ink"
-                      translate="no"
-                    >
+                  <li key={c.criterion} className="border-b border-ink/10 py-2.5 text-sm">
+                    <span className="font-semibold" translate="no">
                       {c.criterion}
                     </span>
-                    <span className="text-xs text-ink/65 ml-2">
-                      · {c.note}
-                    </span>
+                    <span className="block text-ink/70">{c.note}</span>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <div className="text-xs font-medium text-ink/80 uppercase tracking-wide mb-2">
-                JD 常見句型解讀
-              </div>
-              <ul className="space-y-1.5 text-sm text-ink/80">
+              <h3 className="mb-2 text-base font-semibold">JD 常見句型解讀</h3>
+              <ul className="border-t border-ink/15">
                 {JD_PATTERNS.map((p) => (
-                  <li key={p.pattern}>
-                    <span
-                      className="text-xs font-mono font-semibold text-ink"
-                      translate="no"
-                    >
+                  <li key={p.pattern} className="border-b border-ink/10 py-2.5 text-sm">
+                    <span className="font-semibold" translate="no">
                       {p.pattern}
                     </span>
-                    <span className="text-xs text-ink/65 ml-2">
-                      · {p.meaning}
-                    </span>
+                    <span className="block text-ink/70">{p.meaning}</span>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
 
-          <div className="rounded-lg border border-ink/15 bg-paper p-4">
-            <div className="text-xs font-medium text-ink/80 uppercase tracking-wide mb-2">
-              AI Prompt · 直接複製使用
-            </div>
-            <pre
-              className="text-xs text-ink leading-relaxed whitespace-pre-wrap font-mono"
-              translate="no"
-            >
-              {AI_PROMPT_TEMPLATE}
-            </pre>
-          </div>
+          <h3 className="mb-2 text-base font-semibold">AI Prompt，直接複製使用</h3>
+          <pre
+            className="whitespace-pre-wrap border-l-2 border-ink/25 bg-white px-4 py-3 font-mono text-xs leading-relaxed"
+            translate="no"
+          >
+            {AI_PROMPT_TEMPLATE}
+          </pre>
         </section>
 
         {/* 履歷黃金公式 */}
-        <section className="mb-10 rounded-lg border border-ink bg-ink p-6 text-white">
-          <div className="text-xs font-medium tracking-wide uppercase text-ink/60 mb-2">
-            履歷黃金公式
-          </div>
-          <h2 className="text-lg font-semibold mb-3">
-            動詞 + 藉由策略 + 量化成就
-          </h2>
-          <p className="text-sm text-paper/70 leading-relaxed">
-            每條 bullet 都要有這三件事 — 動詞（做什麼）、策略（怎麼做）、量化成就（成果多少）。「Responsible for」開頭的 bullet HR 一律略過。
-          </p>
-        </section>
+        <Callout title="履歷黃金公式：動詞 + 藉由策略 + 量化成就">
+          每條 bullet 都要有這三件事 — 動詞（做什麼）、策略（怎麼做）、量化成就（成果多少）。「
+          <Pen>Responsible for</Pen>」開頭的 bullet HR 一律略過。
+        </Callout>
 
         {/* 練習類型 */}
-        <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-3">
-          選一個練習類型
-        </div>
-        <ul className="grid gap-4 sm:grid-cols-2">
-          {RESUME_TYPES.map((t) => {
-            const isReady = t.status === 'ready' && t.slug
-            const inner = (
-              <div className="flex flex-col h-full rounded-lg border border-ink/15 bg-white p-5 relative motion-safe:transition hover:border-ink/40 hover:shadow-sm">
-                {!isReady && (
-                  <span className="absolute top-4 right-4 text-[10px] font-mono px-1.5 py-0.5 rounded bg-paper text-ink/65">
-                    即將上線
-                  </span>
-                )}
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-ink text-white">
-                    {String(t.order).padStart(2, '0')}
-                  </span>
-                  <h3
-                    className="text-base font-semibold text-ink"
-                    translate="no"
-                  >
-                    {t.title}
-                  </h3>
-                </div>
-                <p className="text-sm text-ink/70 mb-3 leading-relaxed">
-                  {t.desc}
-                </p>
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {t.frameworks.map((f) => (
-                    <span
-                      key={f}
-                      className="text-[10px] px-1.5 py-0.5 rounded bg-paper text-ink/70 font-mono"
-                      translate="no"
-                    >
-                      {f}
-                    </span>
-                  ))}
-                </div>
-                <div className="text-xs text-ink/65 border-t border-ink/10 pt-3 mt-auto">
-                  <span className="text-ink/60">例：</span>
-                  {t.sampleTask}
-                </div>
-              </div>
-            )
-            return (
-              <li key={t.title} className="h-full">
-                {isReady ? (
-                  <Link
-                    href={`/resume/${t.slug}`}
-                    className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded-lg"
-                  >
-                    {inner}
-                  </Link>
-                ) : (
-                  inner
-                )}
-              </li>
-            )
-          })}
-        </ul>
+        <section>
+          <SectionTitle title="選一個練習類型" />
+          <IndexList>
+            {RESUME_TYPES.map((t) => {
+              const isReady = t.status === 'ready' && t.slug
+              return (
+                <IndexRow
+                  key={t.title}
+                  href={isReady ? `/resume/${t.slug}` : undefined}
+                  disabled={!isReady}
+                  tag={String(t.order).padStart(2, '0')}
+                  title={t.title}
+                  translateTitle={false}
+                  desc={
+                    <>
+                      {t.desc}
+                      <span className="mt-2 block text-ink/65" translate="no">
+                        {t.frameworks.join(' · ')}
+                      </span>
+                      <span className="mt-1 block text-ink/65">
+                        例：{t.sampleTask}
+                      </span>
+                    </>
+                  }
+                  aside={isReady ? undefined : '即將上線'}
+                />
+              )
+            })}
+          </IndexList>
+        </section>
       </div>
     </main>
   )

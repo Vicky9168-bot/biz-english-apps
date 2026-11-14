@@ -1,9 +1,8 @@
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { SessionClient } from './session-client'
 import type { Vocabulary } from '@/lib/supabase/types'
-import { BookOpen } from 'lucide-react'
-import { IconTile } from '../../icon-tile'
 
 export default async function CharadesSessionPage({
   searchParams,
@@ -135,21 +134,20 @@ export default async function CharadesSessionPage({
 
   if (words.length === 0) {
     return (
-      <main className="flex-1 flex items-center justify-center px-6 py-12">
-        <div className="max-w-md text-center">
-          <IconTile icon={BookOpen} size="lg" className="mb-4" />
-          <h2 className="text-xl font-semibold text-ink mb-2">
+      <main className="flex-1 flex items-center justify-center bg-paper px-6 py-12">
+        <div className="max-w-md border-l-4 border-mark pl-5">
+          <h2 className="text-2xl font-bold text-ink mb-2">
             找不到適合的單字
           </h2>
           <p className="text-ink/70 mb-6">
             可能是題庫還沒 seed，或你已經練完了所有字。
           </p>
-          <a
+          <Link
             href="/"
-            className="inline-block rounded-md bg-ink px-4 py-2 text-sm font-medium text-paper"
+            className="inline-block rounded-md bg-ink px-4 py-2 text-sm font-semibold text-paper hover:bg-ink/85"
           >
-            回 Dashboard
-          </a>
+            回首頁
+          </Link>
         </div>
       </main>
     )

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ExitButton } from '../../back-button'
 import type { Vocabulary } from '@/lib/supabase/types'
+import { Mark, Pen } from '@/app/page-kit'
 
 const MAX_ATTEMPTS = 3
 const MAX_RECORDING_MS = 30000
@@ -530,8 +531,8 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
       <div className="mx-auto max-w-2xl px-6 py-10">
         {/* 目標字 / AI 描述卡 */}
         {mode === 'user_describes' ? (
-          <div className="rounded-lg border border-ink/15 bg-white p-8 mb-6 text-center">
-            <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-3">
+          <div className="border-y border-ink/15 py-8 mb-6 text-center">
+            <div className="text-xs font-medium  text-ink/65 mb-3">
               目標單字 · AI 看不到
             </div>
             <div
@@ -559,9 +560,9 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
             )}
           </div>
         ) : (
-          <div className="rounded-lg border border-ink/15 bg-white p-6 mb-6">
+          <div className="border-y border-ink/15 py-6 mb-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="text-xs font-medium tracking-wide uppercase text-ink">
+              <div className="text-xs font-medium  text-ink">
                 AI 出題 · 聽力理解
               </div>
               {audioUrl && (
@@ -600,7 +601,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
             )}
 
             {audioUrl && scriptShown && aiDescription && (
-              <p className="mt-4 rounded-lg bg-paper p-3 text-sm text-ink/80 leading-relaxed">
+              <p className="mt-4 border-l-2 border-ink/25 pl-3 text-sm text-ink/80 leading-relaxed">
                 {aiDescription}
               </p>
             )}
@@ -630,7 +631,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
         )}
 
         {/* 錄音按鈕 / 狀態 */}
-        <div className="rounded-lg bg-white border border-ink/15 p-8 text-center">
+        <div className="border-y border-ink/15 py-8 text-center">
           {phase === 'idle' && (
             <>
               <p className="text-ink/70 mb-6">
@@ -643,7 +644,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
               <button
                 onClick={startRecording}
                 disabled={mode === 'ai_describes' && !audioUrl}
-                className="group relative w-24 h-24 rounded-full bg-ink text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink/20 motion-safe:transition-transform motion-safe:hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 inline-flex items-center justify-center"
+                className="group relative w-24 h-24 rounded-full bg-ink text-paper hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ink/20 motion-safe:transition-transform motion-safe:hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 inline-flex items-center justify-center"
                 aria-label="開始錄音"
               >
                 <MicIcon className="w-9 h-9" />
@@ -696,7 +697,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
           {phase === 'result' && lastAttempt && (
             <div className="text-left">
               {lastAttempt.transcript && (
-                <div className="mb-4 rounded-lg bg-paper p-4">
+                <div className="mb-4 border-l-4 border-ink/25 pl-4">
                   <div className="text-xs text-ink/65 mb-1">
                     {mode === 'user_describes' ? '你剛才說' : '你猜的'}
                   </div>
@@ -708,10 +709,8 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
 
               {mode === 'user_describes' && lastAttempt.aiGuess && (
                 <div
-                  className={`mb-4 rounded-lg p-4 ${
-                    lastAttempt.isCorrect
-                      ? 'bg-mark/25 border border-mark'
-                      : 'bg-pen/10 border border-pen/30'
+                  className={`mb-4 border-l-4 pl-4 py-1 ${
+                    lastAttempt.isCorrect ? 'border-mark' : 'border-pen'
                   }`}
                 >
                   <div
@@ -719,25 +718,25 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                       lastAttempt.isCorrect ? 'text-ink' : 'text-pen'
                     }`}
                   >
-                    {lastAttempt.isCorrect ? '✓ AI 猜對了！' : '✗ AI 猜錯了'}
+                    {lastAttempt.isCorrect ? 'AI 猜對了' : 'AI 猜錯了'}
                   </div>
                   <div
-                    className={`text-lg font-semibold ${
-                      lastAttempt.isCorrect ? 'text-ink' : 'text-pen'
-                    }`}
+                    className="text-lg font-semibold"
                     translate="no"
                   >
-                    {lastAttempt.aiGuess}
+                    {lastAttempt.isCorrect ? (
+                      <Mark>{lastAttempt.aiGuess}</Mark>
+                    ) : (
+                      <Pen>{lastAttempt.aiGuess}</Pen>
+                    )}
                   </div>
                 </div>
               )}
 
               {mode === 'ai_describes' && (
                 <div
-                  className={`mb-4 rounded-lg p-4 ${
-                    lastAttempt.isCorrect
-                      ? 'bg-mark/25 border border-mark'
-                      : 'bg-pen/10 border border-pen/30'
+                  className={`mb-4 border-l-4 pl-4 py-1 ${
+                    lastAttempt.isCorrect ? 'border-mark' : 'border-pen'
                   }`}
                 >
                   <div
@@ -745,7 +744,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                       lastAttempt.isCorrect ? 'text-ink' : 'text-pen'
                     }`}
                   >
-                    {lastAttempt.isCorrect ? '✓ 猜對了！' : '✗ 不對喔'}
+                    {lastAttempt.isCorrect ? '猜對了' : '不對喔'}
                   </div>
                 </div>
               )}
@@ -753,10 +752,10 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
               {revealed && (
                 <>
                   {!lastAttempt.isCorrect && (
-                    <div className="rounded-lg bg-mark/30 border border-mark p-4 mb-3">
+                    <div className="border-l-4 border-mark pl-4 py-1 mb-3">
                       <div className="text-xs text-ink mb-1">答案</div>
                       <div className="text-xl font-bold text-ink">
-                        {currentWord.word}
+                        <Mark>{currentWord.word}</Mark>
                       </div>
                       {currentWord.example_sentence && (
                         <div className="mt-2 text-sm text-ink/80 italic">
@@ -767,7 +766,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                   )}
 
                   <div
-                    className="rounded-lg bg-white border border-ink/15 p-4 mb-4"
+                    className="border-l-4 border-ink/25 pl-4 mb-4"
                     aria-live="polite"
                   >
                     <div className="text-xs font-medium text-ink/65 mb-2">
@@ -786,20 +785,20 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                           <span>{explanation.one_tip_zh}</span>
                         </div>
                         {explanation.better_phrase && (
-                          <div className="rounded bg-paper p-3">
+                          <div className="border-l-2 border-ink/25 pl-3">
                             <div className="text-xs text-ink/65 mb-1">你說</div>
-                            <div className="text-ink/80 mb-2 line-through">
-                              {explanation.better_phrase.you_said}
+                            <div className="mb-2">
+                              <Pen>{explanation.better_phrase.you_said}</Pen>
                             </div>
                             <div className="text-xs text-ink/65 mb-1">更好</div>
-                            <div className="text-ink font-medium">
-                              {explanation.better_phrase.better}
+                            <div className="font-medium">
+                              <Mark>{explanation.better_phrase.better}</Mark>
                             </div>
                           </div>
                         )}
                         {explanation.describe_next_time?.angle_zh && (
-                          <div className="rounded-md border border-mark bg-mark/25 p-3">
-                            <div className="text-[10px] font-semibold tracking-wide uppercase text-ink mb-1.5">
+                          <div className="border-l-4 border-mark pl-3">
+                            <div className="text-[10px] font-semibold  text-ink mb-1.5">
                               下次這樣描述，對方更容易猜到
                             </div>
                             <div className="text-sm text-ink leading-relaxed mb-2">
@@ -808,7 +807,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
                             {explanation.describe_next_time.sample_en && (
                               <div className="rounded bg-white border border-mark/40 px-3 py-2 text-sm text-ink italic">
                                 <span
-                                  className="not-italic text-[10px] font-mono font-semibold text-ink mr-2 uppercase tracking-wide"
+                                  className="not-italic text-xs font-display font-semibold text-ink mr-2 "
                                   translate="no"
                                 >
                                   Sample
@@ -863,7 +862,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
           )}
 
           {error && (
-            <div className="mt-4 rounded-md bg-pen/10 border border-pen/30 px-3 py-2 text-sm text-pen">
+            <div className="mt-4 border-l-4 border-pen pl-3 py-1 text-sm text-pen">
               {error}
             </div>
           )}
@@ -871,8 +870,8 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
 
         {/* 累積歷史 */}
         {currentAttempts.length > 0 && phase !== 'result' && (
-          <div className="mt-6 rounded-lg bg-white border border-ink/15 p-4">
-            <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-2">
+          <div className="mt-6 border-t border-ink/15 pt-4">
+            <div className="text-xs font-medium  text-ink/65 mb-2">
               本題歷史
             </div>
             <ul className="divide-y divide-ink/10">
@@ -934,10 +933,8 @@ function CompleteView({
     <main className="flex-1 bg-paper py-10 px-6">
       <div className="max-w-2xl mx-auto">
         {/* 總覽 */}
-        <div className="rounded-lg bg-white border border-ink/15 p-8 mb-6 text-center">
-          <div className="inline-block px-3 py-1 mb-4 text-xs font-medium tracking-wide uppercase text-ink bg-mark/30 rounded-full">
-            Session Complete
-          </div>
+        <div className="border-y border-ink/15 py-8 mb-6">
+          <div className="mb-2 text-sm text-ink/65">練習結束</div>
           <h1 className="text-2xl font-bold text-ink mb-2 text-pretty">
             今日練習完成
           </h1>
@@ -945,7 +942,7 @@ function CompleteView({
             {feedback?.overall_encouragement_zh ?? '每天一點點，進步看得見。'}
           </p>
 
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-3 border-t border-ink/15">
             <StatBig label="猜中" value={`${correct} / ${results.length}`} />
             <StatBig
               label="星星"
@@ -963,8 +960,8 @@ function CompleteView({
         </div>
 
         {/* 每題結果 */}
-        <section className="rounded-lg bg-white border border-ink/15 p-6 mb-6">
-          <h2 className="text-sm font-semibold tracking-wide uppercase text-ink/65 mb-3">
+        <section className="border-t border-ink/15 pt-6 mb-6">
+          <h2 className="text-sm font-semibold  text-ink/65 mb-3">
             每題結果
           </h2>
           <ul className="divide-y divide-ink/10">
@@ -1001,11 +998,11 @@ function CompleteView({
                 <div className="space-y-4">
                   {feedback.grammar_errors.map((e, i) => (
                     <div key={i} className="text-sm">
-                      <div className="text-pen line-through">
-                        {e.original}
+                      <div>
+                        <Pen>{e.original}</Pen>
                       </div>
-                      <div className="text-ink font-medium">
-                        {e.corrected}
+                      <div className="font-medium">
+                        <Mark>{e.corrected}</Mark>
                       </div>
                       <div className="text-xs text-ink/65 mt-1">
                         {e.explanation_zh}
@@ -1021,9 +1018,11 @@ function CompleteView({
                 <div className="space-y-4">
                   {feedback.better_expressions.map((e, i) => (
                     <div key={i} className="text-sm">
-                      <div className="text-ink/70">你說：{e.you_said}</div>
-                      <div className="text-ink font-medium">
-                        更好：{e.better}
+                      <div>
+                        <Pen>{e.you_said}</Pen>
+                      </div>
+                      <div className="font-medium">
+                        <Mark>{e.better}</Mark>
                       </div>
                       <div className="text-xs text-ink/65 mt-1">{e.why_zh}</div>
                     </div>
@@ -1038,11 +1037,11 @@ function CompleteView({
                   {feedback.description_tips.map((tip, i) => (
                     <div
                       key={i}
-                      className="rounded-lg border border-ink/15 bg-paper p-4"
+                      className="border-t border-ink/15 pt-4"
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <span
-                          className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-ink text-white"
+                          className="text-xs font-display font-bold px-1.5 py-0.5 rounded bg-ink text-white"
                           translate="no"
                         >
                           {String(i + 1).padStart(2, '0')}
@@ -1067,9 +1066,9 @@ function CompleteView({
                         {tip.better_approach_zh}
                       </div>
                       {tip.sample_sentence && (
-                        <div className="mt-3 rounded-md border border-mark bg-white px-3 py-2 text-sm text-ink italic">
+                        <div className="mt-3 border-l-4 border-mark pl-3 text-sm text-ink italic">
                           <span
-                            className="not-italic text-[10px] font-mono font-semibold text-ink mr-2 uppercase tracking-wide"
+                            className="not-italic text-xs font-display font-semibold text-ink mr-2 "
                             translate="no"
                           >
                             Sample
@@ -1100,13 +1099,13 @@ function CompleteView({
         <div className="flex gap-3">
           <Link
             href="/"
-            className="flex-1 rounded-md border border-ink/25 bg-white px-4 py-3 text-center text-sm font-semibold text-ink/80 hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+            className="flex-1 rounded-md border border-ink/25 px-4 py-3 text-center text-sm font-semibold text-ink hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
-            回 Dashboard
+            回首頁
           </Link>
           <Link
             href="/charades"
-            className="flex-1 rounded-md bg-ink px-4 py-3 text-center text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 transition"
+            className="flex-1 rounded-md bg-ink px-4 py-3 text-center text-sm font-semibold text-paper hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 transition"
           >
             再練一輪
           </Link>
@@ -1118,13 +1117,14 @@ function CompleteView({
 
 function StatBig({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="rounded-lg bg-paper py-3">
-      <div className="text-xs text-ink/65 mb-1">{label}</div>
-      <div className="text-xl font-bold text-ink tabular-nums">{value}</div>
+    <div className="border-ink/15 px-3 py-3 first:pl-0 [&:not(:first-child)]:border-l">
+      <div className="mb-1 text-sm text-ink/65">{label}</div>
+      <div className="font-display text-2xl font-bold tabular-nums">{value}</div>
     </div>
   )
 }
 
+// 回饋區塊：紅筆線 = 要改的、螢光黃線 = 做得好或下次這樣做、墨線 = 補充
 function FeedbackCard({
   title,
   accent,
@@ -1136,24 +1136,14 @@ function FeedbackCard({
 }) {
   const bar =
     accent === 'rose'
-      ? 'bg-pen'
-      : accent === 'blue'
-        ? 'bg-ink'
-        : accent === 'emerald'
-          ? 'bg-ink'
-          : 'bg-ink/50'
+      ? 'border-pen'
+      : accent === 'emerald'
+        ? 'border-mark'
+        : 'border-ink/25'
   return (
-    <section className="rounded-lg bg-white border border-ink/15 overflow-hidden">
-      <header className="flex items-center gap-3 px-6 pt-5">
-        <span
-          className={`inline-block w-1 h-4 rounded-sm ${bar}`}
-          aria-hidden="true"
-        />
-        <h3 className="text-sm font-semibold tracking-wide uppercase text-ink/65">
-          {title}
-        </h3>
-      </header>
-      <div className="px-6 pb-5 pt-3">{children}</div>
+    <section className={`border-l-4 pl-5 ${bar}`}>
+      <h3 className="mb-3 text-lg font-bold">{title}</h3>
+      <div>{children}</div>
     </section>
   )
 }

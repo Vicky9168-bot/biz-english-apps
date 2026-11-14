@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AppNav } from '../../site-nav'
+import { PageHeader } from '@/app/page-kit'
 
 const TEMPLATE_LINES: string[] = [
   "Dear [HR Manager's Name],",
@@ -60,34 +61,37 @@ export default async function ResumeCoverLetterPage() {
     <main className="flex-1 bg-paper min-h-screen">
       <AppNav backHref="/resume" />
 
-      <div className="mx-auto max-w-3xl px-6 py-10 space-y-6">
-        <header className="rounded-lg border border-ink/15 bg-white p-6">
-          <h1 className="text-2xl font-bold text-ink text-pretty mb-3">
-            Cover Letter 開頭到結尾範本
-          </h1>
-          <p className="text-ink/80 leading-relaxed">
-            Cover Letter 三段就夠：自我介紹 + 為什麼是你、為什麼是這家公司、禮貌收尾。填空範本先寫完，再回頭調整口氣與細節。
-          </p>
-        </header>
+      <div className="mx-auto max-w-3xl px-6 py-10 space-y-12">
+        <PageHeader
+          title="Cover Letter 開頭到結尾範本"
+          subtitle={<>Cover Letter 三段就夠：自我介紹 + 為什麼是你、為什麼是這家公司、禮貌收尾。填空範本先寫完，再回頭調整口氣與細節。</>}
+        />
 
         {/* 開頭範本 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">
+        <section>
+          <h2 className="text-2xl font-bold mb-3">
             開頭範本（第一段 + 第二段）
           </h2>
-          <p className="text-xs text-ink/65 mb-4">
+          <p className="text-sm text-ink/65 mb-4">
             方括號 [ ] 內是你要替換成自己資料的地方。
           </p>
-          <div className="rounded-lg border border-ink/15 bg-paper p-5 space-y-3">
+          {/* 信紙：橫線 + 左側紅邊線 */}
+          <div
+            className="relative bg-white py-9 pl-14 pr-6 shadow-[0_1px_0_rgba(26,36,48,0.06),0_24px_40px_-28px_rgba(26,36,48,0.4)]"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(to bottom, transparent 0 35px, rgba(26,36,48,0.08) 35px 36px)',
+            }}
+          >
+            <span
+              aria-hidden
+              className="absolute inset-y-0 left-10 w-px bg-pen/35"
+            />
             {TEMPLATE_LINES.map((line, i) =>
               line === '' ? (
-                <div key={i} className="h-2" />
+                <div key={i} className="h-9" />
               ) : (
-                <p
-                  key={i}
-                  className="text-sm text-ink leading-relaxed"
-                  translate="no"
-                >
+                <p key={i} className="text-sm leading-9" translate="no">
                   {line}
                 </p>
               )
@@ -96,18 +100,18 @@ export default async function ResumeCoverLetterPage() {
         </section>
 
         {/* 好用句型 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">
+        <section>
+          <h2 className="text-2xl font-bold mb-3">
             四個好用句型
           </h2>
-          <p className="text-xs text-ink/65 mb-4">
+          <p className="text-sm text-ink/65 mb-4">
             換不同表達方式，避免模板感太重。
           </p>
           <ul className="space-y-3">
             {USEFUL_PATTERNS.map((p, i) => (
               <li
                 key={i}
-                className="rounded-lg border border-ink/15 bg-paper p-4"
+                className="border-t border-ink/15 pt-4"
               >
                 <p
                   className="text-sm text-ink leading-relaxed mb-2"
@@ -115,8 +119,8 @@ export default async function ResumeCoverLetterPage() {
                 >
                   &ldquo;{p.pattern}&rdquo;
                 </p>
-                <p className="text-xs text-ink/70">
-                  <span className="font-semibold text-ink/80">用途：</span>
+                <p className="text-sm text-ink/70">
+                  <span className="font-semibold text-ink">用途：</span>
                   {p.use}
                 </p>
               </li>
@@ -125,20 +129,20 @@ export default async function ResumeCoverLetterPage() {
         </section>
 
         {/* 結尾範例 */}
-        <section className="rounded-lg border border-ink/15 bg-white p-6">
-          <h2 className="text-lg font-semibold text-ink mb-1">
+        <section>
+          <h2 className="text-2xl font-bold mb-3">
             兩種結尾範例
           </h2>
-          <p className="text-xs text-ink/65 mb-4">
+          <p className="text-sm text-ink/65 mb-4">
             依你想給對方的印象（穩健 vs 積極）挑一種。
           </p>
           <div className="space-y-4">
             {CLOSINGS.map((c) => (
               <div
                 key={c.title}
-                className="rounded-lg border border-ink/15 bg-paper p-5"
+                className="border-t border-ink/15 pt-5"
               >
-                <div className="text-xs font-mono font-semibold text-ink/70 uppercase tracking-wide mb-3">
+                <div className="mb-3 font-display text-sm font-semibold text-ink/65">
                   {c.title}
                 </div>
                 <p
@@ -153,10 +157,8 @@ export default async function ResumeCoverLetterPage() {
         </section>
 
         {/* 寫作提醒 */}
-        <section className="rounded-lg border border-mark bg-mark/25 p-5">
-          <div className="text-xs font-medium text-ink uppercase tracking-wide mb-2">
-            寫作提醒
-          </div>
+        <section className="border-l-4 border-mark pl-5">
+          <h2 className="text-lg font-bold mb-2">寫作提醒</h2>
           <ul className="space-y-1.5 text-sm text-ink">
             <li>· 一定要點名 HR / 主管姓名，找不到才用「Hiring Manager」</li>
             <li>· 「為什麼是這家公司」要具體 — 講出你研究過的產品、文化或成就</li>
@@ -167,16 +169,16 @@ export default async function ResumeCoverLetterPage() {
         </section>
 
         {/* CTA */}
-        <div className="flex justify-center gap-3 pt-2">
+        <div className="flex flex-wrap gap-3 border-t border-ink/15 pt-6">
           <Link
             href="/resume/experience"
-            className="rounded-md border border-ink/25 bg-white px-5 py-2.5 text-sm font-semibold text-ink/80 hover:bg-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+            className="rounded-md border border-ink/25 px-5 py-2.5 text-sm font-semibold text-ink hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
             ← 看 Work Experience
           </Link>
           <Link
             href="/resume"
-            className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
+            className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 transition"
           >
             回履歷首頁
           </Link>

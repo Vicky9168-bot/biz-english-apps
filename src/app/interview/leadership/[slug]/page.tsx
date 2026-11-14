@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getFrameworkBySlug, LEADERSHIP_FRAMEWORKS } from '@/lib/interview/leadership'
 import { AppNav } from '../../../site-nav'
+import { Callout, IndexList, IndexRow, PageHeader } from '@/app/page-kit'
 
 export function generateStaticParams() {
   return LEADERSHIP_FRAMEWORKS.map((f) => ({ slug: f.slug }))
@@ -37,64 +38,48 @@ export default async function LeadershipPage({
       <AppNav backHref="/interview" />
 
       <div className="mx-auto max-w-4xl px-6 py-10">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-ink text-pretty">
-            {framework.title}
-          </h1>
-          <p className="text-ink/70 mt-3 max-w-2xl leading-relaxed">
-            {framework.intro}
-          </p>
+        <PageHeader title={framework.title} subtitle={framework.intro}>
           <a
             href={framework.source_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block mt-3 text-xs text-ink/65 hover:text-ink underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded-sm"
+            className="mt-3 inline-block rounded-sm text-sm text-ink/65 underline decoration-ink/30 underline-offset-4 hover:text-ink hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
           >
             官方原文 ↗
           </a>
-        </header>
+        </PageHeader>
 
-        <ol className="grid gap-4 sm:grid-cols-2">
+        <IndexList>
           {framework.principles.map((p, i) => (
-            <li
+            <IndexRow
               key={p.id}
-              className="rounded-lg border border-ink/15 bg-white p-5"
-            >
-              <div className="flex items-start gap-3 mb-2">
-                <span className="text-xs font-mono text-ink/60 mt-1 shrink-0">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <div className="min-w-0">
-                  <h2 className="text-base font-semibold text-ink">
-                    {p.name_en}
-                  </h2>
-                  <div className="text-xs text-ink/65 mt-0.5">
-                    {p.name_zh}
-                  </div>
-                </div>
-              </div>
-              <p className="text-sm text-ink/70 leading-relaxed mb-3">
-                {p.description}
-              </p>
-              {p.example_question && (
-                <div className="text-xs text-ink/65 border-t border-ink/10 pt-3 font-mono leading-relaxed">
-                  <span className="text-ink/60">Q：</span>
-                  {p.example_question}
-                </div>
-              )}
-            </li>
+              tag={String(i + 1).padStart(2, '0')}
+              title={p.name_en}
+              translateTitle={false}
+              desc={
+                <>
+                  <span className="text-ink/65">{p.name_zh}</span>
+                  <span className="mt-1 block">{p.description}</span>
+                  {p.example_question && (
+                    <span className="mt-2 block border-l-2 border-ink/25 pl-3 text-ink/75" translate="no">
+                      Q：{p.example_question}
+                    </span>
+                  )}
+                </>
+              }
+            />
           ))}
-        </ol>
+        </IndexList>
 
-        <div className="mt-8 rounded-lg border border-ink/15 bg-white p-5 text-center">
-          <p className="text-sm text-ink/70 mb-3">
-            準備行為題時，把每個故事對應到 1-2 條原則，講的時候刻意帶出關鍵字
-          </p>
+        <div className="mt-10">
+          <Callout>
+            準備行為題時，把每個故事對應到 1-2 條原則，講的時候刻意帶出關鍵字。
+          </Callout>
           <Link
             href="/interview/behavioral"
-            className="inline-block text-sm font-medium bg-ink text-white px-4 py-2 rounded-lg hover:bg-ink transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
+            className="inline-block rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper hover:bg-ink/85 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2"
           >
-            去練行為題 →
+            去練行為題
           </Link>
         </div>
       </div>

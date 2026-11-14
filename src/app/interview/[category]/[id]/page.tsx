@@ -8,6 +8,7 @@ import {
 } from '@/lib/interview/questions'
 import PracticeForm from './practice-form'
 import { AppNav } from '../../../site-nav'
+import { IndexList, IndexRow, SectionTitle } from '@/app/page-kit'
 
 const VALID_CATEGORIES: QuestionCategory[] = [
   'basic',
@@ -55,21 +56,24 @@ export default async function QuestionPracticePage({
       <AppNav backHref={`/interview/${cat}`} />
 
       <div className="mx-auto max-w-3xl px-6 py-10">
-        <header className="mb-8">
-          <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-2 flex items-center gap-2">
-            <span>{meta.title}</span>
+        <header className="mb-10 border-b border-ink/15 pb-8">
+          <p className="mb-3 text-sm text-ink/65">
+            {meta.title}
             {question.framework && (
-              <span className="font-mono px-1.5 py-0.5 rounded bg-ink text-white text-[10px] normal-case">
+              <span className="ml-3 font-display font-semibold text-ink">
                 {question.framework}
               </span>
             )}
-          </div>
-          <h1 className="text-2xl font-bold text-ink text-pretty leading-snug">
+          </p>
+          <h1
+            className="text-balance text-2xl font-bold leading-snug md:text-3xl"
+            translate="no"
+          >
             {question.question_en}
           </h1>
-          <p className="text-ink/70 mt-2">{question.question_zh}</p>
+          <p className="mt-3 text-base text-ink/70">{question.question_zh}</p>
           {question.focus && (
-            <p className="text-xs text-ink/65 mt-3 border-l-2 border-ink/25 pl-3">
+            <p className="mt-4 border-l-4 border-mark pl-4 text-sm leading-relaxed text-ink/75">
               {question.focus}
             </p>
           )}
@@ -78,51 +82,32 @@ export default async function QuestionPracticePage({
         <PracticeForm question={question} />
 
         {question.external_resources.length > 0 && (
-          <section className="mt-8 rounded-lg border border-ink/15 bg-white p-6">
-            <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-3">
-              延伸學習資源
-            </div>
-            <ul className="space-y-3">
+          <section className="mt-12">
+            <SectionTitle title="延伸學習資源" />
+            <IndexList>
               {question.external_resources.map((r) => {
                 const isInternal = r.url.startsWith('/')
-                const linkProps = isInternal
-                  ? { href: r.url }
-                  : {
-                      href: r.url,
-                      target: '_blank',
-                      rel: 'noopener noreferrer',
-                    }
                 return (
-                  <li key={r.url}>
-                    <a
-                      {...linkProps}
-                      className="group block rounded-lg border border-ink/10 p-3 hover:border-ink/25 hover:bg-paper transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
-                    >
-                      <div className="text-sm font-medium text-ink group-hover:underline underline-offset-2">
-                        {r.title}
-                        <span className="text-ink/60 ml-1 text-xs">
-                          {isInternal ? '→' : '↗'}
-                        </span>
-                      </div>
-                      {r.note && (
-                        <div className="text-xs text-ink/65 mt-1">
-                          {r.note}
-                        </div>
-                      )}
-                    </a>
-                  </li>
+                  <IndexRow
+                    key={r.url}
+                    href={r.url}
+                    external={!isInternal}
+                    title={r.title}
+                    desc={r.note}
+                    aside={isInternal ? '站內' : '外部連結 ↗'}
+                  />
                 )
               })}
-            </ul>
+            </IndexList>
           </section>
         )}
 
-        <div className="mt-6 text-center">
+        <div className="mt-10">
           <Link
             href={`/interview/${cat}`}
-            className="text-sm text-ink/65 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded-sm px-1"
+            className="rounded-sm text-sm text-ink/65 underline decoration-ink/30 underline-offset-4 hover:text-ink hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
           >
-            ← 換一題練
+            換一題練
           </Link>
         </div>
       </div>

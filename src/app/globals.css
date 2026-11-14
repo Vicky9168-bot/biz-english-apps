@@ -68,6 +68,21 @@
   animation: redline-fade 0.5s ease-out calc(var(--d, 0s) + 2.1s) both;
 }
 
+/* 靜態版：練習區用，答錯劃掉、重點標出（沒有動畫） */
+.strike-pen {
+  color: color-mix(in srgb, var(--color-ink) 60%, transparent);
+  background: linear-gradient(var(--color-pen), var(--color-pen)) 0 56% / 100%
+    2px no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.hl-mark {
+  background: linear-gradient(var(--color-mark), var(--color-mark)) 0 82% / 100%
+    60% no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
 /* 功能列 hover / focus：標題底下掃出螢光筆 */
 .mark-hover {
   background: linear-gradient(var(--color-mark), var(--color-mark)) 0 92% / 0%

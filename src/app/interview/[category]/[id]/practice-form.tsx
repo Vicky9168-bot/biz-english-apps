@@ -14,35 +14,46 @@ export default function PracticeForm({ question }: Props) {
   const wordCount = answer.trim() ? answer.trim().split(/\s+/).length : 0
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-lg border border-ink/15 bg-white p-6">
-        <div className="text-xs font-medium tracking-wide uppercase text-ink/65 mb-2">
-          你的答案
+    <div className="space-y-10">
+      <section>
+        <h2 className="mb-3 text-xl font-bold">你的答案</h2>
+        {/* 稿紙：橫線 + 左側紅色邊線，字行高與線距一致 */}
+        <div className="relative bg-white shadow-[0_1px_0_rgba(26,36,48,0.06),0_24px_40px_-28px_rgba(26,36,48,0.4)]">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 left-10 w-px bg-pen/35"
+          />
+          <textarea
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+            placeholder="先用英文寫下你的回答，寫完再看提示。不用完美，先寫出來比較重要。"
+            rows={10}
+            aria-label="你的答案"
+            className="block w-full resize-y bg-transparent py-[18px] pl-14 pr-5 text-base leading-9 text-ink placeholder:text-ink/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(to bottom, transparent 0 35px, rgba(26,36,48,0.08) 35px 36px)',
+              backgroundPosition: '0 18px',
+            }}
+          />
         </div>
-        <textarea
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-          placeholder="先用英文寫下你的回答，寫完再看提示。不用完美，先寫出來比較重要。"
-          rows={10}
-          className="w-full rounded-lg border border-ink/15 bg-paper p-4 text-sm text-ink placeholder:text-ink/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:border-ink/40 resize-y"
-        />
-        <div className="flex items-center justify-between mt-3">
-          <span className="text-xs font-mono text-ink/65">
+        <div className="mt-3 flex items-center justify-between">
+          <span className="font-display text-sm tabular-nums text-ink/65">
             {wordCount} words
           </span>
           {!revealed ? (
             <button
               type="button"
               onClick={() => setRevealed(true)}
-              className="text-sm font-medium bg-ink text-white px-4 py-2 rounded-lg hover:bg-ink transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
+              className="rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition hover:bg-ink/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
             >
-              看提示與答題大綱 →
+              看提示與答題大綱
             </button>
           ) : (
             <button
               type="button"
               onClick={() => setRevealed(false)}
-              className="text-sm text-ink/70 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded-sm px-1"
+              className="rounded-sm px-1 text-sm text-ink/70 underline decoration-ink/30 underline-offset-4 hover:text-ink hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
             >
               收起提示
             </button>
@@ -51,40 +62,29 @@ export default function PracticeForm({ question }: Props) {
       </section>
 
       {revealed && (
-        <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-          <HintCard
-            label="為什麼考這題"
-            code="WHY"
-            items={question.why_asked}
-            tone="slate"
-          />
-          <HintCard
+        <div className="space-y-8">
+          <HintBlock label="為什麼考這題" items={question.why_asked} />
+          <HintBlock
             label="面試官期待什麼"
-            code="EXPECT"
             items={question.what_they_expect}
-            tone="slate"
           />
-          <HintCard
+          <HintBlock
             label="你該這樣答"
-            code="DO"
             items={question.how_to_answer}
-            tone="emerald"
+            tone="do"
           />
           {question.what_to_avoid && question.what_to_avoid.length > 0 && (
-            <HintCard
+            <HintBlock
               label="別踩這些雷"
-              code="AVOID"
               items={question.what_to_avoid}
-              tone="amber"
+              tone="avoid"
             />
           )}
           {question.answer_outline && question.answer_outline.length > 0 && (
-            <HintCard
+            <HintBlock
               label="英文答題大綱"
-              code="OUTLINE"
               items={question.answer_outline}
-              tone="slate"
-              mono
+              english
             />
           )}
         </div>
@@ -93,51 +93,35 @@ export default function PracticeForm({ question }: Props) {
   )
 }
 
-type Tone = 'slate' | 'emerald' | 'amber'
-
-function HintCard({
+// 提示區塊：螢光黃線 = 該怎麼做、紅筆線 = 要避開、墨線 = 背景說明
+function HintBlock({
   label,
-  code,
   items,
-  tone,
-  mono = false,
+  tone = 'plain',
+  english = false,
 }: {
   label: string
-  code: string
   items: string[]
-  tone: Tone
-  mono?: boolean
+  tone?: 'plain' | 'do' | 'avoid'
+  english?: boolean
 }) {
-  const toneClass = {
-    slate: 'border-ink/15 bg-white',
-    emerald: 'border-mark bg-mark/13',
-    amber: 'border-mark bg-mark/13',
-  }[tone]
-
-  const codeToneClass = {
-    slate: 'bg-paper text-ink/70',
-    emerald: 'bg-mark/40 text-ink',
-    amber: 'bg-mark/40 text-ink',
+  const border = {
+    plain: 'border-ink/25',
+    do: 'border-mark',
+    avoid: 'border-pen',
   }[tone]
 
   return (
-    <section className={`rounded-lg border p-5 ${toneClass}`}>
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${codeToneClass}`}>
-          {code}
-        </span>
-        <span className="text-xs font-medium tracking-wide uppercase text-ink/65">
-          {label}
-        </span>
-      </div>
+    <section className={`border-l-4 pl-5 ${border}`}>
+      <h2 className="mb-3 text-lg font-bold">{label}</h2>
       <ul className="space-y-2">
         {items.map((item, i) => (
           <li
             key={i}
-            className={`text-sm leading-relaxed text-ink/80 flex gap-2 ${mono ? 'font-mono' : ''}`}
+            className="text-sm leading-relaxed text-ink/80"
+            translate={english ? 'no' : undefined}
           >
-            <span className="text-ink/60 shrink-0">·</span>
-            <span className="min-w-0">{item}</span>
+            {item}
           </li>
         ))}
       </ul>

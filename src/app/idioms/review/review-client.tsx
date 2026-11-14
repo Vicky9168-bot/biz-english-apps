@@ -2,6 +2,13 @@
 
 import { useMemo, useState } from 'react'
 import type { IdiomStatus } from './page'
+import {
+  EmptyNote,
+  IndexList,
+  IndexRow,
+  Mark,
+  SectionTitle,
+} from '@/app/page-kit'
 
 type Idiom = {
   id: string
@@ -31,12 +38,6 @@ const STATUS_LABEL: Record<IdiomStatus, string> = {
   wrong: '曾答錯',
   learned: '學過',
   new: '沒碰過',
-}
-
-const STATUS_TONE: Record<IdiomStatus, string> = {
-  wrong: 'bg-pen/15 text-pen',
-  learned: 'bg-mark/40 text-ink',
-  new: 'bg-paper text-ink/65',
 }
 
 type FilterKey = 'all' | 'wrong' | 'learned' | 'new'
@@ -77,9 +78,9 @@ export default function ReviewClient({ idioms, categoryMeta }: Props) {
             key={k}
             type="button"
             onClick={() => setFilter(k)}
-            className={`text-xs px-3 py-1.5 rounded-full border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
+            className={`text-sm px-3 py-1.5 rounded-full border transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
               filter === k
-                ? 'border-ink bg-ink text-white'
+                ? 'border-ink bg-ink text-paper'
                 : 'border-ink/15 bg-white text-ink/80 hover:border-ink/40'
             }`}
           >
@@ -96,65 +97,53 @@ export default function ReviewClient({ idioms, categoryMeta }: Props) {
       </div>
 
       {grouped.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-ink/25 bg-white p-10 text-center text-sm text-ink/65">
-          這個篩選沒有俚語
-        </div>
+        <EmptyNote>這個篩選沒有俚語</EmptyNote>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-10">
           {grouped.map(([cat, list]) => {
             const meta = categoryMeta[cat]
             return (
               <section key={cat}>
-                <div className="flex items-baseline gap-2 mb-3">
-                  <span
-                    className={`text-xs font-mono font-semibold px-2 py-0.5 rounded border ${meta?.color ?? ''}`}
-                  >
-                    {meta?.label ?? cat}
-                  </span>
-                  <span className="text-xs text-ink/65 font-mono">
-                    {list.length}
-                  </span>
-                </div>
-                <ul className="grid gap-3 sm:grid-cols-2">
+                <SectionTitle title={meta?.label ?? cat} hint={`${list.length} 個`} />
+                <IndexList>
                   {list.map((i) => (
-                    <li
+                    <IndexRow
                       key={i.id}
-                      className="rounded-lg border border-ink/15 bg-white p-4"
-                    >
-                      <div className="flex items-start justify-between gap-2 mb-1">
-                        <div
-                          className="text-base font-semibold text-ink"
-                          translate="no"
-                        >
-                          {i.idiom}
-                        </div>
-                        <span
-                          className={`text-[10px] font-mono px-1.5 py-0.5 rounded shrink-0 ${STATUS_TONE[i.status]}`}
-                        >
-                          {STATUS_LABEL[i.status]}
-                        </span>
-                      </div>
-                      <div className="text-sm text-ink/80 mb-2">
-                        {i.meaning_zh}
-                      </div>
-                      <p
-                        className="text-xs text-ink/70 italic border-l-2 border-ink/15 pl-2 mb-1"
-                        translate="no"
-                      >
-                        &ldquo;{i.example_en}&rdquo;
-                      </p>
-                      <p className="text-xs text-ink/65">{i.example_zh}</p>
-                      {i.formal_alt && (
-                        <div className="mt-2 text-[11px] text-ink/65">
-                          <span className="font-mono text-ink/60">
-                            formal:
-                          </span>{' '}
-                          <span translate="no">{i.formal_alt}</span>
-                        </div>
-                      )}
-                    </li>
+                      title={i.idiom}
+                      translateTitle={false}
+                      desc={
+                        <>
+                          {i.meaning_zh}
+                          <span
+                            className="mt-2 block border-l-2 border-ink/25 pl-3 italic text-ink/75"
+                            translate="no"
+                          >
+                            &ldquo;{i.example_en}&rdquo;
+                          </span>
+                          <span className="mt-1 block text-ink/65">
+                            {i.example_zh}
+                          </span>
+                          {i.formal_alt && (
+                            <span className="mt-1 block text-ink/65">
+                              正式說法：<span translate="no">{i.formal_alt}</span>
+                            </span>
+                          )}
+                        </>
+                      }
+                      aside={
+                        i.status === 'wrong' ? (
+                          <span className="font-semibold text-pen">
+                            {STATUS_LABEL[i.status]}
+                          </span>
+                        ) : i.status === 'learned' ? (
+                          <Mark>{STATUS_LABEL[i.status]}</Mark>
+                        ) : (
+                          STATUS_LABEL[i.status]
+                        )
+                      }
+                    />
                   ))}
-                </ul>
+                </IndexList>
               </section>
             )
           })}

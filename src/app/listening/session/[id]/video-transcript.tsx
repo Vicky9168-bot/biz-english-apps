@@ -276,7 +276,7 @@ export function VideoTranscript({
         }`}
       >
         <div
-          className={`aspect-video self-start overflow-hidden rounded-lg border border-ink/15 bg-black ${
+          className={`aspect-video self-start overflow-hidden rounded-sm border border-ink/15 bg-black ${
             showTranscript ? 'lg:col-span-3' : ''
           }`}
         >
@@ -303,7 +303,7 @@ export function VideoTranscript({
               ref={listRef}
               onWheel={pauseAutoScroll}
               onTouchMove={pauseAutoScroll}
-              className="absolute inset-0 overflow-y-auto rounded-lg border border-ink/15 bg-white p-2"
+              className="absolute inset-0 overflow-y-auto border border-ink/15 bg-white p-2"
               aria-label={mode === 'zh' ? '中文逐字稿' : '英文逐字稿'}
             >
               {transcript.map((line, i) => {
@@ -319,15 +319,15 @@ export function VideoTranscript({
                     onClick={() => seekTo(line.start)}
                     aria-current={active ? 'true' : undefined}
                     disabled={apiFailed}
-                    className={`flex w-full gap-3 rounded-md px-3 py-2 text-left text-sm leading-relaxed transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
+                    className={`flex w-full gap-3 rounded-sm px-3 py-2 text-left text-sm leading-relaxed transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
                       active
-                        ? 'bg-ink text-white'
+                        ? 'bg-mark/50 font-medium text-ink'
                         : 'text-ink/70 hover:bg-paper'
                     } ${apiFailed ? 'cursor-default' : 'cursor-pointer'}`}
                   >
                     <span
-                      className={`shrink-0 pt-0.5 font-mono text-[11px] tabular-nums ${
-                        active ? 'text-white/60' : 'text-ink/60'
+                      className={`shrink-0 pt-0.5 font-display text-xs tabular-nums ${
+                        active ? 'text-ink/70' : 'text-ink/60'
                       }`}
                     >
                       {formatTime(line.start)}
@@ -343,11 +343,11 @@ export function VideoTranscript({
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-xs text-ink/65">字幕</span>
+          <span className="text-sm text-ink/65">字幕</span>
           <div
             role="group"
             aria-label="字幕模式"
-            className="flex rounded-md border border-ink/25 bg-white p-0.5"
+            className="flex rounded-sm border border-ink/25 bg-white p-0.5"
           >
             {SUBTITLE_MODES.map((m) => (
               <button
@@ -355,9 +355,9 @@ export function VideoTranscript({
                 type="button"
                 onClick={() => writeMode(m.value)}
                 aria-pressed={mode === m.value}
-                className={`rounded px-3 py-1 text-xs transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
+                className={`rounded-sm px-3 py-1 text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
                   mode === m.value
-                    ? 'bg-ink text-white'
+                    ? 'bg-ink text-paper'
                     : 'text-ink/80 hover:bg-paper'
                 }`}
               >
@@ -373,11 +373,11 @@ export function VideoTranscript({
             onClick={onStartQuiz}
             className={`rounded-md px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
               ended
-                ? 'bg-ink text-white hover:bg-ink'
-                : 'border border-ink/25 bg-white text-ink/80 hover:bg-paper'
+                ? 'bg-ink text-paper hover:bg-ink/85'
+                : 'border border-ink/25 text-ink hover:bg-white'
             }`}
           >
-            聽完了，開始練習題目 ↓
+            聽完了，開始練習題目
           </button>
         )}
       </div>
