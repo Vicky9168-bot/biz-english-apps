@@ -49,6 +49,13 @@ export default async function CharadesHome() {
     (weekCorrect ?? []).map((r) => r.word_id).filter(Boolean)
   ).size
 
+  // 我的單字本有幾個字，決定「用我的生字玩」能不能開始
+  const { count: bankCount } = await supabase
+    .from('user_words')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+  const myWords = bankCount ?? 0
+
   const done = (todayCount ?? 0) >= DAILY_TARGET
   const remaining = Math.max(0, DAILY_TARGET - (todayCount ?? 0))
 
@@ -105,6 +112,33 @@ export default async function CharadesHome() {
             />
           </IndexList>
           <p className="mt-3 text-sm text-ink/65">需要允許瀏覽器使用麥克風</p>
+        </section>
+
+        <section className="mb-10">
+          <SectionTitle
+            title="用我的生字玩"
+            hint="不計入排行榜"
+          />
+          <IndexList>
+            <IndexRow
+              href="/charades/session?mode=user_describes&source=mine"
+              disabled={myWords === 0}
+              title="我來描述（我的生字）"
+              desc={
+                myWords === 0
+                  ? '單字本還是空的，先去讀文章把不熟的字存起來'
+                  : `從單字本的 ${myWords} 個字抽 5 題，優先出你常答錯的`
+              }
+              aside={myWords === 0 ? undefined : '開始'}
+            />
+            <IndexRow
+              href="/charades/session?mode=ai_describes&source=mine"
+              disabled={myWords === 0}
+              title="AI 來描述（我的生字）"
+              desc="AI 描述你單字本裡的字，你用英文猜"
+              aside={myWords === 0 ? undefined : '開始'}
+            />
+          </IndexList>
         </section>
 
         <section>

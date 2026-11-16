@@ -7,7 +7,7 @@ import type { Vocabulary } from '@/lib/supabase/types'
 export default async function CharadesSessionPage({
   searchParams,
 }: {
-  searchParams: Promise<{ mode?: string }>
+  searchParams: Promise<{ mode?: string; source?: string }>
 }) {
   const supabase = await createClient()
   const {
@@ -28,6 +28,48 @@ export default async function CharadesSessionPage({
   const mode = (params.mode === 'ai_describes' ? 'ai_describes' : 'user_describes') as
     | 'user_describes'
     | 'ai_describes'
+
+  // 用我的生字玩：從單字本抽字，不走固定詞庫的選字邏輯
+  if (params.source === 'mine') {
+    const words = await pickFromWordBank(supabase, user.id)
+    if (words.length === 0) {
+      return (
+        <main className="flex-1 flex items-center justify-center bg-paper px-6 py-12">
+          <div className="max-w-md border-l-4 border-mark pl-5">
+            <h2 className="text-2xl font-bold text-ink mb-2">單字本還是空的</h2>
+            <p className="text-ink/70 mb-6">
+              先去讀一篇文章，點不熟的單字存起來，就能用它們玩比手畫腳。
+            </p>
+            <Link
+              href="/reading"
+              className="inline-block rounded-md bg-ink px-4 py-2 text-sm font-semibold text-paper hover:bg-ink/85"
+            >
+              去讀文章
+            </Link>
+          </div>
+        </main>
+      )
+    }
+    return (
+      <SessionClient
+        words={words}
+        mode={mode}
+        wordSource="mine"
+        savedWords={[]}
+        profile={{
+          job_title: profile.job_title,
+          industry: profile.industry,
+        }}
+      />
+    )
+  }
+
+  // 已經在單字本的字：結算時不再提示「加入單字本」
+  const { data: bankRows } = await supabase
+    .from('user_words')
+    .select('word')
+    .eq('user_id', user.id)
+  const savedWords = (bankRows ?? []).map((r) => (r.word as string).toLowerCase())
 
   // Fetch words directly (avoid HTTP round-trip for SSR)
   const level = profile.proficiency_level ?? 3
@@ -157,10 +199,56 @@ export default async function CharadesSessionPage({
     <SessionClient
       words={words}
       mode={mode}
+      wordSource="bank"
+      savedWords={savedWords}
       profile={{
         job_title: profile.job_title,
         industry: profile.industry,
       }}
     />
   )
+}
+
+const SESSION_SIZE = 5
+const VOCAB_POS = ['noun', 'verb', 'adjective', 'adverb', 'phrase'] as const
+
+// 從「我的單字本」抽 5 個字：答錯比答對多的先出，同分隨機。
+// 轉成練習元件使用的 Vocabulary 形狀，id 是 user_words 的 id（儲存時會另外標記來源）。
+async function pickFromWordBank(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string
+): Promise<Vocabulary[]> {
+  const { data } = await supabase
+    .from('user_words')
+    .select(
+      'id, word, pos, meaning_zh, meaning_en, example_en, correct_count, wrong_count, user_word_contexts(sentence)'
+    )
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(300)
+
+  const rows = [...(data ?? [])]
+  for (let i = rows.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[rows[i], rows[j]] = [rows[j], rows[i]]
+  }
+  rows.sort(
+    (a, b) => b.wrong_count - b.correct_count - (a.wrong_count - a.correct_count)
+  )
+
+  return rows.slice(0, SESSION_SIZE).map((w) => {
+    const contexts = (w.user_word_contexts ?? []) as Array<{ sentence: string }>
+    const pos = VOCAB_POS.find((p) => p === w.pos) ?? null
+    return {
+      id: w.id as string,
+      word: w.word as string,
+      part_of_speech: pos,
+      difficulty: 3,
+      scenario_tags: [],
+      definition_en: (w.meaning_en as string | null) ?? null,
+      definition_zh: w.meaning_zh as string,
+      example_sentence: (w.example_en as string | null) ?? contexts[0]?.sentence ?? null,
+      audio_url: null,
+    }
+  })
 }

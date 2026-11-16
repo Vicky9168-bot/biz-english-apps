@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { ExitButton } from '../../back-button'
 import type { Vocabulary } from '@/lib/supabase/types'
 import { Mark, Pen } from '@/app/page-kit'
+import { AddToWordBank } from './add-to-word-bank'
 
 const MAX_ATTEMPTS = 3
 const MAX_RECORDING_MS = 30000
@@ -29,15 +30,26 @@ type WordResult = {
   attempts: Attempt[]
   guessedCorrectly: boolean
   explanation: Explanation | null
+  vocab: Vocabulary
 }
 
 interface SessionClientProps {
   words: Vocabulary[]
   mode: 'user_describes' | 'ai_describes'
+  // bank = 固定詞庫；mine = 我的單字本（words 的 id 是 user_words.id）
+  wordSource: 'bank' | 'mine'
+  // 已經在單字本裡的字（小寫），結算時不再提示加入
+  savedWords: string[]
   profile: { job_title: string | null; industry: string | null }
 }
 
-export function SessionClient({ words, mode, profile }: SessionClientProps) {
+export function SessionClient({
+  words,
+  mode,
+  wordSource,
+  savedWords,
+  profile,
+}: SessionClientProps) {
   const router = useRouter()
   const [wordIdx, setWordIdx] = useState(0)
   const [results, setResults] = useState<WordResult[]>([])
@@ -385,6 +397,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
       attempts: currentAttempts,
       guessedCorrectly: correct,
       explanation,
+      vocab: currentWord,
     }
 
     const newResults = [...results, result]
@@ -447,7 +460,7 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             results: finalResults.map((r) => ({
-              wordId: r.wordId,
+              ...(wordSource === 'mine' ? { userWordId: r.wordId } : { wordId: r.wordId }),
               mode,
               attempts: r.attempts.length,
               guessedCorrectly: r.guessedCorrectly,
@@ -478,7 +491,15 @@ export function SessionClient({ words, mode, profile }: SessionClientProps) {
   // ============ RENDER ============
 
   if (phase === 'complete') {
-    return <CompleteView results={results} totalStars={totalStars} feedback={feedback} />
+    return (
+      <CompleteView
+        results={results}
+        totalStars={totalStars}
+        feedback={feedback}
+        wordSource={wordSource}
+        savedWords={savedWords}
+      />
+    )
   }
 
   if (phase === 'saving') {
@@ -910,9 +931,13 @@ function CompleteView({
   results,
   totalStars,
   feedback,
+  wordSource,
+  savedWords,
 }: {
   results: WordResult[]
   totalStars: number
+  wordSource: 'bank' | 'mine'
+  savedWords: string[]
   feedback: {
     grammar_errors?: Array<{ original: string; corrected: string; explanation_zh: string }>
     better_expressions?: Array<{ you_said: string; better: string; why_zh: string }>
@@ -989,6 +1014,29 @@ function CompleteView({
             ))}
           </ul>
         </section>
+
+        {/* 沒猜中（0 星）的詞庫單字：一鍵加入單字本。單字本裡的字本來就在，不用提示 */}
+        {wordSource === 'bank' && (
+          <AddToWordBank
+            savedWords={savedWords}
+            candidates={results
+              .filter((r) => !r.guessedCorrectly)
+              .flatMap((r) => {
+                const meaningZh = r.vocab.definition_zh ?? r.vocab.definition_en
+                if (!meaningZh) return []
+                return [
+                  {
+                    vocabularyId: r.vocab.id,
+                    word: r.vocab.word,
+                    pos: r.vocab.part_of_speech,
+                    meaningZh,
+                    meaningEn: r.vocab.definition_en,
+                    example: r.vocab.example_sentence,
+                  },
+                ]
+              })}
+          />
+        )}
 
         {/* AI 回饋 */}
         {feedback && (

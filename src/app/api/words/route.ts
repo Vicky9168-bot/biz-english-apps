@@ -4,7 +4,8 @@ import { isWordSourceType } from '@/lib/words'
 
 export const runtime = 'nodejs'
 
-const WORD_RE = /^[A-Za-z][A-Za-z'’-]{0,39}$/
+// 單字或片語（可含空格、連字號、撇號），例如 leverage、bottom line、state-of-the-art
+const WORD_RE = /^[A-Za-z][A-Za-z'’ -]{0,59}$/
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 const clean = (v: unknown, max: number) =>
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await request.json().catch(() => null)
-  const word = clean(body?.word, 40)?.toLowerCase()
+  const word = clean(body?.word, 60)?.toLowerCase().replace(/\s+/g, ' ')
   const meaningZh = clean(body?.meaning_zh, 200)
   if (!word || !WORD_RE.test(word) || !meaningZh) {
     return NextResponse.json({ error: 'invalid word' }, { status: 400 })
@@ -79,7 +80,7 @@ export async function POST(request: Request) {
 
   const sentence = clean(body?.sentence, 500)
   if (sentence) {
-    const surface = clean(body?.surface_form, 40)
+    const surface = clean(body?.surface_form, 60)
     const { error } = await supabase.from('user_word_contexts').upsert(
       {
         user_word_id: wordId,
