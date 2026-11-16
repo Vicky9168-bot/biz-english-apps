@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { SAVED_WORD_SELECT, toSavedWord } from '@/lib/words'
 import { AppNav } from '../../site-nav'
 import { PageHeader } from '../../page-kit'
+import { GuideVideo } from '../../guide-video'
 import { VocabClient } from './vocab-client'
 
 export default async function ReadingVocabPage() {
@@ -26,6 +27,7 @@ export default async function ReadingVocabPage() {
           title="我的生字本"
           subtitle="在各處存下來的單字。用原本的句子挖空，選出正確意思，越常答錯的越先出現。"
         />
+        <GuideVideo variant="collapsible" />
         <VocabClient
           initialWords={(data ?? []).map((row) =>
             toSavedWord(row as unknown as Parameters<typeof toSavedWord>[0])

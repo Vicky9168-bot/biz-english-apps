@@ -1,0 +1,23 @@
+{
+  "name": "biz-english-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "單字學習教學影片（Remotion）。網站本體不依賴這個資料夾，只使用渲染出來的 public/videos/*",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts WordGuide ../public/videos/word-guide.mp4 --codec=h264 --crf=27",
+    "poster": "remotion still src/index.ts WordGuide ../public/videos/word-guide-poster.jpg --frame=120 --image-format=jpeg --jpeg-quality=85",
+    "render:charades": "remotion render src/index.ts CharadesGuide ../public/videos/charades-guide.mp4 --codec=h264 --crf=27",
+    "poster:charades": "remotion still src/index.ts CharadesGuide ../public/videos/charades-guide-poster.jpg --frame=45 --image-format=jpeg --jpeg-quality=85"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.544",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "remotion": "4.0.544"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "typescript": "^5"
+  }
+}

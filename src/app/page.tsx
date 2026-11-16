@@ -8,6 +8,7 @@ import { getLearningStats } from '@/lib/learning-stats'
 import { FEATURES, FEATURE_GROUPS, HOME_CAROUSEL_KEYS } from '@/lib/constants'
 import { HomeCarousel } from './home-carousel'
 import { SiteNav } from './site-nav'
+import { HomeTour } from './home-tour'
 
 // 首頁示範：兩句常見的職場英文，被紅筆改成道地說法
 const REDLINE_EDITS = [
@@ -25,7 +26,12 @@ const REDLINE_EDITS = [
   },
 ] as const
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ tour?: string }>
+}) {
+  const { tour } = await searchParams
   const supabase = await createClient()
   const {
     data: { user },
@@ -69,12 +75,12 @@ export default async function Home() {
         <div className="mx-auto grid max-w-6xl gap-12 px-6 py-14 md:py-20 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-16">
           <div>
             <h1 className="text-balance text-[clamp(2.25rem,5vw,3.25rem)] font-bold leading-[1.15]">
-              讓你的英文，聽起來像做過這份工作
+              開口說職場英文，AI 陪你練到上場
             </h1>
             <p className="mt-5 max-w-md text-base leading-relaxed text-ink/70">
               {user
-                ? '每天一點英文，累積成為職場上的即戰力。'
-                : '依你的職位與產業出題，練聽力、口說、履歷與面試，AI 逐句幫你改。'}
+                ? '每天練一點口說，AI 逐句幫你改，累積成職場上的即戰力。'
+                : '依你的職位與產業出題，練口說、聽力、履歷與面試，AI 逐句幫你改。'}
             </p>
             {!user && (
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -102,6 +108,7 @@ export default async function Home() {
       {user && (
         <section
           aria-label="學習紀錄"
+          data-tour="stats"
           className="border-b border-ink/10 bg-white"
         >
           <div className="mx-auto grid max-w-6xl grid-cols-2 divide-x divide-ink/10 px-6">
@@ -144,6 +151,7 @@ export default async function Home() {
           return (
             <section
               key={group.key}
+              data-tour={`group-${group.key}`}
               className="mt-16 grid gap-6 lg:grid-cols-[15rem_1fr] lg:gap-12"
             >
               <div>
@@ -159,6 +167,7 @@ export default async function Home() {
                     title={f.title}
                     desc={f.desc}
                     tag={f.tag}
+                    tourId={`feature-${f.key}`}
                   />
                 ))}
               </div>
@@ -171,6 +180,7 @@ export default async function Home() {
         {user && (
           <Link
             href="/progress"
+            data-tour="progress-link"
             className="mb-4 inline-block rounded-sm font-semibold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
           >
             看完整成就
@@ -181,6 +191,7 @@ export default async function Home() {
           <span translate="no">with ironv makes you happy every day.</span>
         </p>
       </footer>
+      {user && <HomeTour userId={user.id} force={tour === '1'} />}
     </main>
   )
 }
@@ -256,16 +267,19 @@ function FeatureRow({
   title,
   desc,
   tag,
+  tourId,
 }: {
   href: string
   icon: LucideIcon
   title: string
   desc: string
   tag: string
+  tourId: string
 }) {
   return (
     <Link
       href={href}
+      data-tour={tourId}
       className="group grid grid-cols-[4.5rem_1fr_auto] items-start gap-x-4 border-t border-ink/15 px-2 py-6 transition-colors hover:bg-white/70 focus-visible:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink/40 sm:gap-x-6"
     >
       <span className="pt-1 font-display text-sm font-semibold text-ink/65">

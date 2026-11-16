@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { READING_CATEGORIES, todayInTaipei } from '@/lib/reading'
 import { AppNav } from '../site-nav'
+import { GuideVideo } from '../guide-video'
 import {
   Callout,
   IndexList,
@@ -53,6 +54,8 @@ export default async function ReadingHome() {
           title="每日商業閱讀"
           subtitle="每天從國際媒體挑出最新的商業新聞，用英文解說。涵蓋財金、行銷、AI 趨勢、科技與國際議題，邊讀邊查生字，存起來再練習。"
         />
+
+        <GuideVideo variant="collapsible" />
 
         <StatStrip
           items={[

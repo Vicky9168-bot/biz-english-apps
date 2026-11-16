@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AppNav } from '../site-nav'
+import { GuideVideo } from '../guide-video'
 import { BookOpen, Target } from 'lucide-react'
 import {
   IndexList,
@@ -68,6 +69,8 @@ export default async function CharadesHome() {
           title="比手畫腳單字"
           subtitle="用英文描述目標單字，讓 AI 猜出來 — 訓練口說表達與商務詞彙。"
         />
+
+        <GuideVideo variant="collapsible" video="charades" />
 
         <StatStrip
           items={[

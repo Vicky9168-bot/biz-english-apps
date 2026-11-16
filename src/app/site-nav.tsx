@@ -20,6 +20,13 @@ export function SiteNav({ user }: { user: NavUser | null }) {
         </Link>
         <div className="flex items-center gap-4">
           <Link
+            href="/guide"
+            data-tour="nav-guide"
+            className="rounded-sm text-sm text-ink/70 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
+          >
+            新手指南
+          </Link>
+          <Link
             href="/pricing"
             className="rounded-sm text-sm text-ink/70 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
           >

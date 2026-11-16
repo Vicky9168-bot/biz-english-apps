@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Remotion 影片專案有自己的依賴與規則，不在網站的檢查範圍
+    "video/**",
   ]),
 ]);
 
