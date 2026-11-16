@@ -30,7 +30,8 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const pathname = request.nextUrl.pathname
-  const publicPaths = ['/', '/login', '/signup', '/auth', '/pricing']
+  // /api/reading/cron 沒有登入狀態，由路由自己用 CRON_SECRET 驗證
+  const publicPaths = ['/', '/login', '/signup', '/auth', '/pricing', '/api/reading/cron']
   const isPublic = publicPaths.some(
     (p) => pathname === p || pathname.startsWith(`${p}/`)
   )

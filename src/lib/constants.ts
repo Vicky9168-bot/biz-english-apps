@@ -215,6 +215,7 @@ export type FeatureKey =
   | 'listening'
   | 'speaking'
   | 'idioms'
+  | 'reading'
   | 'resume'
   | 'interview'
 
@@ -278,6 +279,15 @@ export const FEATURES: readonly {
     title: '商務俚語練習',
     desc: '100 個會議、談判常用 idioms · 情境選擇題',
     tag: 'Part 4',
+    group: 'business',
+  },
+  {
+    key: 'reading',
+    href: '/reading',
+    emoji: '📰',
+    title: '每日商業閱讀',
+    desc: '國際媒體每日新聞解說 · 點字查詞 + 生字本練習',
+    tag: '每日',
     group: 'business',
   },
   {

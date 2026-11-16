@@ -4,6 +4,7 @@ import {
   Handshake,
   Headphones,
   Languages,
+  Newspaper,
   Presentation,
   type LucideIcon,
 } from 'lucide-react'
@@ -15,6 +16,7 @@ export const FEATURE_ICONS: Record<FeatureKey, LucideIcon> = {
   listening: Headphones,
   speaking: Presentation,
   idioms: Handshake,
+  reading: Newspaper,
   resume: FileText,
   interview: BriefcaseBusiness,
 }
