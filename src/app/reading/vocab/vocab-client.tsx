@@ -2,23 +2,13 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { WORD_SOURCE_LABELS, type SavedWord, type WordContext } from '@/lib/words'
 import { EmptyNote, IndexList, Mark, Pen, SectionTitle } from '../../page-kit'
-
-export type SavedWord = {
-  id: string
-  word: string
-  surface_form: string | null
-  pos: string | null
-  meaning_zh: string
-  meaning_en: string | null
-  example_en: string | null
-  context_sentence: string | null
-  correct_count: number
-  wrong_count: number
-}
 
 type Question = {
   word: SavedWord
+  // 這題用哪一句當語境（同一個字有多個出現場合時，每輪隨機挑一句）
+  context: WordContext | null
   // 空陣列表示單字卡模式（單字太少或意思重複，湊不出四個選項）
   options: string[]
   correctIndex: number
@@ -42,6 +32,15 @@ function blankOut(sentence: string | null, surface: string) {
   return re.test(sentence) ? sentence.replace(re, '_____') : null
 }
 
+// 優先挑能挖空的句子；都不行就挑任一句（單字卡模式照樣能顯示）
+function pickContext(word: SavedWord): WordContext | null {
+  const usable = word.contexts.filter(
+    (c) => blankOut(c.sentence, c.surface_form ?? word.word) !== null
+  )
+  const pool = usable.length > 0 ? usable : word.contexts
+  return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null
+}
+
 // 答錯越多越優先，同分隨機
 function buildRound(words: SavedWord[]): Question[] {
   const picked = shuffle(words)
@@ -50,10 +49,11 @@ function buildRound(words: SavedWord[]): Question[] {
   const meanings = [...new Set(words.map((w) => w.meaning_zh))]
 
   return picked.map((word) => {
+    const context = pickContext(word)
     const others = shuffle(meanings.filter((m) => m !== word.meaning_zh)).slice(0, 3)
-    if (others.length < 3) return { word, options: [], correctIndex: -1 }
+    if (others.length < 3) return { word, context, options: [], correctIndex: -1 }
     const options = shuffle([word.meaning_zh, ...others])
-    return { word, options, correctIndex: options.indexOf(word.meaning_zh) }
+    return { word, context, options, correctIndex: options.indexOf(word.meaning_zh) }
   })
 }
 
@@ -77,7 +77,7 @@ export function VocabClient({ initialWords }: { initialWords: SavedWord[] }) {
           : w
       )
     )
-    fetch('/api/reading/words', {
+    fetch('/api/words', {
       method: 'PATCH',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ id, correct }),
@@ -85,7 +85,7 @@ export function VocabClient({ initialWords }: { initialWords: SavedWord[] }) {
   }
 
   const remove = async (id: string) => {
-    const res = await fetch(`/api/reading/words?id=${encodeURIComponent(id)}`, {
+    const res = await fetch(`/api/words?id=${encodeURIComponent(id)}`, {
       method: 'DELETE',
     })
     if (res.ok) setWords((prev) => prev.filter((w) => w.id !== id))
@@ -152,8 +152,9 @@ export function VocabClient({ initialWords }: { initialWords: SavedWord[] }) {
       )
     }
 
-    const surface = q.word.surface_form ?? q.word.word
-    const blanked = blankOut(q.word.context_sentence, surface)
+    const blanked = q.context
+      ? blankOut(q.context.sentence, q.context.surface_form ?? q.word.word)
+      : null
     const isCard = q.options.length === 0
 
     return (
@@ -176,9 +177,9 @@ export function VocabClient({ initialWords }: { initialWords: SavedWord[] }) {
             <p className="font-display text-3xl font-bold" translate="no">
               {q.word.word}
             </p>
-            {q.word.context_sentence && (
+            {q.context && (
               <p className="mt-3 text-base leading-relaxed text-ink/80" translate="no">
-                {q.word.context_sentence}
+                {q.context.sentence}
               </p>
             )}
             {!revealed ? (
@@ -323,12 +324,22 @@ export function VocabClient({ initialWords }: { initialWords: SavedWord[] }) {
                     {w.pos}
                   </span>
                 )}
+                <span className="ml-2 rounded-full border border-ink/20 px-2 py-0.5 text-xs text-ink/65">
+                  {WORD_SOURCE_LABELS[w.source_type]}
+                </span>
               </p>
               <p className="mt-1 text-sm">{w.meaning_zh}</p>
-              {w.context_sentence && (
-                <p className="mt-2 text-sm leading-relaxed text-ink/70" translate="no">
-                  {w.context_sentence}
+              {w.contexts.slice(0, 2).map((c) => (
+                <p
+                  key={c.sentence}
+                  className="mt-2 text-sm leading-relaxed text-ink/70"
+                  translate="no"
+                >
+                  {c.sentence}
                 </p>
+              ))}
+              {w.contexts.length > 2 && (
+                <p className="mt-1 text-xs text-ink/55">還有 {w.contexts.length - 2} 個語境</p>
               )}
               {w.correct_count + w.wrong_count > 0 && (
                 <p className="mt-2 text-xs text-ink/55">

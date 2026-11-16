@@ -158,18 +158,19 @@ export function ReaderClient({
       if (saved.has(e.word)) return
       setSaving(true)
       try {
-        const res = await fetch('/api/reading/words', {
+        const res = await fetch('/api/words', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({
             word: e.word,
-            surface_form: e.surface,
             pos: e.pos,
             meaning_zh: e.meaning_zh,
             meaning_en: e.meaning_en,
             example_en: e.example_en,
-            context_sentence: e.context,
-            article_id: article.id,
+            source_type: 'reading',
+            source_id: article.id,
+            sentence: e.context,
+            surface_form: e.surface,
           }),
         })
         if (!res.ok) throw new Error('save failed')

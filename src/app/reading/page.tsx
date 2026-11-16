@@ -36,7 +36,7 @@ export default async function ReadingHome() {
   )
 
   const { data: saved } = await supabase
-    .from('reading_saved_words')
+    .from('user_words')
     .select('correct_count, wrong_count')
     .eq('user_id', user.id)
   const savedCount = saved?.length ?? 0

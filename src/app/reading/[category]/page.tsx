@@ -56,7 +56,7 @@ export default async function ReadingArticlePage({
   }
 
   const { data: saved } = await supabase
-    .from('reading_saved_words')
+    .from('user_words')
     .select('word')
     .eq('user_id', user.id)
 
