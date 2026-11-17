@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { Mark, Pen } from '@/app/page-kit'
+import { findIdiomSpan } from '@/lib/idiom-highlight'
 
 type Question = {
   id: string
@@ -154,8 +155,9 @@ export default function PracticeClient({
   const isAnswered = chosen !== null
   const isCorrect = chosen === q.correct_index
 
-  // 例句把 idiom 高亮
-  const highlighted = highlightIdiom(q.example_en, q.idiom)
+  // 例句把 idiom 畫線；萬一例句裡找不到，題目改成直接問這個俚語，
+  // 不然「畫線的俚語」會問得沒頭沒尾
+  const span = findIdiomSpan(q.example_en, q.idiom)
 
   return (
     <>
@@ -219,10 +221,22 @@ export default function PracticeClient({
         </div>
 
         <div className="text-sm text-ink/65 mb-2">
-          在這個情境裡，畫線的俚語是什麼意思？
+          {span
+            ? '在這個情境裡，畫線的俚語是什麼意思？'
+            : `在這個情境裡，「${q.idiom}」是什麼意思？`}
         </div>
         <p className="text-lg text-ink leading-relaxed mb-6">
-          {highlighted}
+          {span ? (
+            <>
+              {q.example_en.slice(0, span.start)}
+              <span className="hl-mark font-semibold text-ink">
+                {q.example_en.slice(span.start, span.end)}
+              </span>
+              {q.example_en.slice(span.end)}
+            </>
+          ) : (
+            q.example_en
+          )}
         </p>
 
         <ul className="border-b border-ink/15">
@@ -405,39 +419,5 @@ function EndStateCard({
         去學今日新題
       </Link>
     </div>
-  )
-}
-
-function escapeRegex(s: string) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-}
-
-function highlightIdiom(sentence: string, idiom: string) {
-  // 先把 placeholder 換成通配符再 escape，避免 double-escape
-  const PLACEHOLDER = '\u0001'
-  const withPlaceholder = idiom
-    .replace(/\b(someone|something|one'?s)\b/gi, PLACEHOLDER)
-  const escaped = escapeRegex(withPlaceholder).replace(
-    new RegExp(PLACEHOLDER, 'g'),
-    '\\S+'
-  )
-  let re: RegExp
-  try {
-    re = new RegExp(`(${escaped})`, 'i')
-  } catch {
-    re = new RegExp(`(${escapeRegex(idiom)})`, 'i')
-  }
-  const parts = sentence.split(re)
-  return parts.map((part, i) =>
-    part && re.test(part) ? (
-      <span
-        key={i}
-        className="hl-mark font-semibold text-ink"
-      >
-        {part}
-      </span>
-    ) : (
-      <span key={i}>{part}</span>
-    )
   )
 }
