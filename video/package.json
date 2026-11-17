@@ -13,7 +13,8 @@
     "poster:listening": "remotion still src/index.ts ListeningGuide ../public/videos/listening-guide-poster.jpg --frame=72 --image-format=jpeg --jpeg-quality=85",
     "render:speaking": "remotion render src/index.ts SpeakingGuide ../public/videos/speaking-guide.mp4 --codec=h264 --crf=27 --concurrency=2",
     "poster:speaking": "remotion still src/index.ts SpeakingGuide ../public/videos/speaking-guide-poster.jpg --frame=72 --image-format=jpeg --jpeg-quality=85",
-    "captions": "node scripts/build-captions.mjs"
+    "captions": "node scripts/build-captions.mjs",
+    "brand": "node scripts/export-brand.mjs"
   },
   "dependencies": {
     "@remotion/cli": "4.0.544",

@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'BizEnglish — 商務英語學習',
+  title: 'BizVoice — 商用英文口說練習',
   description: '為商務人士打造的英語學習平台：比手畫腳單字、聽力訓練、場景框架練習',
 }
 

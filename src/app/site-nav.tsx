@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { BackButton } from './back-button'
+import { BrandLogo } from './brand-logo'
 
 export type NavUser = {
   email: string | null
@@ -13,10 +14,10 @@ export function SiteNav({ user }: { user: NavUser | null }) {
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
         <Link
           href="/"
-          className="font-display text-xl font-bold text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded-sm"
-          translate="no"
+          aria-label="BizVoice 首頁"
+          className="-ml-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
         >
-          BizEnglish
+          <BrandLogo />
         </Link>
         <div className="flex items-center gap-4">
           <Link
@@ -86,10 +87,10 @@ export function AppNav({ backHref = '/' }: { backHref?: string }) {
         <BackButton href={backHref} />
         <Link
           href="/"
-          className="font-display text-xl font-bold text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 rounded-sm"
-          translate="no"
+          aria-label="BizVoice 首頁"
+          className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
         >
-          BizEnglish
+          <BrandLogo className="h-9 w-auto" />
         </Link>
       </div>
     </nav>

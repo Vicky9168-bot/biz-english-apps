@@ -187,7 +187,7 @@ export default async function Home({
           </Link>
         )}
         <p>
-          © {new Date().getFullYear()} BizEnglish ·{' '}
+          © {new Date().getFullYear()} BizVoice ·{' '}
           <span translate="no">with ironv makes you happy every day.</span>
         </p>
       </footer>

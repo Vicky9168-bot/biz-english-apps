@@ -8,7 +8,7 @@ import { GuideVideo, type GuideVideoKey } from '../guide-video'
 import { IndexList, IndexRow, PageHeader, SectionTitle } from '../page-kit'
 
 export const metadata = {
-  title: '新手指南 · BizEnglish',
+  title: '新手指南 · BizVoice',
   description: '第一次來？1 分鐘教學影片、單字學習 4 步驟，以及每個功能該從哪裡開始。',
 }
 

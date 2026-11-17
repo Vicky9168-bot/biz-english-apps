@@ -131,7 +131,7 @@ export type TourStep = {
 
 export const TOUR_STEPS: TourStep[] = [
   {
-    title: '歡迎來到 BizEnglish',
+    title: '歡迎來到 BizVoice',
     description: '花 1 分鐘認識該從哪裡開始。想跳過隨時按 Esc 或右上角的 ✕。',
   },
   {

@@ -12,7 +12,7 @@ import {
 import { SiteNav } from '../site-nav'
 
 export const metadata = {
-  title: '方案與價格 · BizEnglish',
+  title: '方案與價格 · BizVoice',
   description: '免費體驗核心學習方法，升級 Pro 解鎖無限 AI 評分與完整求職題庫。',
 }
 

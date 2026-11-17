@@ -43,3 +43,7 @@ next-env.d.ts
 # Remotion 影片專案
 /video/node_modules
 /video/out
+
+# Logo 產生器的暫存（字體與虛擬環境不放進 git）
+/tools/brand/.venv
+/tools/brand/bricolage.ttf

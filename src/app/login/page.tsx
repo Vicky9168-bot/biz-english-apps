@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { BrandLogo } from '@/app/brand-logo'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -59,8 +60,8 @@ export default function LoginPage() {
   return (
     <main className="flex-1 flex items-center justify-center bg-paper px-6 py-12 text-ink">
       <div className="w-full max-w-md">
-        <Link href="/" className="block text-center mb-8">
-          <div className="font-display text-2xl font-bold text-ink" translate="no">BizEnglish</div>
+        <Link href="/" aria-label="BizVoice 首頁" className="mb-8 flex justify-center">
+          <BrandLogo className="h-12 w-auto" />
         </Link>
 
         <div className="rounded-lg border border-ink/15 bg-white p-8">
