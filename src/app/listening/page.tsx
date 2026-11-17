@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { StartButton } from './start-button'
 import { AppNav } from '../site-nav'
+import { GuideVideo } from '../guide-video'
 import {
   EmptyNote,
   IndexList,
@@ -62,6 +63,8 @@ export default async function ListeningHome() {
           title="聽力訓練"
           subtitle="AI 現場生成 60–90 秒商務對話，每題 3 道題目測抓實詞、細節、推論。"
         />
+
+        <GuideVideo variant="collapsible" video="listening" />
 
         <section className="mb-12">
           <SectionTitle title="今天要練哪個場景？" />

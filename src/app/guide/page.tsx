@@ -1,15 +1,22 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { FEATURES } from '@/lib/constants'
+import { FEATURES, type FeatureKey } from '@/lib/constants'
 import { FEATURE_ICONS } from '@/lib/feature-icons'
 import { FAQ, FEATURE_GUIDE, WORD_FLOW } from '@/lib/guide'
 import { SiteNav } from '../site-nav'
-import { GuideVideo } from '../guide-video'
+import { GuideVideo, type GuideVideoKey } from '../guide-video'
 import { IndexList, IndexRow, PageHeader, SectionTitle } from '../page-kit'
 
 export const metadata = {
   title: '新手指南 · BizEnglish',
   description: '第一次來？1 分鐘教學影片、單字學習 4 步驟，以及每個功能該從哪裡開始。',
+}
+
+// 有教學影片的功能：直接嵌在該功能的說明下方
+const FEATURE_VIDEOS: Partial<Record<FeatureKey, { video: GuideVideoKey; note: string }>> = {
+  charades: { video: 'charades', note: '25 秒看懂怎麼開始，沒有聲音，已預設開啟字幕。' },
+  listening: { video: 'listening', note: '30 秒看懂聽力訓練怎麼開始，沒有聲音，已預設開啟字幕。' },
+  speaking: { video: 'speaking', note: '30 秒看懂商業場景練習怎麼開始，沒有聲音，已預設開啟字幕。' },
 }
 
 const linkClass =
@@ -55,7 +62,7 @@ export default async function GuidePage() {
         <section className="mb-12">
           <GuideVideo variant="inline" />
           <p className="mt-3 text-sm text-ink/70">
-            影片沒有聲音，字幕在畫面內。下面有同樣內容的文字版。
+            影片沒有聲音，已預設開啟字幕。下面有同樣內容的文字版。
           </p>
         </section>
 
@@ -104,12 +111,10 @@ export default async function GuidePage() {
                         <li key={step}>{step}</li>
                       ))}
                     </ol>
-                    {f.key === 'charades' && (
+                    {FEATURE_VIDEOS[f.key] && (
                       <div className="mt-4 max-w-xl">
-                        <GuideVideo variant="inline" video="charades" />
-                        <p className="mt-2 text-sm text-ink/70">
-                          25 秒看懂怎麼開始，沒有聲音，字幕在畫面內。
-                        </p>
+                        <GuideVideo variant="inline" video={FEATURE_VIDEOS[f.key]!.video} />
+                        <p className="mt-2 text-sm text-ink/70">{FEATURE_VIDEOS[f.key]!.note}</p>
                       </div>
                     )}
                     <Link href={to(f.href)} className={`mt-4 inline-block text-sm ${linkClass}`}>

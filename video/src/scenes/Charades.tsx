@@ -1,6 +1,6 @@
 import React from 'react'
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion'
-import { BrowserFrame, C, Captions, Cursor, HL, StepHeader, at, fade } from '../theme'
+import { BrowserFrame, C, Cursor, HL, StepHeader, at, fade } from '../theme'
 import { MicButton, SessionTop } from './parts'
 
 const CLICK_ROW = 110
@@ -128,13 +128,6 @@ export const CharadesScene: React.FC = () => {
         </div>
       </BrowserFrame>
 
-      <Captions
-        items={[
-          { from: 0, to: 134, text: '點「用我的生字玩」，從單字本抽題' },
-          { from: 142, to: 300, text: '看到單字後，用英文描述它，不能直接說出這個字' },
-          { from: 300, to: 450, text: 'AI 猜中就拿星星；猜不中最多再試 3 次' },
-        ]}
-      />
 
       <Cursor
         clicks={[CLICK_ROW, CLICK_MIC]}

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AppNav } from '../site-nav'
+import { GuideVideo } from '../guide-video'
 import {
   EmptyNote,
   IndexList,
@@ -68,6 +69,8 @@ export default async function SpeakingHome() {
           title="商業場景練習"
           subtitle="用 STAR / PREP / SCQA / Pyramid 框架回答面試 · 主管 · 高層問題，錄音後 AI 給 4 大面向評分 + 逐句改寫 + 模範答案。"
         />
+
+        <GuideVideo variant="collapsible" video="speaking" />
 
         {/* 熱身影片 + 快速 cheat sheet */}
         <section className="mb-12">

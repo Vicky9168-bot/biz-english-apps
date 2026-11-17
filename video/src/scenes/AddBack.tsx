@@ -1,6 +1,6 @@
 import React from 'react'
 import { AbsoluteFill, useCurrentFrame } from 'remotion'
-import { BrowserFrame, C, Captions, Cursor, HL, StepHeader, at, fade } from '../theme'
+import { BrowserFrame, C, Cursor, HL, StepHeader, at, fade } from '../theme'
 
 const CLICK_ALL = 120
 
@@ -124,12 +124,6 @@ export const AddBackScene: React.FC = () => {
         </div>
       </BrowserFrame>
 
-      <Captions
-        items={[
-          { from: 0, to: 128, text: '一般模式結束後，沒猜中的字會列在結算畫面' },
-          { from: 128, to: 330, text: '按「全部加入」（或單字旁的「加入單字本」），它們就回到生字本' },
-        ]}
-      />
 
       <Cursor
         clicks={[CLICK_ALL]}

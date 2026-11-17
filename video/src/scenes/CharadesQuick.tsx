@@ -1,60 +1,23 @@
 import React from 'react'
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion'
-import { BrowserFrame, C, Captions, Cursor, HL, StepHeader, at, fade } from '../theme'
+import { BrowserFrame, C, Cursor, HL, StepHeader, at, fade } from '../theme'
 import { MicButton, SessionTop } from './parts'
+import { Closing, Hook } from './TitleScenes'
 
 // 比手畫腳新手短片（約 25 秒）：選模式 → 允許麥克風並用英文描述 → AI 猜、拿星星
 
 const TOTAL = 3
 
 // ---------- 開場 ----------
-export const QuickHook: React.FC = () => {
-  const frame = useCurrentFrame()
-  const { fps } = useVideoConfig()
-  const chips = ['選模式', '說英文', '看結果']
-
-  return (
-    <AbsoluteFill style={{ padding: '170px 260px' }}>
-      <div style={{ opacity: fade(frame, 2, 12), fontSize: 44, color: C.sub, fontWeight: 600 }}>
-        比手畫腳單字
-      </div>
-      <h1
-        style={{
-          margin: '14px 0 0',
-          fontSize: 150,
-          fontWeight: 800,
-          opacity: fade(frame, 6, 14),
-        }}
-      >
-        第一次玩？
-      </h1>
-      <p style={{ margin: '24px 0 0', fontSize: 62, fontWeight: 700, opacity: fade(frame, 16, 14) }}>
-        <HL>3 個動作</HL>，馬上上手
-      </p>
-      <div style={{ marginTop: 70, display: 'flex', gap: 28 }}>
-        {chips.map((c, i) => {
-          const pop = spring({ frame: frame - (34 + i * 10), fps, config: { damping: 200 } })
-          return (
-            <span
-              key={c}
-              style={{
-                opacity: pop,
-                transform: `translateY(${interpolate(pop, [0, 1], [20, 0])}px)`,
-                border: `3px solid ${C.ink}`,
-                borderRadius: 999,
-                padding: '10px 34px',
-                fontSize: 44,
-                fontWeight: 700,
-              }}
-            >
-              {i + 1}　{c}
-            </span>
-          )
-        })}
-      </div>
-    </AbsoluteFill>
-  )
-}
+export const QuickHook: React.FC = () => (
+  <Hook
+    kicker="比手畫腳單字"
+    title="第一次玩？"
+    highlight="3 個動作"
+    rest="，馬上上手"
+    chips={['選模式', '說英文', '看結果']}
+  />
+)
 
 // ---------- 步驟 1：選模式 ----------
 const MODE_CLICK = 120
@@ -133,12 +96,6 @@ export const QuickMode: React.FC = () => {
         </div>
       </BrowserFrame>
 
-      <Captions
-        items={[
-          { from: 0, to: 96, text: '進入「比手畫腳」，會看到兩種模式' },
-          { from: 96, to: 180, text: '第一次玩，選「我來描述」' },
-        ]}
-      />
       <Cursor
         clicks={[MODE_CLICK]}
         path={[
@@ -237,13 +194,6 @@ export const QuickDescribe: React.FC = () => {
         </div>
       </BrowserFrame>
 
-      <Captions
-        items={[
-          { from: 0, to: 80, text: '第一次會問麥克風權限，按「允許」' },
-          { from: 80, to: 188, text: '看到單字，按麥克風，用英文描述它' },
-          { from: 188, to: 240, text: '不能直接說出這個字' },
-        ]}
-      />
       <Cursor
         clicks={[PERMIT_CLICK, MIC_CLICK]}
         path={[
@@ -332,31 +282,19 @@ export const QuickResult: React.FC = () => {
         </div>
       </BrowserFrame>
 
-      <Captions
-        items={[
-          { from: 0, to: 70, text: 'AI 猜中，就拿星星' },
-          { from: 70, to: 150, text: '越快猜中，星星越多；最多可以試 3 次' },
-        ]}
-      />
     </AbsoluteFill>
   )
 }
 
 // ---------- 結尾 ----------
-export const QuickOutro: React.FC = () => {
-  const frame = useCurrentFrame()
-
-  return (
-    <AbsoluteFill style={{ padding: '200px 260px' }}>
-      <h1 style={{ margin: 0, fontSize: 130, fontWeight: 800, opacity: fade(frame, 4, 14) }}>
+export const QuickOutro: React.FC = () => (
+  <Closing
+    title={
+      <>
         現在就<HL>開始</HL>
-      </h1>
-      <p style={{ margin: '36px 0 0', fontSize: 58, fontWeight: 700, opacity: fade(frame, 20, 14) }}>
-        「比手畫腳」→「我來描述」
-      </p>
-      <p style={{ margin: '24px 0 0', fontSize: 44, color: C.sub, opacity: fade(frame, 34, 14) }}>
-        每輪 5 題，說錯也沒關係，多說就會進步
-      </p>
-    </AbsoluteFill>
-  )
-}
+      </>
+    }
+    line="「比手畫腳」→「我來描述」"
+    note="每輪 5 題，說錯也沒關係，多說就會進步"
+  />
+)

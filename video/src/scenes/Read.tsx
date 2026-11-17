@@ -1,6 +1,6 @@
 import React from 'react'
 import { AbsoluteFill, useCurrentFrame } from 'remotion'
-import { BrowserFrame, C, Captions, Cursor, HL, StepHeader, at, fade } from '../theme'
+import { BrowserFrame, C, Cursor, HL, StepHeader, at, fade } from '../theme'
 
 const CLICK_WORD = 110
 const CLICK_SAVE = 250
@@ -121,13 +121,6 @@ export const ReadScene: React.FC = () => {
         </div>
       </BrowserFrame>
 
-      <Captions
-        items={[
-          { from: 0, to: 108, text: '每天讀一篇商業英文文章' },
-          { from: 108, to: 246, text: '點到不熟的單字，右邊會顯示它在這句話的意思' },
-          { from: 246, to: 360, text: '按「存到生字本」，單字和原句就存起來了' },
-        ]}
-      />
 
       <Cursor
         clicks={[CLICK_WORD, CLICK_SAVE]}

@@ -167,3 +167,10 @@ body {
 .biz-tour .driver-popover-close-btn {
   color: rgb(26 36 48 / 0.65);
 }
+
+/* 教學影片的字幕（WebVTT）：沿用墨水底與白字，位置與大小由播放器決定，控制列出現時會自動避開 */
+video::cue {
+  background: rgb(26 36 48 / 0.88);
+  color: #fff;
+  font-family: inherit;
+}

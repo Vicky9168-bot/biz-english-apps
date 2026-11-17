@@ -1,6 +1,6 @@
 import React from 'react'
 import { AbsoluteFill, useCurrentFrame } from 'remotion'
-import { BrowserFrame, C, Captions, Cursor, HL, StepHeader, at, fade } from '../theme'
+import { BrowserFrame, C, Cursor, HL, StepHeader, at, fade } from '../theme'
 
 const CLICK_START = 110
 const SWAP = 130
@@ -183,13 +183,6 @@ export const VocabScene: React.FC = () => {
         </div>
       </BrowserFrame>
 
-      <Captions
-        items={[
-          { from: 0, to: 128, text: '到「我的生字本」，按「開始練習」' },
-          { from: 128, to: 270, text: '用原本的句子挖空，選出正確的意思' },
-          { from: 270, to: 390, text: '答錯越多的字，越早出現在練習裡' },
-        ]}
-      />
 
       <Cursor
         clicks={[CLICK_START, CLICK_OPTION]}

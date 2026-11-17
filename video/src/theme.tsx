@@ -115,50 +115,6 @@ export const BrowserFrame: React.FC<{ url: string; children: React.ReactNode }> 
   </div>
 )
 
-type Caption = { from: number; to: number; text: string }
-
-// 字幕：同一時間只顯示一句
-export const Captions: React.FC<{ items: Caption[] }> = ({ items }) => {
-  const frame = useCurrentFrame()
-  const active = items.find((i) => frame >= i.from && frame < i.to)
-  if (!active) return null
-  const opacity = interpolate(
-    frame,
-    [active.from, active.from + 8, active.to - 8, active.to],
-    [0, 1, 1, 0],
-    clamp
-  )
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 60,
-        display: 'flex',
-        justifyContent: 'center',
-        opacity,
-      }}
-    >
-      <div
-        style={{
-          background: C.ink,
-          color: '#fff',
-          fontSize: 46,
-          fontWeight: 600,
-          padding: '18px 40px',
-          borderRadius: 14,
-          maxWidth: 1640,
-          textAlign: 'center',
-          lineHeight: 1.35,
-        }}
-      >
-        {active.text}
-      </div>
-    </div>
-  )
-}
-
 type PathPoint = { f: number; x: number; y: number }
 
 // 滑鼠游標：依關鍵影格移動，clicks 內的影格會出現按下與擴散效果

@@ -55,17 +55,20 @@ export const FEATURE_GUIDE: Record<FeatureKey, { start: string; steps: string[] 
   listening: {
     start: '先學抓重點單字的策略，再進商務對話練習。',
     steps: [
-      '先看 Content Words 策略課，學會聽出關鍵實詞。',
-      '再開始商務對話練習：AI 現場生成約 60–90 秒的對話。',
-      '每段對話有 3 道題，測實詞、細節與推論。',
+      '第一次進聽力，會先上一堂 Content Words 小課，學會只抓實詞；之後可從「複習 Content Words」重看。',
+      '選一個場景（或隨機抽），按「開始今日聽力訓練」，AI 現場生成約 60–90 秒的對話。',
+      '播放音檔；聽不清楚可以調速度、從頭再聽，或顯示原文。',
+      '答 3 題（實詞、細節、推論），送出後馬上看正解和解說。',
+      '另有「從影片練習」：答完題目後可接著跟讀（Shadowing），AI 檢查發音與流暢度。',
     ],
   },
   speaking: {
     start: '用框架回答商業場景題，錄音後由 AI 評分。',
     steps: [
-      '選一個場景題，以及回答的框架（STAR、PREP、SCQA、Pyramid）。',
-      '按下錄音，用英文回答；需要允許瀏覽器使用麥克風。',
-      'AI 給 4 大面向評分、逐句改寫和模範答案。',
+      '依框架（STAR、PREP、SCQA、Pyramid）挑一個場景；沒有想練的可以自訂。',
+      '看「對方問你」和框架應用提示，可以先花 30 秒思考，再按錄音；需要允許瀏覽器使用麥克風。',
+      '用英文回答，建議 30–90 秒，錄滿 90 秒會自動結束。',
+      'AI 給 4 大面向評分（框架、商務用詞、文法、流暢度）、逐句改寫和模範答案。',
     ],
   },
   idioms: {
@@ -140,16 +143,17 @@ export const TOUR_STEPS: TourStep[] = [
   },
   {
     target: 'feature-reading',
-    title: '每天從這裡開始',
-    description: '每天一篇商業新聞的英文解說。讀的時候點不熟的單字，就能存進生字本。',
+    title: '每天從清單的第一個開始',
+    description:
+      '每天一篇商業新聞的英文解說。讀的時候點不熟的單字，就能存進生字本；其他功能都在這份清單裡。',
     side: 'top',
   },
   {
     target: 'feature-charades',
-    title: '存下來的字，拿來玩',
+    title: '接著，把存下來的字拿來玩',
     description:
       '比手畫腳可以選「用我的生字玩」，用英文描述單字讓 AI 猜；沒猜中的字也能一鍵加回單字本。',
-    side: 'top',
+    side: 'bottom',
   },
   {
     target: 'group-career',
