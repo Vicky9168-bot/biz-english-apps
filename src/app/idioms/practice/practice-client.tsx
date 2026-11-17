@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { Mark, Pen } from '@/app/page-kit'
 import { findIdiomSpan } from '@/lib/idiom-highlight'
+import { getIdiomCategory, practiceHref, type IdiomCategory } from '@/lib/idioms'
 
 type Question = {
   id: string
@@ -32,16 +33,6 @@ type ApiResp =
   | { all_learned: true; today_done: number; daily_limit: number }
   | { empty_review: true; today_done: number; daily_limit: number }
 
-const CATEGORY_LABEL: Record<string, string> = {
-  meeting: '會議',
-  negotiation: '談判',
-  strategy: '策略',
-  feedback: '回饋',
-  urgency: '時間壓力',
-  interpersonal: '人際',
-  general: '通用',
-}
-
 type EndState =
   | { kind: 'done_for_today'; today_done: number; daily_limit: number }
   | { kind: 'all_learned'; today_done: number; daily_limit: number }
@@ -49,8 +40,11 @@ type EndState =
 
 export default function PracticeClient({
   mode,
+  category,
 }: {
   mode: 'learn' | 'review'
+  // 只練某一類；null 代表全部類別
+  category: IdiomCategory | null
 }) {
   const [q, setQ] = useState<Question | null>(null)
   const [chosen, setChosen] = useState<number | null>(null)
@@ -65,7 +59,9 @@ export default function PracticeClient({
     setError(null)
     setEndState(null)
     try {
-      const res = await fetch(`/api/idioms/next?mode=${mode}`, {
+      const query = new URLSearchParams({ mode })
+      if (category) query.set('category', category)
+      const res = await fetch(`/api/idioms/next?${query}`, {
         cache: 'no-store',
       })
       if (!res.ok) {
@@ -98,7 +94,7 @@ export default function PracticeClient({
     } finally {
       setLoading(false)
     }
-  }, [mode])
+  }, [mode, category])
 
   useEffect(() => {
     loadNext()
@@ -147,7 +143,7 @@ export default function PracticeClient({
   }
 
   if (endState) {
-    return <EndStateCard state={endState} sessionDone={session.done} />
+    return <EndStateCard state={endState} sessionDone={session.done} category={category} />
   }
 
   if (!q) return null
@@ -213,7 +209,7 @@ export default function PracticeClient({
       <div className="border-y border-ink/15 bg-white px-1 py-6 mb-6">
         <div className="flex items-center gap-3 mb-4 text-sm text-ink/65">
           <span className="font-semibold text-ink">
-            {CATEGORY_LABEL[q.category] ?? q.category}
+            {getIdiomCategory(q.category)?.label ?? q.category}
           </span>
           <span className="font-display tabular-nums">
             Lv.{q.difficulty}
@@ -351,10 +347,16 @@ export default function PracticeClient({
 function EndStateCard({
   state,
   sessionDone,
+  category,
 }: {
   state: EndState
   sessionDone: number
+  category: IdiomCategory | null
 }) {
+  const categoryLabel = category ? getIdiomCategory(category)?.label : null
+  // 指定類別時，「回首頁」改回該類別頁
+  const backHref = category ? `/idioms/category/${category}` : '/idioms'
+  const backLabel = categoryLabel ? `回「${categoryLabel}」類別` : '回題庫首頁'
   if (state.kind === 'done_for_today') {
     return (
       <div className="border-l-4 border-mark pl-6 py-2">
@@ -368,16 +370,16 @@ function EndStateCard({
         </p>
         <div className="flex gap-3">
           <Link
-            href="/idioms/practice?mode=review"
+            href={practiceHref('review', category)}
             className="rounded-md bg-ink text-paper px-5 py-2.5 text-sm font-semibold hover:bg-ink/85 motion-safe:transition"
           >
             去複習
           </Link>
           <Link
-            href="/idioms"
+            href={backHref}
             className="rounded-md border border-ink/25 text-ink px-5 py-2.5 text-sm font-semibold hover:bg-paper motion-safe:transition"
           >
-            回題庫首頁
+            {backLabel}
           </Link>
         </div>
       </div>
@@ -388,13 +390,13 @@ function EndStateCard({
       <div className="border-y border-ink/15 py-8">
         
         <h2 className="text-xl font-bold text-ink mb-2">
-          100 個俚語全部練過了！
+          {categoryLabel ? `「${categoryLabel}」類的俚語全部練過了！` : '100 個俚語全部練過了！'}
         </h2>
         <p className="text-sm text-ink/70 mb-6">
           剩下就是不斷複習，讓聽到就秒懂
         </p>
         <Link
-          href="/idioms/practice?mode=review"
+          href={practiceHref('review', category)}
           className="rounded-md bg-ink text-paper px-5 py-2.5 text-sm font-semibold hover:bg-ink/85 motion-safe:transition"
         >
           開始複習
@@ -410,10 +412,10 @@ function EndStateCard({
         還沒有可以複習的題目
       </h2>
       <p className="text-sm text-ink/70 mb-6">
-        先去學一些新題，之後再回來複習
+        {categoryLabel ? `先去學一些「${categoryLabel}」類的新題，` : '先去學一些新題，'}之後再回來複習
       </p>
       <Link
-        href="/idioms/practice"
+        href={practiceHref('learn', category)}
         className="rounded-md bg-ink text-paper px-5 py-2.5 text-sm font-semibold hover:bg-ink/85 motion-safe:transition"
       >
         去學今日新題

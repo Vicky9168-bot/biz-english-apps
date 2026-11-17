@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import type { IdiomStatus } from './page'
+import type { IdiomStatus } from '@/lib/idioms'
 import {
   EmptyNote,
   IndexList,
@@ -24,10 +24,7 @@ type Idiom = {
   status: IdiomStatus
 }
 
-type CategoryMeta = Record<
-  string,
-  { label: string; color: string; order: number }
->
+type CategoryMeta = Record<string, { label: string; order: number }>
 
 type Props = {
   idioms: Idiom[]

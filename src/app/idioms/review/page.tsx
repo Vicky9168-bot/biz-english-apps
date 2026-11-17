@@ -4,6 +4,12 @@ import { createClient } from '@/lib/supabase/server'
 import ReviewClient from './review-client'
 import { AppNav } from '../../site-nav'
 import { PageHeader, StatStrip } from '@/app/page-kit'
+import { IDIOM_CATEGORIES, statusOf, summarizeAttempts } from '@/lib/idioms'
+
+// 清單依類別分組顯示，順序跟首頁一致
+const CATEGORY_META = Object.fromEntries(
+  IDIOM_CATEGORIES.map((c, i) => [c.key, { label: c.label, order: i + 1 }])
+)
 
 type Idiom = {
   id: string
@@ -17,49 +23,6 @@ type Idiom = {
   difficulty: number
   tags: string[] | null
 }
-
-const CATEGORY_META: Record<
-  string,
-  { label: string; color: string; order: number }
-> = {
-  meeting: {
-    label: '會議',
-    color: 'text-ink bg-mark/30 border-mark',
-    order: 1,
-  },
-  negotiation: {
-    label: '談判',
-    color: 'text-ink bg-mark/25 border-mark',
-    order: 2,
-  },
-  strategy: {
-    label: '策略',
-    color: 'text-ink/80 bg-paper border-ink/25',
-    order: 3,
-  },
-  feedback: {
-    label: '回饋',
-    color: 'text-pen bg-pen/10 border-pen/30',
-    order: 4,
-  },
-  urgency: {
-    label: '時間壓力',
-    color: 'text-pen bg-pen/10 border-pen/30',
-    order: 5,
-  },
-  interpersonal: {
-    label: '人際',
-    color: 'text-ink bg-paper border-ink/15',
-    order: 6,
-  },
-  general: {
-    label: '通用',
-    color: 'text-ink/80 bg-paper border-ink/15',
-    order: 7,
-  },
-}
-
-export type IdiomStatus = 'wrong' | 'learned' | 'new'
 
 export default async function IdiomsReviewPage() {
   const supabase = await createClient()
@@ -90,21 +53,12 @@ export default async function IdiomsReviewPage() {
       .limit(2000),
   ])
 
-  const attemptedIds = new Set<string>()
-  const wrongIds = new Set<string>()
-  ;(attempts ?? []).forEach((a) => {
-    attemptedIds.add(a.idiom_id)
-    if (!a.is_correct) wrongIds.add(a.idiom_id)
-  })
+  const { attemptedIds, wrongIds } = summarizeAttempts(attempts ?? [])
 
   const allIdioms = (idioms ?? []) as Idiom[]
   const withStatus = allIdioms.map((i) => ({
     ...i,
-    status: (wrongIds.has(i.id)
-      ? 'wrong'
-      : attemptedIds.has(i.id)
-        ? 'learned'
-        : 'new') as IdiomStatus,
+    status: statusOf(i.id, attemptedIds, wrongIds),
   }))
 
   const stats = {

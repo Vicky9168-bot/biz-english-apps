@@ -9,40 +9,7 @@ import {
   SectionTitle,
   StatStrip,
 } from '../page-kit'
-
-const CATEGORY_META: Record<
-  string,
-  { label: string; desc: string }
-> = {
-  meeting: {
-    label: '會議',
-    desc: 'touch base · loop in · circle back',
-  },
-  negotiation: {
-    label: '談判',
-    desc: 'push back · hash out · deal breaker',
-  },
-  strategy: {
-    label: '策略',
-    desc: 'pivot · double down · north star',
-  },
-  feedback: {
-    label: '回饋',
-    desc: 'drop the ball · above and beyond · nail it',
-  },
-  urgency: {
-    label: '時間壓力',
-    desc: 'crunch time · put out fires · buy some time',
-  },
-  interpersonal: {
-    label: '人際',
-    desc: 'team player · rock the boat · see eye to eye',
-  },
-  general: {
-    label: '通用',
-    desc: 'cut corners · bite the bullet · from scratch',
-  },
-}
+import { IDIOM_CATEGORIES, IDIOM_DAILY_LIMIT } from '@/lib/idioms'
 
 export default async function IdiomsHome() {
   const supabase = await createClient()
@@ -58,9 +25,9 @@ export default async function IdiomsHome() {
     .single()
   if (!profile?.onboarding_completed) redirect('/onboarding')
 
-  const { count: totalCount } = await supabase
+  const { data: idiomRows } = await supabase
     .from('business_idioms')
-    .select('*', { count: 'exact', head: true })
+    .select('id, category')
 
   const { data: attempts } = await supabase
     .from('idiom_attempts')
@@ -86,7 +53,7 @@ export default async function IdiomsHome() {
       .map((a) => a.idiom_id)
   )
   const todayDone = todayIds.size
-  const DAILY_LIMIT = 10
+  const DAILY_LIMIT = IDIOM_DAILY_LIMIT
   const todayReachedLimit = todayDone >= DAILY_LIMIT
 
   // 複習池:曾經答錯過的
@@ -94,7 +61,16 @@ export default async function IdiomsHome() {
     (attempts ?? []).filter((a) => a.is_correct === false).map((a) => a.idiom_id)
   )
 
-  const total = totalCount ?? 0
+  const total = idiomRows?.length ?? 0
+
+  // 每個類別：共幾個、你學過幾個
+  const byCategory = new Map<string, { total: number; learned: number }>()
+  ;(idiomRows ?? []).forEach((r) => {
+    const stat = byCategory.get(r.category) ?? { total: 0, learned: 0 }
+    stat.total += 1
+    if (uniqueAttempted.has(r.id)) stat.learned += 1
+    byCategory.set(r.category, stat)
+  })
   const seedMissing = total === 0
 
   return (
@@ -187,17 +163,22 @@ export default async function IdiomsHome() {
           </>
         )}
 
-        {/* 分類簡介 */}
+        {/* 7 大類：點進去看這一類的俚語、學習或複習 */}
         <section>
-          <SectionTitle title="涵蓋 7 大類商務場景" />
+          <SectionTitle title="7 大類商務場景" hint="點進去學習或複習" />
           <IndexList>
-            {Object.entries(CATEGORY_META).map(([key, meta]) => (
-              <IndexRow
-                key={key}
-                title={meta.label}
-                desc={<span translate="no">{meta.desc}</span>}
-              />
-            ))}
+            {IDIOM_CATEGORIES.map((c) => {
+              const stat = byCategory.get(c.key) ?? { total: 0, learned: 0 }
+              return (
+                <IndexRow
+                  key={c.key}
+                  href={`/idioms/category/${c.key}`}
+                  title={c.label}
+                  desc={<span translate="no">{c.examples}</span>}
+                  aside={`已學 ${stat.learned} / ${stat.total}`}
+                />
+              )
+            })}
           </IndexList>
         </section>
       </div>

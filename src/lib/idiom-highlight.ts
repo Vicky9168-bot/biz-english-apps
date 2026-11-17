@@ -90,6 +90,10 @@ function buildRegex(tokens: string[]): RegExp | null {
     const lower = tokens[i].toLowerCase()
     const isLast = i === tokens.length - 1
 
+    if (isLast && WILDCARD.test(lower)) {
+      // table something：結尾的「某物／某人」是受詞，不算俚語本身，不畫進去（例句寫 table the rebrand discussion）
+      continue
+    }
     if (lower === 'it') {
       // nail it：例句可能寫 "nailed it"，也可能寫 "nailed the positioning"
       source += isLast ? '(?:\\s+it\\b)?' : '(?:\\s+it)?'

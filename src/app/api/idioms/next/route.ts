@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { IDIOM_DAILY_LIMIT as DAILY_LIMIT, isIdiomCategory } from '@/lib/idioms'
 
 export const runtime = 'nodejs'
-
-const DAILY_LIMIT = 10
 
 type Idiom = {
   id: string
@@ -17,9 +16,10 @@ type Idiom = {
   difficulty: number
 }
 
-// GET /api/idioms/next?mode=learn|review
-// learn: 抽今日新題（日限 10）
+// GET /api/idioms/next?mode=learn|review[&category=meeting|...]
+// learn: 抽今日新題（日限 10，跨類別合計）
 // review: 從已練習過的複習（優先答錯過的，不計入日限）
+// category: 只從這個類別出題；沒給或不認得就是全部類別
 export async function GET(request: Request) {
   const supabase = await createClient()
   const {
@@ -29,6 +29,8 @@ export async function GET(request: Request) {
 
   const url = new URL(request.url)
   const mode = url.searchParams.get('mode') === 'review' ? 'review' : 'learn'
+  const categoryParam = url.searchParams.get('category')
+  const category = isIdiomCategory(categoryParam) ? categoryParam : null
 
   const { data: attempts } = await supabase
     .from('idiom_attempts')
@@ -59,9 +61,12 @@ export async function GET(request: Request) {
     )
   }
 
+  // 出題範圍：指定類別時只看該類別（干擾選項仍照舊，優先取同類別的其他俚語）
+  const inScope = (i: Idiom) => !category || i.category === category
+
   // review mode
   if (mode === 'review') {
-    const learnedPool = allIdioms.filter((i) => attemptedIds.has(i.id))
+    const learnedPool = allIdioms.filter((i) => inScope(i) && attemptedIds.has(i.id))
     if (learnedPool.length === 0) {
       return NextResponse.json({
         empty_review: true,
@@ -95,7 +100,7 @@ export async function GET(request: Request) {
     })
   }
 
-  const unattempted = allIdioms.filter((i) => !attemptedIds.has(i.id))
+  const unattempted = allIdioms.filter((i) => inScope(i) && !attemptedIds.has(i.id))
   if (unattempted.length === 0) {
     return NextResponse.json({
       all_learned: true,
