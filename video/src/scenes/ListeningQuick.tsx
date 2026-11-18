@@ -80,7 +80,7 @@ export const LessonScene: React.FC = () => {
   return (
     <AbsoluteFill>
       <StepHeader n={1} total={TOTAL} title="先上一堂小課" />
-      <BrowserFrame url="bizenglish.app / listening / lesson">
+      <BrowserFrame url="bizvoice.app / listening / lesson">
         <div style={{ position: 'absolute', left: 60, top: 30, fontSize: 40, fontWeight: 800 }}>
           Content Words：只抓實詞
         </div>
@@ -149,7 +149,7 @@ export const ListenScene: React.FC = () => {
   return (
     <AbsoluteFill>
       <StepHeader n={2} total={TOTAL} title="選場景，聽音檔" />
-      <BrowserFrame url="bizenglish.app / listening">
+      <BrowserFrame url="bizvoice.app / listening">
         {/* 聽力首頁 */}
         <div style={{ position: 'absolute', inset: 0, opacity: viewA }}>
           <div style={{ position: 'absolute', left: 60, top: 28, fontSize: 44, fontWeight: 800 }}>聽力訓練</div>
@@ -401,7 +401,7 @@ export const AnswerScene: React.FC = () => {
   return (
     <AbsoluteFill>
       <StepHeader n={3} total={TOTAL} title="答 3 題，看解說" />
-      <BrowserFrame url="bizenglish.app / listening / session">
+      <BrowserFrame url="bizvoice.app / listening / session">
         {QUESTIONS.map((q, qi) => (
           <React.Fragment key={q.q}>
             <div

@@ -31,7 +31,7 @@ export const VocabScene: React.FC = () => {
     <AbsoluteFill>
       <StepHeader n={2} title="到生字本，用原句練習" />
 
-      <BrowserFrame url="bizenglish.app / reading / vocab">
+      <BrowserFrame url="bizvoice.app / reading / vocab">
         {/* 列表 */}
         <div style={{ position: 'absolute', inset: 0, opacity: listOpacity }}>
           <div style={{ position: 'absolute', left: 60, top: 30, fontSize: 44, fontWeight: 800 }}>

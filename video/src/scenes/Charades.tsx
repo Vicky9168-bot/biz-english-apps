@@ -25,7 +25,7 @@ export const CharadesScene: React.FC = () => {
     <AbsoluteFill>
       <StepHeader n={3} title="用你的生字玩比手畫腳" />
 
-      <BrowserFrame url="bizenglish.app / charades">
+      <BrowserFrame url="bizvoice.app / charades">
         {/* 首頁 */}
         <div style={{ position: 'absolute', inset: 0, opacity: homeOpacity }}>
           <div style={{ position: 'absolute', left: 60, top: 34, fontSize: 44, fontWeight: 800 }}>

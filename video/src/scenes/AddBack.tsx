@@ -17,7 +17,7 @@ export const AddBackScene: React.FC = () => {
     <AbsoluteFill>
       <StepHeader n={4} title="沒猜中的字，加回單字本" />
 
-      <BrowserFrame url="bizenglish.app / charades / session">
+      <BrowserFrame url="bizvoice.app / charades / session">
         <div style={{ position: 'absolute', left: 60, top: 30, fontSize: 44, fontWeight: 800 }}>
           練習完成
         </div>

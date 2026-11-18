@@ -27,7 +27,7 @@ export const ReadScene: React.FC = () => {
     <AbsoluteFill>
       <StepHeader n={1} title="讀文章，存下不熟的字" />
 
-      <BrowserFrame url="bizenglish.app / reading / ai">
+      <BrowserFrame url="bizvoice.app / reading / ai">
         <div style={{ position: 'absolute', left: 60, top: 30, fontSize: 24, color: C.sub }}>
           AI 趨勢 · 2026-11-16
         </div>

@@ -55,7 +55,7 @@ export const PickScene: React.FC = () => {
   return (
     <AbsoluteFill>
       <StepHeader n={1} total={TOTAL} title="選一個場景" />
-      <BrowserFrame url="bizenglish.app / speaking">
+      <BrowserFrame url="bizvoice.app / speaking">
         <div style={{ position: 'absolute', left: 60, top: 26, fontSize: 44, fontWeight: 800 }}>
           商業場景練習
         </div>
@@ -186,7 +186,7 @@ export const RecordScene: React.FC = () => {
   return (
     <AbsoluteFill>
       <StepHeader n={2} total={TOTAL} title="思考 30 秒，再錄音" />
-      <BrowserFrame url="bizenglish.app / speaking / kpi">
+      <BrowserFrame url="bizvoice.app / speaking / kpi">
         <div style={{ position: 'absolute', left: 60, top: 20, fontSize: 23, color: C.sub }}>
           <b style={{ color: C.ink, fontSize: 26, marginRight: 14 }}>STAR</b>
           Lv.3　management · accountability
@@ -329,7 +329,7 @@ export const FeedbackScene: React.FC = () => {
   return (
     <AbsoluteFill>
       <StepHeader n={3} total={TOTAL} title="看四大面向回饋" />
-      <BrowserFrame url="bizenglish.app / speaking / kpi">
+      <BrowserFrame url="bizvoice.app / speaking / kpi">
         <div style={{ position: 'absolute', inset: 0, opacity: 1 - fade(frame, 28, 12) }}>
           <div style={{ position: 'absolute', left: 60, top: 60, fontSize: 38, fontWeight: 800 }}>AI 分析中</div>
           <div style={{ position: 'absolute', left: 60, top: 124, fontSize: 26, color: C.sub }}>

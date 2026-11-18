@@ -34,7 +34,7 @@ export const QuickMode: React.FC = () => {
   return (
     <AbsoluteFill>
       <StepHeader n={1} total={TOTAL} title="選一個模式" />
-      <BrowserFrame url="bizenglish.app / charades">
+      <BrowserFrame url="bizvoice.app / charades">
         <div style={{ position: 'absolute', left: 60, top: 34, fontSize: 44, fontWeight: 800 }}>
           比手畫腳單字
         </div>
@@ -122,7 +122,7 @@ export const QuickDescribe: React.FC = () => {
   return (
     <AbsoluteFill>
       <StepHeader n={2} total={TOTAL} title="看到單字，用英文說" />
-      <BrowserFrame url="bizenglish.app / charades / session">
+      <BrowserFrame url="bizvoice.app / charades / session">
         <SessionTop word="deadline" />
         <MicButton frame={frame} clickAt={MIC_CLICK} endAt={REC_END} />
 
@@ -164,7 +164,7 @@ export const QuickDescribe: React.FC = () => {
             opacity: promptOpacity,
           }}
         >
-          <div style={{ fontSize: 26, fontWeight: 600 }}>bizenglish.app 想要使用你的麥克風</div>
+          <div style={{ fontSize: 26, fontWeight: 600 }}>bizvoice.app 想要使用你的麥克風</div>
           <div style={{ position: 'absolute', left: 24, top: 120, display: 'flex', gap: 16 }}>
             {[
               { t: '允許', primary: true },
@@ -217,7 +217,7 @@ export const QuickResult: React.FC = () => {
   return (
     <AbsoluteFill>
       <StepHeader n={3} total={TOTAL} title="AI 來猜，最多 3 次" />
-      <BrowserFrame url="bizenglish.app / charades / session">
+      <BrowserFrame url="bizvoice.app / charades / session">
         <SessionTop word="deadline" />
         <MicButton frame={frame} clickAt={-100} endAt={-50} />
 

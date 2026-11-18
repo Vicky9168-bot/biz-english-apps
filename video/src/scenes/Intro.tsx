@@ -16,7 +16,7 @@ export const IntroScene: React.FC = () => {
   return (
     <AbsoluteFill style={{ padding: '120px 260px' }}>
       <div style={{ opacity: fade(frame, 4, 14) }}>
-        <div style={{ fontSize: 40, color: C.sub, fontWeight: 600 }}>BizEnglish</div>
+        <div style={{ fontSize: 40, color: C.sub, fontWeight: 600 }}>BizVoice</div>
         <h1 style={{ margin: '14px 0 0', fontSize: 112, fontWeight: 800, color: C.ink }}>
           單字學習 4 步驟
         </h1>
