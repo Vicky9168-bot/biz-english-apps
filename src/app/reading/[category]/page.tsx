@@ -60,13 +60,6 @@ export default async function ReadingArticlePage({
     .select('word')
     .eq('user_id', user.id)
 
-  const { data: savedArticle } = await supabase
-    .from('reading_saved_articles')
-    .select('article_id')
-    .eq('user_id', user.id)
-    .eq('article_id', article.id)
-    .maybeSingle()
-
   return (
     <main className="flex-1 bg-paper text-ink min-h-screen">
       <AppNav backHref={isToday ? '/reading' : `/reading/archive?category=${category}`} />
@@ -76,7 +69,6 @@ export default async function ReadingArticlePage({
           categoryLabel={meta.label}
           categoryEn={meta.en}
           savedWords={(saved ?? []).map((w) => w.word as string)}
-          initiallySaved={!!savedArticle}
         />
       </div>
     </main>

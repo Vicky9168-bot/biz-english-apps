@@ -88,13 +88,11 @@ export function ReaderClient({
   categoryLabel,
   categoryEn,
   savedWords,
-  initiallySaved,
 }: {
   article: ReadingArticle
   categoryLabel: string
   categoryEn: string
   savedWords: string[]
-  initiallySaved: boolean
 }) {
   const [showZh, setShowZh] = useState(false)
   const [entry, setEntry] = useState<Entry | null>(null)
@@ -102,8 +100,6 @@ export function ReaderClient({
   const [error, setError] = useState<string | null>(null)
   const [saved, setSaved] = useState(() => new Set(savedWords))
   const [saving, setSaving] = useState(false)
-  const [articleSaved, setArticleSaved] = useState(initiallySaved)
-  const [articleSaving, setArticleSaving] = useState(false)
 
   const keyWordMap = useMemo(
     () => new Map(article.key_words.map((w) => [w.word.toLowerCase(), w])),
@@ -156,25 +152,6 @@ export function ReaderClient({
     },
     [keyWordMap, showKeyWord]
   )
-
-  async function toggleArticleSaved() {
-    const next = !articleSaved
-    setArticleSaving(true)
-    setError(null)
-    try {
-      const res = await fetch('/api/reading/save-article', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ article_id: article.id, saved: next }),
-      })
-      if (!res.ok) throw new Error('save failed')
-      setArticleSaved(next)
-    } catch {
-      setError('收藏文章失敗，請再試一次。')
-    } finally {
-      setArticleSaving(false)
-    }
-  }
 
   const save = useCallback(
     async (e: Entry) => {
@@ -334,21 +311,8 @@ export function ReaderClient({
               href={`/reading/archive?category=${article.category}`}
               className="rounded-sm font-semibold underline decoration-ink/30 underline-offset-4 hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
             >
-              我收藏的文章
+              往期文章
             </Link>
-            <button
-              type="button"
-              onClick={toggleArticleSaved}
-              disabled={articleSaving}
-              aria-pressed={articleSaved}
-              className={`rounded-full border px-3.5 py-1.5 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 disabled:opacity-60 ${
-                articleSaved
-                  ? 'border-ink bg-ink text-paper'
-                  : 'border-ink/30 hover:bg-white/70'
-              }`}
-            >
-              {articleSaved ? '已收藏這篇' : '收藏這篇文章'}
-            </button>
           </div>
         </header>
 
