@@ -40,7 +40,7 @@ export const FEATURE_GUIDE: Record<FeatureKey, { start: string; steps: string[] 
       '選一個類別：財金、行銷、AI 趨勢、科技、國際社會。',
       '點任何單字查它在這句話的意思，按「存到生字本」；可以開關中文翻譯。',
       '當天文章還沒準備好時會自動產生，需要稍等一下。',
-      '到「往期文章」可以回頭複習之前讀過的。',
+      '喜歡的文章按「收藏這篇文章」，之後到「收藏的文章」回頭複習。',
     ],
   },
   charades: {
@@ -99,7 +99,7 @@ export const FEATURE_GUIDE: Record<FeatureKey, { start: string; steps: string[] 
 export const FAQ = [
   {
     q: '每日商業閱讀的文章什麼時候換新？',
-    a: '台北時間每天 00:00 換新，每個類別每天一篇，過去的文章都會保留在「往期文章」。',
+    a: '台北時間每天 00:00 換新，每個類別每天一篇，想留下來複習的文章，請在文章頁按「收藏這篇文章」，會存在「收藏的文章」。',
   },
   {
     q: '文章是真的新聞嗎？',

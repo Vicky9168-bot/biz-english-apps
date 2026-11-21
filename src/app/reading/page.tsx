@@ -112,8 +112,8 @@ export default async function ReadingHome() {
           <IndexList>
             <IndexRow
               href="/reading/archive"
-              title="往期文章"
-              desc="每天讀過的新聞解說都會保留，可依類別回頭複習"
+              title="收藏的文章"
+              desc="在文章頁收藏想複習的新聞解說，可依類別回頭複習"
               aside="瀏覽"
             />
             <IndexRow

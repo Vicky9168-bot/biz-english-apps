@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { READING_CATEGORIES, getReadingCategory, isReadingCategory } from '@/lib/reading'
+import { READING_CATEGORIES, getReadingCategory, isReadingCategory, type ReadingCategory } from '@/lib/reading'
 import { AppNav } from '../../site-nav'
 import { EmptyNote, IndexList, IndexRow, PageHeader } from '../../page-kit'
 
@@ -21,14 +21,19 @@ export default async function ReadingArchivePage({
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+  // 只列使用者自己收藏的文章;依收藏時間新到舊
   let query = supabase
-    .from('reading_articles')
-    .select('article_date, category, title, source_name')
-    .order('article_date', { ascending: false })
+    .from('reading_saved_articles')
+    .select('created_at, reading_articles!inner(article_date, category, title, source_name)')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
     .limit(LIMIT)
-  if (category) query = query.eq('category', category)
+  if (category) query = query.eq('reading_articles.category', category)
   const { data } = await query
-  const articles = data ?? []
+  type Row = { article_date: string; category: ReadingCategory; title: string; source_name: string | null }
+  const articles = ((data ?? []) as unknown as Array<{ reading_articles: Row | Row[] }>).map((r) =>
+    Array.isArray(r.reading_articles) ? r.reading_articles[0] : r.reading_articles
+  )
 
   const filterClass = (active: boolean) =>
     `rounded-full border px-3.5 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40 ${
@@ -43,8 +48,8 @@ export default async function ReadingArchivePage({
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <PageHeader
-          title="往期文章"
-          subtitle="每天讀過的商業新聞解說都會保留在這裡，隨時回來複習。"
+          title="收藏的文章"
+          subtitle="在文章頁按「收藏這篇文章」，想回頭複習的就會留在這裡。"
         >
           <nav className="mt-6 flex flex-wrap gap-2" aria-label="文章類別">
             <Link href="/reading/archive" className={filterClass(!category)}>
@@ -63,7 +68,7 @@ export default async function ReadingArchivePage({
         </PageHeader>
 
         {articles.length === 0 ? (
-          <EmptyNote>還沒有文章。每天第一次打開某個類別，就會自動準備當天的文章。</EmptyNote>
+          <EmptyNote>還沒有收藏的文章。讀文章時按「收藏這篇文章」，就會出現在這裡。</EmptyNote>
         ) : (
           <IndexList>
             {articles.map((a) => {
