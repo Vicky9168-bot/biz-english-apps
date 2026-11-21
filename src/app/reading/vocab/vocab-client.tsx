@@ -9,7 +9,8 @@ type Question = {
   word: SavedWord
   // 這題用哪一句當語境（同一個字有多個出現場合時，每輪隨機挑一句）
   context: WordContext | null
-  // 空陣列表示單字卡模式（單字太少或意思重複，湊不出四個選項）
+  // 選項一律英文：句子能挖空 → 選填入的單字；不能挖空 → 選英文解釋
+  // 空陣列表示單字卡模式（單字太少或缺英文解釋，湊不出四個選項）
   options: string[]
   correctIndex: number
 }
@@ -41,19 +42,39 @@ function pickContext(word: SavedWord): WordContext | null {
   return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null
 }
 
+// 湊 4 個英文選項：正解 + 3 個不重複的干擾項（單字題優先挑同詞性的，讓選項比較像樣）
+function buildOptions(
+  word: SavedWord,
+  words: SavedWord[],
+  blanked: boolean
+): { options: string[]; correctIndex: number } | null {
+  const text = (w: SavedWord) => (blanked ? w.word : w.meaning_en)
+  const answer = text(word)
+  if (!answer) return null
+
+  const candidates = shuffle(words.filter((w) => w.id !== word.id && text(w) && text(w) !== answer))
+  if (blanked) candidates.sort((a, b) => Number(b.pos === word.pos) - Number(a.pos === word.pos))
+
+  const others = [...new Set(candidates.map((w) => text(w) as string))].slice(0, 3)
+  if (others.length < 3) return null
+
+  const options = shuffle([answer, ...others])
+  return { options, correctIndex: options.indexOf(answer) }
+}
+
 // 答錯越多越優先，同分隨機
 function buildRound(words: SavedWord[]): Question[] {
   const picked = shuffle(words)
     .sort((a, b) => b.wrong_count - b.correct_count - (a.wrong_count - a.correct_count))
     .slice(0, ROUND_SIZE)
-  const meanings = [...new Set(words.map((w) => w.meaning_zh))]
 
   return picked.map((word) => {
     const context = pickContext(word)
-    const others = shuffle(meanings.filter((m) => m !== word.meaning_zh)).slice(0, 3)
-    if (others.length < 3) return { word, context, options: [], correctIndex: -1 }
-    const options = shuffle([word.meaning_zh, ...others])
-    return { word, context, options, correctIndex: options.indexOf(word.meaning_zh) }
+    const blanked = !!context && blankOut(context.sentence, context.surface_form ?? word.word) !== null
+    const built = buildOptions(word, words, blanked)
+    return built
+      ? { word, context, ...built }
+      : { word, context, options: [], correctIndex: -1 }
   })
 }
 
@@ -223,7 +244,7 @@ export function VocabClient({ initialWords }: { initialWords: SavedWord[] }) {
         ) : (
           <div>
             <p className="text-sm text-ink/65">
-              {blanked ? '空格處的單字是什麼意思？' : '這個單字是什麼意思？'}
+              {blanked ? '哪個單字最適合填入空格？' : '這個單字的英文意思是？'}
             </p>
             <p
               className={`mt-3 leading-relaxed ${
@@ -254,7 +275,9 @@ export function VocabClient({ initialWords }: { initialWords: SavedWord[] }) {
                           : 'border-ink/20 bg-white/60 hover:bg-white disabled:hover:bg-white/60'
                       }`}
                     >
-                      {done && isRight ? <Mark>{opt}</Mark> : isWrongPick ? <Pen>{opt}</Pen> : opt}
+                      <span translate="no">
+                        {done && isRight ? <Mark>{opt}</Mark> : isWrongPick ? <Pen>{opt}</Pen> : opt}
+                      </span>
                     </button>
                   </li>
                 )
@@ -263,17 +286,24 @@ export function VocabClient({ initialWords }: { initialWords: SavedWord[] }) {
 
             {chosen !== null && (
               <div className="mt-6">
-                <p className="text-sm leading-relaxed text-ink/80">
-                  <span className="font-semibold" translate="no">
-                    {q.word.word}
-                  </span>
-                  {q.word.pos ? `（${q.word.pos}）` : ''}：{q.word.meaning_zh}
-                  {q.word.meaning_en && (
-                    <span className="block text-ink/65" translate="no">
-                      {q.word.meaning_en}
+                <div className="space-y-1 text-sm leading-relaxed text-ink/80">
+                  <p>
+                    <span className="font-semibold" translate="no">
+                      {q.word.word}
                     </span>
+                    {q.word.pos ? `（${q.word.pos}）` : ''}：{q.word.meaning_zh}
+                  </p>
+                  {q.word.meaning_en && (
+                    <p className="text-ink/65" translate="no">
+                      {q.word.meaning_en}
+                    </p>
                   )}
-                </p>
+                  {q.word.example_en && (
+                    <p className="text-ink/65" translate="no">
+                      例：{q.word.example_en}
+                    </p>
+                  )}
+                </div>
                 <button
                   type="button"
                   onClick={advance}
