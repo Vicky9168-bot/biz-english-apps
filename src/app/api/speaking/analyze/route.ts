@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getOpenAI, MODELS } from '@/lib/openai'
 import { toFile } from 'openai/uploads'
+import { isSpeakingFramework } from '@/lib/speaking-frameworks'
 
 export const runtime = 'nodejs'
 export const maxDuration = 90
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
       typeof promptEn !== 'string' ||
       !promptEn ||
       typeof framework !== 'string' ||
-      !['STAR', 'PREP', 'SCQA', 'PYRAMID'].includes(framework) ||
+      !isSpeakingFramework(framework) ||
       typeof frameworkHintZh !== 'string' ||
       !frameworkHintZh
     ) {

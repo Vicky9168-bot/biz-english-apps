@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { AppNav } from '../../../site-nav'
 import { IndexList, IndexRow, PageHeader, SectionTitle } from '@/app/page-kit'
+import { isSpeakingFramework, type SpeakingFramework } from '@/lib/speaking-frameworks'
 
-type FrameworkKey = 'STAR' | 'PREP' | 'SCQA' | 'PYRAMID'
+type FrameworkKey = SpeakingFramework
 
 type LetterBreakdown = { letter: string; label: string; desc: string }
 type Example = {
@@ -296,6 +297,138 @@ const CONTENT: Record<FrameworkKey, FrameworkContent> = {
       },
     ],
   },
+
+  DIA: {
+    title: 'DIA',
+    subtitle: '數據分析簡報 · 從數字講到決策（Data → Insight → Action）',
+    overview:
+      '向主管或客戶報告數據時，最常見的錯誤是把每張圖表念一遍。DIA 讓每個數字都往「所以呢？」推進：先交代你看了什麼數據（指標、期間、比較基準），再講這些數字代表什麼（最重要的發現與原因），最後給具體行動建議（誰、做什麼、何時）。核心精神：數字只是證據，決策才是重點。',
+    letters: [
+      { letter: 'D', label: 'Data', desc: '看了什麼 — 指標、期間、比較基準，一句話講清楚' },
+      { letter: 'I', label: 'Insight', desc: '所以呢 — 最重要的 1–2 個發現與可能原因，用「從 X 到 Y」講變化' },
+      { letter: 'A', label: 'Action', desc: '建議 — 具體行動 + 負責人 + 時程，並說明預期影響' },
+    ],
+    whenUse: [
+      '向主管或客戶報告分析結果',
+      '月會、週報的 KPI review',
+      '解釋 dashboard 上的異常波動',
+    ],
+    whenNotUse: [
+      '對方時間很少、要先聽結論 → 用 Pyramid',
+      '需要說服對方改變現狀 → 用 SCQA',
+      '回顧自己的個人貢獻 → 用 STAR',
+    ],
+    examples: [
+      {
+        scenario: '主管：「請簡單說明這季 trial 轉換率的分析。」',
+        annotated: [
+          {
+            text: 'I looked at trial-to-paid conversion for the last two quarters, across about 12,000 trial accounts.',
+            tag: 'D',
+          },
+          {
+            text: 'Conversion fell from 14% to 11%, and the drop is almost entirely in accounts that never invited a teammate in the first week.',
+            tag: 'I',
+          },
+          {
+            text: 'Accounts that did invite someone convert at 22%, so the problem looks like week-one onboarding, not pricing.',
+            tag: 'I',
+          },
+          {
+            text: 'I recommend we add a teammate-invite prompt on day one. I can run it as an A/B test next sprint, and we would know within three weeks.',
+            tag: 'A',
+          },
+        ],
+      },
+      {
+        scenario: '客戶問：「為什麼網站流量成長，詢問數卻沒增加？」',
+        annotated: [
+          {
+            text: 'I compared website traffic and demo requests from January to June, broken down by channel.',
+            tag: 'D',
+          },
+          {
+            text: 'Traffic is up 35%, but demo requests are flat at around 120 a month.',
+            tag: 'I',
+          },
+          {
+            text: 'The growth came almost entirely from blog visitors, who convert at 0.3%, compared with 3% for paid search.',
+            tag: 'I',
+          },
+          {
+            text: 'So I suggest we shift 20% of the content budget toward comparison pages that target buyers, and review the numbers again in 60 days.',
+            tag: 'A',
+          },
+        ],
+      },
+    ],
+  },
+
+  VTC: {
+    title: 'VTC',
+    subtitle: '業務談判 · 守住價值、條件交換（Value → Trade → Close）',
+    overview:
+      '業務談判最常見的錯誤，是客戶一殺價就讓價。VTC 讓你先重申價值（為什麼值這個價），再用「如果你…，那我可以…」的條件交換來讓步，讓每一次退讓都換回承諾，最後複述條件、確認下一步，避免談完又被拖。核心精神：不白白讓步，每個讓步都要換到東西。',
+    letters: [
+      { letter: 'V', label: 'Value', desc: '先重申價值 — 回到客戶在乎的結果與數字，不急著談價格' },
+      { letter: 'T', label: 'Trade', desc: '條件交換 — "If you..., then I can..."，讓步要換回承諾（年約、付款條件、案例見證…）' },
+      { letter: 'C', label: 'Close', desc: '收尾 — 複述已談好的條件，確認下一步與期限' },
+    ],
+    whenUse: [
+      '客戶殺價、要求折扣',
+      '續約或升級方案的談判',
+      '對方提出額外條件（延長付款、加送服務）',
+    ],
+    whenNotUse: [
+      '對方還在了解產品 → 先用 SCQA 鋪陳需求',
+      '給高層報告進度 → 用 Pyramid',
+      '單純表達意見 → 用 PREP',
+    ],
+    examples: [
+      {
+        scenario: '客戶：「你們比競爭對手貴 15%，能不能降到跟他們一樣？」',
+        annotated: [
+          {
+            text: 'I understand price matters. Before we talk numbers, let me recap what you told me: cutting your onboarding time from six weeks to two is worth roughly $80,000 a year to you.',
+            tag: 'V',
+          },
+          {
+            text: "I can't match their price without removing the dedicated onboarding team that makes that two-week timeline possible.",
+            tag: 'V',
+          },
+          {
+            text: 'What I can do is this: if you commit to a two-year term, then I can offer 8% off and lock the same rate for the second year.',
+            tag: 'T',
+          },
+          {
+            text: "So to confirm: two-year term, 8% discount, rate locked for year two. I'll send the revised order form today. Can you get it signed by Friday?",
+            tag: 'C',
+          },
+        ],
+      },
+      {
+        scenario: '續約：「預算被砍了，續約費用能不能減半？」',
+        annotated: [
+          {
+            text: 'Thanks for being upfront. Last year the platform saved your team about 600 hours, so I want to keep that value intact while we work on the budget.',
+            tag: 'V',
+          },
+          {
+            text: "I can't go to half, but if you move from monthly to annual payment, then I can reduce the fee by 12%.",
+            tag: 'T',
+          },
+          {
+            text: "And if you're open to being a reference customer, I can add two extra user seats at no cost.",
+            tag: 'T',
+          },
+          {
+            text: "Let me summarize: annual payment, 12% off, one reference call, and two free seats. I'll draft that now. Shall we finalize it by the end of the week?",
+            tag: 'C',
+          },
+        ],
+      },
+    ],
+  },
 }
 
 export default async function FrameworkDetailPage({
@@ -304,9 +437,9 @@ export default async function FrameworkDetailPage({
   params: Promise<{ fw: string }>
 }) {
   const { fw } = await params
-  const key = fw.toUpperCase() as FrameworkKey
+  const key = fw.toUpperCase()
+  if (!isSpeakingFramework(key)) notFound()
   const content = CONTENT[key]
-  if (!content) notFound()
 
   return (
     <main className="flex-1 bg-paper min-h-screen">

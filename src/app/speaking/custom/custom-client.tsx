@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import { SpeakingSession } from '../[id]/session-client'
 import { SectionTitle } from '@/app/page-kit'
+import { SPEAKING_FRAMEWORK_SHORT, type SpeakingFramework } from '@/lib/speaking-frameworks'
 
-type FW = 'STAR' | 'PREP' | 'SCQA' | 'PYRAMID'
+type FW = SpeakingFramework
 
 type Recommendation = {
   recommended_framework: FW
@@ -16,12 +17,6 @@ type Recommendation = {
   title_zh: string
 }
 
-const FRAMEWORK_DESC: Record<FW, string> = {
-  STAR: '過去經驗 · 行為題',
-  PREP: '表達意見 · 立場',
-  SCQA: '說服 · 提案',
-  PYRAMID: 'Exec 溝通 · 答案先行',
-}
 
 export function CustomScenarioWizard() {
   const [context, setContext] = useState('')
@@ -83,7 +78,7 @@ export function CustomScenarioWizard() {
               {rec.recommended_framework}
             </span>
             <span className="text-sm text-ink/70">
-              {FRAMEWORK_DESC[rec.recommended_framework]}
+              {SPEAKING_FRAMEWORK_SHORT[rec.recommended_framework]}
             </span>
           </p>
           <p className="max-w-xl text-sm leading-relaxed text-ink/80">
@@ -98,7 +93,7 @@ export function CustomScenarioWizard() {
                   {rec.alternative_framework}
                 </span>
                 <span className="text-sm text-ink/65">
-                  {FRAMEWORK_DESC[rec.alternative_framework]}
+                  {SPEAKING_FRAMEWORK_SHORT[rec.alternative_framework]}
                 </span>
               </p>
               <p className="text-sm text-ink/70">{rec.alternative_when_zh}</p>

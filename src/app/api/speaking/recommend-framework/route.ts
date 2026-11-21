@@ -1,12 +1,17 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getOpenAI, MODELS } from '@/lib/openai'
+import {
+  SPEAKING_FRAMEWORKS,
+  SPEAKING_FRAMEWORK_AI_NOTE,
+  type SpeakingFramework,
+} from '@/lib/speaking-frameworks'
 
 export const runtime = 'nodejs'
 export const maxDuration = 30
 
-const FRAMEWORKS = ['STAR', 'PREP', 'SCQA', 'PYRAMID'] as const
-type FW = (typeof FRAMEWORKS)[number]
+const FRAMEWORKS = SPEAKING_FRAMEWORKS
+type FW = SpeakingFramework
 
 // 用戶自訂情境 → AI 挑框架 + 生英文 prompt + 客製化提示
 export async function POST(request: Request) {
@@ -37,11 +42,8 @@ export async function POST(request: Request) {
 
   const prompt = `你是資深商務英語教練。學生描述了一個真實情境，幫他選最適合的回答框架。
 
-四個框架:
-- STAR (Situation-Task-Action-Result): 過去經驗、行為題 (Tell me about a time...)
-- PREP (Point-Reason-Example-Point): 表達意見、表態立場 (What do you think?)
-- SCQA (Situation-Complication-Question-Answer): 說服型提案，需要鋪陳共識再給答案
-- PYRAMID (Answer → 3 支撐 → 佐證): Exec 溝通、答案先行、對方時間少
+${SPEAKING_FRAMEWORKS.length} 個框架:
+${SPEAKING_FRAMEWORKS.map((fw) => `- ${SPEAKING_FRAMEWORK_AI_NOTE[fw]}`).join('\n')}
 
 學生的情境 (中文):
 "${context}"
@@ -54,7 +56,7 @@ ${
 
 回傳嚴格 JSON:
 {
-  "recommended_framework": "STAR" 或 "PREP" 或 "SCQA" 或 "PYRAMID",
+  "recommended_framework": "以下其中一個: ${SPEAKING_FRAMEWORKS.join(' / ')}",
   "recommended_reason_zh": "1-2 句中文，為什麼這個框架最適合這個情境",
   "framework_hint_zh": "針對這個情境客製化的字母應用提示 (例如 STAR 就寫 S: ... · T: ... · A: ... · R: ...)，要具體不能是通則",
   "alternative_framework": "第二選擇 (不能跟 recommended 相同)",

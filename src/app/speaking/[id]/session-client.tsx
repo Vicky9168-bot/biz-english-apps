@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Mark, Pen } from '@/app/page-kit'
+import type { SpeakingFramework } from '@/lib/speaking-frameworks'
 
 type Feedback = {
   userText: string
@@ -38,7 +39,7 @@ export function SpeakingSession({
   titleZh: string
   promptEn: string
   contextZh: string | null
-  framework: 'STAR' | 'PREP' | 'SCQA' | 'PYRAMID'
+  framework: SpeakingFramework
   frameworkHintZh: string
   difficulty: number
   tags: string[]

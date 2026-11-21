@@ -65,7 +65,7 @@ export const FEATURE_GUIDE: Record<FeatureKey, { start: string; steps: string[] 
   speaking: {
     start: '用框架回答商業場景題，錄音後由 AI 評分。',
     steps: [
-      '依框架（STAR、PREP、SCQA、Pyramid）挑一個場景；沒有想練的可以自訂。',
+      '依框架（STAR、PREP、SCQA、Pyramid、數據簡報 DIA、業務談判 VTC）挑一個場景；沒有想練的可以自訂。',
       '看「對方問你」和框架應用提示，可以先花 30 秒思考，再按錄音；需要允許瀏覽器使用麥克風。',
       '用英文回答，建議 30–90 秒，錄滿 90 秒會自動結束。',
       'AI 給 4 大面向評分（框架、商務用詞、文法、流暢度）、逐句改寫和模範答案。',

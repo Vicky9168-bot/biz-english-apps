@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { SPEAKING_FRAMEWORKS, SPEAKING_FRAMEWORK_DESC, type SpeakingFramework } from '@/lib/speaking-frameworks'
 import { AppNav } from '../site-nav'
 import { GuideVideo } from '../guide-video'
 import {
@@ -15,17 +16,10 @@ type Scenario = {
   title_zh: string
   prompt_en: string
   context_zh: string | null
-  framework: 'STAR' | 'PREP' | 'SCQA' | 'PYRAMID'
+  framework: SpeakingFramework
   framework_hint_zh: string
   difficulty: number
   tags: string[] | null
-}
-
-const FRAMEWORK_DESC: Record<Scenario['framework'], string> = {
-  STAR: '過去經驗 · 行為題（Situation-Task-Action-Result）',
-  PREP: '表達意見 · 立場（Point-Reason-Example-Point）',
-  SCQA: '說服 · 提案（Situation-Complication-Question-Answer）',
-  PYRAMID: 'Exec 溝通 · 答案先行（Answer → 3 支撐 → 佐證，McKinsey）',
 }
 
 export default async function SpeakingHome() {
@@ -57,7 +51,7 @@ export default async function SpeakingHome() {
       ;(acc[s.framework] ??= []).push(s)
       return acc
     },
-    {} as Record<Scenario['framework'], Scenario[]>
+    {} as Record<SpeakingFramework, Scenario[]>
   )
 
   return (
@@ -67,14 +61,14 @@ export default async function SpeakingHome() {
       <div className="mx-auto max-w-4xl px-6 py-10">
         <PageHeader
           title="商業場景練習"
-          subtitle="用 STAR / PREP / SCQA / Pyramid 框架回答面試 · 主管 · 高層問題，錄音後 AI 給 4 大面向評分 + 逐句改寫 + 模範答案。"
+          subtitle="用 STAR / PREP / SCQA / Pyramid 回答面試 · 主管 · 高層問題，也能練數據分析簡報（DIA）和業務談判（VTC）。錄音後 AI 給 4 大面向評分 + 逐句改寫 + 模範答案。"
         />
 
         <GuideVideo variant="collapsible" video="speaking" />
 
         {/* 熱身影片 + 快速 cheat sheet */}
         <section className="mb-12">
-          <SectionTitle title="先看這支影片，搞懂 4 種商務 structure" hint="約 5 分鐘" />
+          <SectionTitle title="先看這支影片，搞懂商務 structure" hint="約 5 分鐘" />
           <div className="mb-6 aspect-video overflow-hidden rounded-sm border border-ink/15 bg-black">
             <iframe
               src="https://www.youtube-nocookie.com/embed/-FMB6xtQdjM?start=529&rel=0"
@@ -88,22 +82,22 @@ export default async function SpeakingHome() {
             看完複習，點框架看詳細解釋與範例
           </p>
           <IndexList>
-            {(['STAR', 'PREP', 'SCQA', 'PYRAMID'] as const).map((fw) => (
+            {SPEAKING_FRAMEWORKS.map((fw) => (
               <IndexRow
                 key={fw}
                 href={`/speaking/framework/${fw.toLowerCase()}`}
                 title={fw}
-                desc={FRAMEWORK_DESC[fw]}
+                desc={SPEAKING_FRAMEWORK_DESC[fw]}
                 aside="看解釋"
               />
             ))}
           </IndexList>
         </section>
 
-        {(['STAR', 'PREP', 'SCQA', 'PYRAMID'] as const).map((fw) =>
+        {SPEAKING_FRAMEWORKS.map((fw) =>
           grouped[fw]?.length ? (
             <section key={fw} className="mb-12">
-              <SectionTitle title={fw} hint={FRAMEWORK_DESC[fw]} />
+              <SectionTitle title={fw} hint={SPEAKING_FRAMEWORK_DESC[fw]} />
               <IndexList>
                 {grouped[fw].map((s) => (
                   <IndexRow
