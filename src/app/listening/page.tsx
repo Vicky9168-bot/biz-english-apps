@@ -3,7 +3,8 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { StartButton } from './start-button'
 import { ImportVideoForm } from './import-video-form'
-import { countTodayImports, getDailyImportLimit } from '@/lib/youtube-import-quota'
+import { getSupabaseAdmin } from '@/lib/supabase/admin'
+import { countTodayImports, getDailyImportLimit, getImportGate } from '@/lib/youtube-import-quota'
 import { AppNav } from '../site-nav'
 import { GuideVideo } from '../guide-video'
 import {
@@ -59,6 +60,9 @@ export default async function ListeningHome() {
   // 今天已匯入幾部(migration 還沒跑時當 0,不要讓整頁壞掉)
   const importLimit = getDailyImportLimit()
   const importedToday = await countTodayImports(supabase, user.id).catch(() => 0)
+  // 先練完站內影片才開放自己貼連結;查詢失敗時保守地維持鎖住
+  const gate = await getImportGate(getSupabaseAdmin(), user.id).catch(() => null)
+  const completedIds = gate?.completedIds ?? new Set<string>()
 
   return (
     <main className="flex-1 bg-paper text-ink min-h-screen">
@@ -74,9 +78,18 @@ export default async function ListeningHome() {
 
         <section className="mb-12">
           <SectionTitle title="Step 1：複習 Content Words" />
-          <p className="mb-5 max-w-xl text-sm leading-relaxed text-ink/70">
-            先熟悉聽力裡最常被重音強調的實詞，再開始練習。
-          </p>
+          <aside className="mb-5 max-w-xl rounded-md border border-ink/15 bg-white/60 px-4 py-3 text-sm leading-relaxed text-ink/75">
+            <p className="font-semibold text-ink">Tips：什麼是 content words（實詞）？</p>
+            <p className="mt-1">
+              實詞是帶有主要意思的字：名詞、動詞、形容詞、副詞（含否定、疑問詞、數字），說話時會被重讀。
+              冠詞、代名詞、介系詞、助動詞、連接詞這些虛詞則常被輕輕帶過。
+            </p>
+            <p className="mt-1" translate="no">
+              We <strong>need</strong> to <strong>finish</strong> the <strong>report</strong> by{' '}
+              <strong>Friday</strong>.
+            </p>
+            <p className="mt-1">聽力只要抓住粗體的實詞，就能理解大部分意思。</p>
+          </aside>
           <Link
             href="/listening/lesson/content-words?review=1"
             className="inline-block rounded-sm underline decoration-ink/30 underline-offset-4 hover:text-ink hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
@@ -88,12 +101,13 @@ export default async function ListeningHome() {
         {/* YouTube 影片練習：依題庫順序編號 */}
         <section className="mb-12">
           <SectionTitle
-            title="從影片練習"
+            title="Step 2：從影片練習"
             hint={`${youtubeVideos?.length ?? 0} 部`}
           />
           <ImportVideoForm
             remaining={Math.max(0, importLimit - importedToday)}
             limit={importLimit}
+            gate={gate?.unlocked ? null : { done: gate?.done ?? 0, total: gate?.total ?? 0 }}
           />
           <IndexList>
             {(youtubeVideos ?? []).map((v, i) => (
@@ -116,6 +130,11 @@ export default async function ListeningHome() {
                 <span className="col-start-2 min-w-0 sm:col-start-3">
                   <span className="block text-lg font-semibold leading-snug line-clamp-2">
                     <span className="mark-hover">{v.title}</span>
+                    {completedIds.has(v.id) && (
+                      <span className="ml-2 rounded-full border border-ink/20 px-2 py-0.5 align-middle text-xs font-normal text-ink/65">
+                        已完成
+                      </span>
+                    )}
                   </span>
                   {v.summary_zh && (
                     <span className="mt-1 block text-sm leading-relaxed text-ink/70 line-clamp-2">
@@ -129,7 +148,7 @@ export default async function ListeningHome() {
         </section>
 
         <section className="mb-12">
-          <SectionTitle title="今天要練哪個場景？" />
+          <SectionTitle title="Step 3：今天要練哪個場景？" />
           <p className="mb-5 max-w-xl text-sm leading-relaxed text-ink/70">
             隨機抽或自己選一個，GPT-4o 現場生對話 + 3 道題，大約 3–5 分鐘。
           </p>

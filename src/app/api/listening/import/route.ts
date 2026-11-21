@@ -8,7 +8,7 @@ import {
   parseYoutubeUrl,
   YoutubeImportError,
 } from '@/lib/youtube-import'
-import { getDailyImportLimit, reserveImport } from '@/lib/youtube-import-quota'
+import { getDailyImportLimit, getImportGate, reserveImport } from '@/lib/youtube-import-quota'
 
 export const runtime = 'nodejs'
 // 抓字幕 + 翻譯整支影片 + 出 12 題,長影片可能超過 30 秒
@@ -44,6 +44,14 @@ export async function POST(request: Request) {
     // 題庫已有這支影片:直接帶去練習,不花 token 也不扣額度
     const existing = await findExistingVideo(admin, videoId)
     if (existing) return NextResponse.json({ id: existing.id, created: false })
+
+    const gate = await getImportGate(admin, user.id)
+    if (!gate.unlocked) {
+      return NextResponse.json(
+        { error: `請先練完站內原有的影片(${gate.done} / ${gate.total}),才能自己匯入` },
+        { status: 403 }
+      )
+    }
 
     release = await reserveImport(admin, user.id, videoId)
     if (!release) {
