@@ -6,12 +6,14 @@ import {
   ListenScene,
   ListeningHook,
   ListeningOutro,
+  VideoScene,
 } from './scenes/ListeningQuick'
 
-// 聽力訓練新手短片（約 30 秒）
+// 聽力訓練新手短片（約 35 秒）
 const SCENES = buildScenes('listening', {
   hook: ListeningHook,
   lesson: LessonScene,
+  videos: VideoScene,
   listen: ListenScene,
   answer: AnswerScene,
   outro: ListeningOutro,

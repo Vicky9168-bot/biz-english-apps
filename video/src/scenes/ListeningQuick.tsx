@@ -3,18 +3,18 @@ import { AbsoluteFill, useCurrentFrame } from 'remotion'
 import { BrowserFrame, C, Cursor, HL, StepHeader, at, fade } from '../theme'
 import { Closing, Hook } from './TitleScenes'
 
-// 聽力訓練新手短片（約 30 秒）：Content Words 小課 → 選場景、聽音檔 → 答 3 題看解說
+// 聽力訓練新手短片（約 35 秒）：Content Words 小課 → 影片練習（練完才能貼連結匯入）→ 選場景、聽音檔 → 答 3 題看解說
 // 流程依 src/app/listening 的實際畫面；跟讀（Shadowing）只出現在 YouTube 影片練習，所以這裡不演。
 
-const TOTAL = 3
+const TOTAL = 4
 
 export const ListeningHook: React.FC = () => (
   <Hook
     kicker="聽力訓練"
     title="第一次練？"
-    highlight="3 個步驟"
+    highlight="4 個步驟"
     rest="，先學一招再開聽"
-    chips={['小課', '聽音檔', '答 3 題']}
+    chips={['小課', '看影片', '聽音檔', '答 3 題']}
   />
 )
 
@@ -126,7 +126,136 @@ export const LessonScene: React.FC = () => {
   )
 }
 
-// ---------- 步驟 2：選場景、聽音檔 ----------
+// ---------- 步驟 2：從影片練習（練完才能貼連結匯入） ----------
+const VIDEO_ROWS = [
+  { title: 'English Communication and Confidence', done: true },
+  { title: 'Accelerating Language Learning', done: false },
+  { title: 'Understanding the Golden Circle', done: true },
+]
+const VIDEO_PICK_CLICK = 70
+const VIDEO_UNLOCK = 150
+const INPUT_CLICK = 185
+
+export const VideoScene: React.FC = () => {
+  const frame = useCurrentFrame()
+  const unlocked = frame >= VIDEO_UNLOCK
+  const picked = frame >= VIDEO_PICK_CLICK
+
+  return (
+    <AbsoluteFill>
+      <StepHeader n={2} total={TOTAL} title="從影片練習" />
+      <BrowserFrame url="bizvoice.app / listening">
+        <div style={{ position: 'absolute', left: 60, top: 28, fontSize: 40, fontWeight: 800 }}>從影片練習</div>
+        <div style={{ position: 'absolute', right: 60, top: 44, fontSize: 24, color: C.sub }}>6 部</div>
+
+        {/* 貼連結匯入：練完所有影片才解鎖 */}
+        <div
+          style={{
+            position: 'absolute',
+            left: 60,
+            top: 100,
+            width: 920,
+            height: 56,
+            boxSizing: 'border-box',
+            border: `2px solid ${C.line}`,
+            borderRadius: 8,
+            padding: '0 18px',
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: 24,
+            color: C.sub,
+            opacity: unlocked ? 1 : 0.55,
+          }}
+        >
+          https://www.youtube.com/watch?v=...
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            left: 1000,
+            top: 100,
+            width: 130,
+            height: 56,
+            borderRadius: 8,
+            background: C.ink,
+            color: C.paper,
+            fontSize: 24,
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: unlocked ? 1 : 0.35,
+          }}
+        >
+          匯入
+        </div>
+        <div style={{ position: 'absolute', left: 60, top: 168, fontSize: 22, color: C.sub }}>
+          {unlocked ? (
+            <>
+              <HL>全部練完，解鎖了</HL>　今天還能匯入 1 部（題庫已有的影片不扣次數）
+            </>
+          ) : (
+            '先把下面 6 部影片都練過，才能自己貼連結（已完成 4 / 6）'
+          )}
+        </div>
+
+        {VIDEO_ROWS.map((v, i) => {
+          const done = v.done || (i === 1 && unlocked)
+          return (
+            <div
+              key={v.title}
+              style={{
+                position: 'absolute',
+                left: 60,
+                right: 60,
+                top: 232 + i * 100,
+                height: 100,
+                boxSizing: 'border-box',
+                borderTop: `2px solid ${C.line}`,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 24,
+                background: i === 1 && picked && !unlocked ? 'rgba(26,36,48,0.06)' : 'transparent',
+                opacity: fade(frame, 6 + i * 6, 12),
+              }}
+            >
+              <span style={{ width: 40, fontSize: 22, fontWeight: 700, color: C.sub }}>0{i + 1}</span>
+              <span style={{ width: 128, height: 72, borderRadius: 4, background: 'rgba(26,36,48,0.14)' }} />
+              <span style={{ fontSize: 30, fontWeight: 700 }}>{v.title}</span>
+              {done && (
+                <span
+                  style={{
+                    border: `2px solid ${C.line}`,
+                    borderRadius: 999,
+                    padding: '2px 14px',
+                    fontSize: 20,
+                    color: C.sub,
+                  }}
+                >
+                  已完成
+                </span>
+              )}
+            </div>
+          )
+        })}
+      </BrowserFrame>
+
+      <Cursor
+        clicks={[VIDEO_PICK_CLICK, INPUT_CLICK]}
+        path={[
+          { f: 8, ...at(1300, 540) },
+          { f: 62, ...at(520, 382) },
+          { f: 78, ...at(520, 382) },
+          { f: 170, ...at(520, 382) },
+          { f: 180, ...at(520, 128) },
+          { f: 240, ...at(520, 128) },
+        ]}
+      />
+    </AbsoluteFill>
+  )
+}
+
+// ---------- 步驟 3：選場景、聽音檔 ----------
 const SCENARIOS = ['隨機抽一個', '內部會議', '客戶電話', '簡報 Q&A', '商務閒聊', '商務談判']
 const SELECT_CLICK = 40
 const PICK_CLICK = 64
@@ -148,7 +277,7 @@ export const ListenScene: React.FC = () => {
 
   return (
     <AbsoluteFill>
-      <StepHeader n={2} total={TOTAL} title="選場景，聽音檔" />
+      <StepHeader n={3} total={TOTAL} title="選場景，聽音檔" />
       <BrowserFrame url="bizvoice.app / listening">
         {/* 聽力首頁 */}
         <div style={{ position: 'absolute', inset: 0, opacity: viewA }}>
@@ -359,7 +488,7 @@ export const ListenScene: React.FC = () => {
   )
 }
 
-// ---------- 步驟 3：答 3 題，看正解與解說 ----------
+// ---------- 步驟 4：答 3 題，看正解與解說 ----------
 const QUESTIONS = [
   {
     q: 'What is the main purpose of the call?',
@@ -400,7 +529,7 @@ export const AnswerScene: React.FC = () => {
 
   return (
     <AbsoluteFill>
-      <StepHeader n={3} total={TOTAL} title="答 3 題，看解說" />
+      <StepHeader n={4} total={TOTAL} title="答 3 題，看解說" />
       <BrowserFrame url="bizvoice.app / listening / session">
         {QUESTIONS.map((q, qi) => (
           <React.Fragment key={q.q}>
