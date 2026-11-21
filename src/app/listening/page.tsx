@@ -2,6 +2,9 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { StartButton } from './start-button'
+import { ImportVideoForm } from './import-video-form'
+import { getSupabaseAdmin } from '@/lib/supabase/admin'
+import { countTodayImports, getDailyImportLimit, getImportGate } from '@/lib/youtube-import-quota'
 import { AppNav } from '../site-nav'
 import { GuideVideo } from '../guide-video'
 import {
@@ -54,6 +57,13 @@ export default async function ListeningHome() {
     .eq('source_type', 'youtube')
     .order('created_at', { ascending: true })
 
+  // 今天已匯入幾部(migration 還沒跑時當 0,不要讓整頁壞掉)
+  const importLimit = getDailyImportLimit()
+  const importedToday = await countTodayImports(supabase, user.id).catch(() => 0)
+  // 先練完站內影片才開放自己貼連結;查詢失敗時保守地維持鎖住
+  const gate = await getImportGate(getSupabaseAdmin(), user.id).catch(() => null)
+  const completedIds = gate?.completedIds ?? new Set<string>()
+
   return (
     <main className="flex-1 bg-paper text-ink min-h-screen">
       <AppNav />
@@ -67,6 +77,68 @@ export default async function ListeningHome() {
         <GuideVideo variant="collapsible" video="listening" />
 
         <section className="mb-12">
+          <SectionTitle title="複習 Content Words" />
+          <p className="mb-3 max-w-xl text-sm leading-relaxed text-ink/70">
+            先熟悉聽力裡最常被重音強調的實詞，再開始練習。
+          </p>
+          <Link
+            href="/listening/lesson/content-words?review=1"
+            className="inline-block rounded-sm underline decoration-ink/30 underline-offset-4 hover:text-ink hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
+          >
+            什麼是 content words？點進去看
+          </Link>
+        </section>
+
+        {/* YouTube 影片練習：依題庫順序編號 */}
+        <section className="mb-12">
+          <SectionTitle
+            title="從影片練習"
+            hint={`${youtubeVideos?.length ?? 0} 部`}
+          />
+          <ImportVideoForm
+            remaining={Math.max(0, importLimit - importedToday)}
+            limit={importLimit}
+            gate={gate?.unlocked ? null : { done: gate?.done ?? 0, total: gate?.total ?? 0 }}
+          />
+          <IndexList>
+            {(youtubeVideos ?? []).map((v, i) => (
+              <Link
+                key={v.id}
+                href={`/listening/session/${v.id}`}
+                className="group grid grid-cols-[3.5rem_1fr] items-start gap-x-4 border-t border-ink/15 px-2 py-5 transition-colors hover:bg-white/70 focus-visible:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink/40 sm:grid-cols-[4.5rem_9rem_1fr] sm:gap-x-6"
+              >
+                <span className="pt-0.5 font-display text-sm font-semibold tabular-nums text-ink/65">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                {v.youtube_video_id && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={`https://i.ytimg.com/vi/${v.youtube_video_id}/hqdefault.jpg`}
+                    alt=""
+                    className="col-start-2 row-start-2 mt-3 aspect-video w-36 rounded-sm object-cover sm:col-start-2 sm:row-start-1 sm:mt-0"
+                  />
+                )}
+                <span className="col-start-2 min-w-0 sm:col-start-3">
+                  <span className="block text-lg font-semibold leading-snug line-clamp-2">
+                    <span className="mark-hover">{v.title}</span>
+                    {completedIds.has(v.id) && (
+                      <span className="ml-2 rounded-full border border-ink/20 px-2 py-0.5 align-middle text-xs font-normal text-ink/65">
+                        已完成
+                      </span>
+                    )}
+                  </span>
+                  {v.summary_zh && (
+                    <span className="mt-1 block text-sm leading-relaxed text-ink/70 line-clamp-2">
+                      {v.summary_zh}
+                    </span>
+                  )}
+                </span>
+              </Link>
+            ))}
+          </IndexList>
+        </section>
+
+        <section className="mb-12">
           <SectionTitle title="今天要練哪個場景？" />
           <p className="mb-5 max-w-xl text-sm leading-relaxed text-ink/70">
             隨機抽或自己選一個，GPT-4o 現場生對話 + 3 道題，大約 3–5 分鐘。
@@ -76,59 +148,8 @@ export default async function ListeningHome() {
           </div>
         </section>
 
-        {/* YouTube 影片練習：依題庫順序編號 */}
-        {youtubeVideos && youtubeVideos.length > 0 && (
-          <section className="mb-12">
-            <SectionTitle
-              title="從影片練習"
-              hint={`${youtubeVideos.length} 部`}
-            />
-            <IndexList>
-              {youtubeVideos.map((v, i) => (
-                <Link
-                  key={v.id}
-                  href={`/listening/session/${v.id}`}
-                  className="group grid grid-cols-[3.5rem_1fr] items-start gap-x-4 border-t border-ink/15 px-2 py-5 transition-colors hover:bg-white/70 focus-visible:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink/40 sm:grid-cols-[4.5rem_9rem_1fr] sm:gap-x-6"
-                >
-                  <span className="pt-0.5 font-display text-sm font-semibold tabular-nums text-ink/65">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  {v.youtube_video_id && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={`https://i.ytimg.com/vi/${v.youtube_video_id}/hqdefault.jpg`}
-                      alt=""
-                      className="col-start-2 row-start-2 mt-3 aspect-video w-36 rounded-sm object-cover sm:col-start-2 sm:row-start-1 sm:mt-0"
-                    />
-                  )}
-                  <span className="col-start-2 min-w-0 sm:col-start-3">
-                    <span className="block text-lg font-semibold leading-snug line-clamp-2">
-                      <span className="mark-hover">{v.title}</span>
-                    </span>
-                    {v.summary_zh && (
-                      <span className="mt-1 block text-sm leading-relaxed text-ink/70 line-clamp-2">
-                        {v.summary_zh}
-                      </span>
-                    )}
-                  </span>
-                </Link>
-              ))}
-            </IndexList>
-          </section>
-        )}
-
         <section>
-          <SectionTitle
-            title="最近 7 天"
-            hint={
-              <Link
-                href="/listening/lesson/content-words?review=1"
-                className="rounded-sm underline decoration-ink/30 underline-offset-4 hover:text-ink hover:decoration-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/40"
-              >
-                複習 Content Words
-              </Link>
-            }
-          />
+          <SectionTitle title="最近 7 天" />
           {!recentSessions || recentSessions.length === 0 ? (
             <EmptyNote>還沒有紀錄。開始第一題吧</EmptyNote>
           ) : (
